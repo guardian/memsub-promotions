@@ -2,7 +2,25 @@ name := """memsub-promotions"""
 
 version := "1.0-SNAPSHOT"
 
-lazy val root = (project in file(".")).enablePlugins(PlayScala)
+lazy val root = (project in file(".")).enablePlugins(
+  PlayScala,
+  BuildInfoPlugin
+).settings(
+  magentaPackageName := "promotions",
+  buildInfoKeys := Seq[BuildInfoKey](
+    name,
+    BuildInfoKey.constant("gitCommitId", Option(System.getenv("BUILD_VCS_NUMBER")) getOrElse (try {
+      "git rev-parse HEAD".!!.trim
+    } catch {
+      case e: Exception => "unknown"
+    })),
+    BuildInfoKey.constant("buildNumber", Option(System.getenv("BUILD_NUMBER")) getOrElse "DEV"),
+    BuildInfoKey.constant("buildTime", System.currentTimeMillis)
+  ),
+  buildInfoPackage := "app",
+  buildInfoOptions += BuildInfoOption.ToMap
+)
+
 
 scalaVersion := "2.11.7"
 
@@ -23,3 +41,5 @@ resolvers ++= Seq(
 
 addCommandAlias("devrun", "run -Dconfig.resource=DEV.conf 9500")
 addCommandAlias("fast-test", "testOnly -- -l Acceptance")
+
+playArtifactDistSettings
