@@ -10,7 +10,7 @@
   },
   "recipes":{
     "default":{
-      "actionsBeforeApp": ["promotions-tool.uploadArtifacts", "memsub-promotions.deploy"]
+      "actionsBeforeApp": ["promotions-tool.uploadArtifacts", "promotions-tool.deploy"]
     },
     "artifactUploadOnly": {
       "actions": [ "promotions-tool.uploadArtifacts" ]
