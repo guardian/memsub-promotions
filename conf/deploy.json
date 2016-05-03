@@ -1,19 +1,31 @@
 {
   "defaultStacks": ["membership"],
-  "packages":{
-    "promotions-tool":{
+  "packages": {
+    "promotions-tool": {
       "type":"autoscaling",
-      "data":{
+      "apps": [
+        "promotions-tool"
+      ],
+      "data": {
+        "port": "9000",
         "bucket": "gu-promotions-tool-dist"
       }
     }
   },
-  "recipes":{
-    "default":{
-      "actionsBeforeApp": ["promotions-tool.uploadArtifacts", "promotions-tool.deploy"]
+  "recipes": {
+    "default" : {
+      "depends" : [
+        "uploadArtifacts",
+        "deploy"
+      ]
     },
-    "artifactUploadOnly": {
-      "actions": [ "promotions-tool.uploadArtifacts" ]
+    "uploadArtifacts": {
+      "actionsBeforeApp": ["promotions-tool.uploadArtifacts"]
+    },
+    "deploy": {
+      "actionsPerHost": [
+        "promotions-tool.deploy"
+      ]
     }
   }
 }
