@@ -1,0 +1,355 @@
+{
+  "AWSTemplateFormatVersion": "2010-09-09",
+  "Description": "Memebership/Subscription promotions tool",
+  "Parameters": {
+    "Name": {
+      "Description": "The name given to the autoscaling group",
+      "Type": "String"
+    },
+    "Stage": {
+      "Description": "Environment name",
+      "Type": "String",
+      "AllowedValues": [ "PROD" ]
+    },
+    "GithubTeamName": {
+      "Description": "Github team name, used for giving SSH access to members of the team.",
+      "Type": "String",
+      "Default": "Membership-and-Subscriptions"
+    },
+    "InstanceType": {
+      "Description": "EC2 instance type",
+      "Type": "String",
+      "AllowedValues": [
+        "t2.micro",
+        "t2.small",
+        "t2.medium",
+        "m3.medium",
+        "m3.large"
+      ],
+      "ConstraintDescription": "must be a valid EC2 instance type."
+    },
+    "MaxInstances" : {
+      "Description": "Maximum number of instances. This should be (at least) double the desired capacity.",
+      "Type": "Number"
+    },
+    "MinInstances" : {
+      "Description": "Minimum number of instances",
+      "Type": "Number"
+    },
+    "VpcId": {
+      "Description": "ID of the VPC onto which to launch the application",
+      "Type": "AWS::EC2::VPC::Id"
+    },
+    "PrivateVpcSubnets" : {
+      "Description": "Public subnets to use in VPC",
+      "Type": "List<AWS::EC2::Subnet::Id>"
+    },
+    "PublicVpcSubnets" : {
+      "Description": "Public subnets to use for the ELB",
+      "Type": "List<AWS::EC2::Subnet::Id>"
+    },
+    "AmiId": {
+      "Description": "Custom AMI to use for instances",
+      "Type": "String"
+    },
+    "AlarmEmailAddress": {
+      "Description": "Contact email for alarms",
+      "Type": "String"
+    },
+    "InternalCidrIp": {
+      "Description": "Internal network CIDR IP",
+      "Type": "String"
+    },
+    "Stack": {
+      "Description": "Application stack",
+      "Type": "String",
+      "Default": "promotions-tool"
+    },
+    "SslArn": {
+      "Description": "SSL certificate ARN",
+      "Type": "String",
+      "Default": ""
+    },
+    "App": {
+      "Description": "Application name",
+      "Type": "String",
+      "Default": "promotions-tool"
+    }
+  },
+
+  "Resources": {
+    "ServerRole": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [ {
+            "Effect": "Allow",
+            "Principal": {
+              "Service": [ "ec2.amazonaws.com" ]
+            },
+            "Action": [ "sts:AssumeRole" ]
+          } ]
+        },
+        "Path": "/",
+        "Policies": [ {
+          "PolicyName": "root",
+
+          "PolicyDocument": {
+            "Statement": [
+              {
+                "Effect": "Allow",
+                "Action": "s3:GetObject",
+                "Resource": "arn:aws:s3:::gu-promotions-tool-*/*"
+              },
+              {
+                "Effect": "Allow",
+                "Action": "ec2:DescribeTags",
+                "Resource": "*"
+              },
+              {
+                "Effect": "Allow",
+                "Action": [
+                  "cloudwatch:*",
+                  "logs:*"
+                ],
+                "Resource": "*"
+              }
+            ]
+          }
+        } ]
+      }
+    },
+
+    "InstanceProfile": {
+      "Type": "AWS::IAM::InstanceProfile",
+      "Properties": {
+        "Path": "/",
+        "Roles": [ {"Ref": "ServerRole"} ]
+      }
+    },
+
+    "LoadBalancer": {
+      "Type": "AWS::ElasticLoadBalancing::LoadBalancer",
+      "Properties": {
+        "Scheme" : "internet-facing",
+        "Listeners": [{
+          "LoadBalancerPort": "443",
+          "InstancePort": "9000",
+          "Protocol": "HTTPS",
+          "SSLCertificateId": {"Ref": "SslArn"}
+        }],
+        "CrossZone": "true",
+        "HealthCheck": {
+          "Target": "HTTP:9000/healthcheck",
+          "HealthyThreshold": "2",
+          "UnhealthyThreshold": "10",
+          "Interval": "30",
+          "Timeout": "10"
+        },
+        "Subnets": { "Ref": "PublicVpcSubnets" },
+        "SecurityGroups": [
+          { "Ref": "LoadBalancerSecurityGroup" }
+        ],
+        "ConnectionDrainingPolicy": {
+          "Enabled" : "true",
+          "Timeout" : "60"
+        }
+      }
+    },
+
+    "AutoscalingGroup": {
+      "Type": "AWS::AutoScaling::AutoScalingGroup",
+      "Properties": {
+        "AvailabilityZones": { "Fn::GetAZs": "" },
+        "LaunchConfigurationName": { "Ref": "LaunchConfig" },
+        "MinSize": {"Ref": "MinInstances"},
+        "MaxSize": {"Ref": "MaxInstances"},
+        "HealthCheckType": "ELB",
+        "HealthCheckGracePeriod": 400,
+        "LoadBalancerNames": [ {"Ref": "LoadBalancer"} ],
+        "Tags": [
+          {
+            "Key": "Stage",
+            "Value": { "Ref": "Stage" },
+            "PropagateAtLaunch": "true"
+          },
+          {
+            "Key": "Name",
+            "Value": {
+              "Fn::Join": [":", [{"Ref":"Stage"}, {"Ref":"App"}]]
+            },
+            "PropagateAtLaunch": "true"
+          },
+          {
+            "Key": "Stack",
+            "Value": {"Ref": "Stack"},
+            "PropagateAtLaunch": "true"
+          },
+          {
+            "Key": "App",
+            "Value": {"Ref": "App"},
+            "PropagateAtLaunch": "true"
+          },
+          {
+            "Key": "Role",
+            "Value": {"Ref": "App"},
+            "PropagateAtLaunch": "true"
+          }
+        ],
+        "VPCZoneIdentifier": {
+          "Ref": "PrivateVpcSubnets"
+        }
+      }
+    },
+
+    "LaunchConfig": {
+      "Type": "AWS::AutoScaling::LaunchConfiguration",
+      "Properties": {
+        "ImageId": {"Ref": "AmiId"},
+        "SecurityGroups": [
+          {"Ref": "InstanceSecurityGroup"},
+          {"Ref": "SshAccessSecurityGroup"}
+        ],
+        "InstanceType": {"Ref": "InstanceType"},
+        "AssociatePublicIpAddress": "True",
+        "IamInstanceProfile": {"Ref": "InstanceProfile"},
+        "UserData": {
+          "Fn::Base64": {
+              "Fn::Join": [
+                  "\n",
+                  [
+                      "#!/bin/bash -ev",
+                      { "Fn::Join": [ "", ["/opt/features/ssh-keys/initialise-keys-and-cron-job.sh -l -b github-team-keys -t ", {"Ref":"GithubTeamName"}, "|| true"] ] },
+
+                      "CONF_DIR=/membership/memsub-promotions-1.0-SNAPSHOT/conf",
+
+                      "adduser --system --home /membership --disabled-password membership",
+                      {"Fn::Join":["", ["aws --region ", { "Ref": "AWS::Region" }, " s3 cp s3://gu-promotions-tool-dist/", { "Ref" : "Stack" }, "/", { "Ref" : "Stage" }, "/memsub-promotions/app.zip /tmp"]]},
+                      "unzip -d /membership /tmp/app.zip",
+
+                      "wget https://s3.amazonaws.com/aws-cloudwatch/downloads/latest/awslogs-agent-setup.py",
+                      {"Fn::Join": ["", ["sed -i",
+                          " -e \"s/__DATE/$(date +%F)/\"",
+                          " -e \"s/__BUILD/$(cat $CONF_DIR/build.txt)/\"",
+                          " -e 's/__STAGE/", { "Ref": "Stage" }, "/'",
+                          " $CONF_DIR/logger.conf"]]},
+                      {"Fn::Join": [" ", ["python awslogs-agent-setup.py -nr", { "Ref": "AWS::Region" }, "-c $CONF_DIR/logger.conf" ]]},
+
+                      {"Fn::Join":["", ["sed 's/__STAGE/", { "Ref" : "Stage" } ,"/' $CONF_DIR/upstart.conf > /etc/init/memsub-promotions.conf"]]},
+
+                      "chown -R membership /membership/",
+
+                      "start memsub-promotions"
+                  ]
+              ]
+          }
+        }
+      }
+    },
+
+    "SshAccessSecurityGroup": {
+      "Type": "AWS::EC2::SecurityGroup",
+      "Properties": {
+        "VpcId": { "Ref": "VpcId" },
+        "GroupDescription": "Open up SSH access",
+        "SecurityGroupIngress": [
+          {
+            "IpProtocol": "tcp",
+            "FromPort": "22",
+            "ToPort": "22",
+            "CidrIp": { "Ref": "InternalCidrIp" }
+          }
+        ]
+      }
+    },
+
+    "LoadBalancerSecurityGroup": {
+      "Type": "AWS::EC2::SecurityGroup",
+      "Properties": {
+        "VpcId": { "Ref": "VpcId" },
+        "GroupDescription": "Open up HTTP  access to load balancer",
+        "SecurityGroupIngress": [
+          {
+            "IpProtocol": "tcp",
+            "FromPort": "443",
+            "ToPort": "443",
+            "CidrIp": { "Ref": "InternalCidrIp" }
+          }
+        ],
+        "SecurityGroupEgress": [
+          {
+            "IpProtocol": "tcp",
+            "FromPort": "9000",
+            "ToPort": "9000",
+            "CidrIp": "0.0.0.0/0"
+          }
+        ]
+      }
+    },
+
+    "InstanceSecurityGroup": {
+      "Type": "AWS::EC2::SecurityGroup",
+      "Properties": {
+        "VpcId": { "Ref": "VpcId" },
+        "GroupDescription": "Open up HTTP access to load balancer",
+        "SecurityGroupIngress": [
+          {
+            "IpProtocol": "tcp",
+            "FromPort": "9000",
+            "ToPort": "9000",
+            "SourceSecurityGroupId": {
+              "Ref": "LoadBalancerSecurityGroup"
+            }
+          }
+        ]
+      }
+    },
+
+  "TopicSendEmail": {
+      "Type": "AWS::SNS::Topic",
+      "Properties": {
+        "DisplayName": "SendEmailToIdentityDev",
+        "Subscription": [
+          {
+            "Endpoint": {"Ref":"AlarmEmailAddress"},
+            "Protocol": "email"
+          }
+        ]
+      }
+    },
+
+    "alarmNoHealthyHosts": {
+      "Type": "AWS::CloudWatch::Alarm",
+      "Properties": {
+        "ActionsEnabled": "true",
+        "AlarmDescription": "There are insufficient healthy hosts",
+        "ComparisonOperator": "LessThanThreshold",
+        "EvaluationPeriods": "1",
+        "MetricName": "HealthyHostCount",
+        "Namespace": "AWS/ELB",
+        "Period": "60",
+        "Statistic": "Average",
+        "Threshold": {"Ref":"MinInstances"},
+        "AlarmActions": [
+          { "Ref": "TopicSendEmail" }
+        ],
+        "InsufficientDataActions": [
+          { "Ref": "TopicSendEmail" }
+        ],
+        "Dimensions": [
+          {
+            "Name": "LoadBalancerName",
+            "Value": { "Ref": "LoadBalancer"}
+          }
+        ]
+      }
+    }
+
+  },
+
+  "Outputs": {
+    "LoadBalancer": {
+      "Value": { "Fn::GetAtt": ["LoadBalancer", "DNSName"] }
+    }
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "defaultStacks": ["membership"],
+  "packages":{
+    "memsub-promotions":{
+      "type":"autoscaling",
+      "data":{
+        "bucket": "gu-promotions-tool-dist"
+      }
+    }
+  },
+  "recipes":{
+    "default":{
+      "actionsBeforeApp": [" memsub-promotions.uploadArtifacts", " memsub-promotions.deploy"]
+    },
+    "artifactUploadOnly": {
+      "actions": [ " memsub-promotions.uploadArtifacts" ]
+    }
+  }
+}
