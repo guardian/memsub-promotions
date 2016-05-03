@@ -131,6 +131,7 @@
     "LoadBalancer": {
       "Type": "AWS::ElasticLoadBalancing::LoadBalancer",
       "Properties": {
+        "LoadBalancerName" : {"Fn::Join" : ["-", [{"Ref": "App"}, { "Ref" : "Stage" } ]]},
         "Scheme" : "internet-facing",
         "Listeners": [{
           "LoadBalancerPort": "443",
