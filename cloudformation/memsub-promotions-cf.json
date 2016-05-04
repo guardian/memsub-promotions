@@ -63,7 +63,7 @@
     "Stack": {
       "Description": "Application stack",
       "Type": "String",
-      "Default": "promotions-tool"
+      "Default": "membership"
     },
     "SslArn": {
       "Description": "SSL certificate ARN",
@@ -225,8 +225,14 @@
                       "CONF_DIR=/membership/memsub-promotions-1.0-SNAPSHOT/conf",
 
                       "adduser --system --home /membership --disabled-password membership",
-                      {"Fn::Join":["", ["aws --region ", { "Ref": "AWS::Region" }, " s3 cp s3://gu-promotions-tool-dist/", { "Ref" : "Stack" }, "/", { "Ref" : "Stage" }, "/memsub-promotions/app.zip /tmp"]]},
+                      {"Fn::Join":["", ["aws --region ", { "Ref": "AWS::Region" }, " s3 cp s3://gu-promotions-tool-dist/", { "Ref" : "Stack" }, "/", { "Ref" : "Stage" }, "/", { "Ref" : "App" }, "/app.zip /tmp"]]},
                       "unzip -d /membership /tmp/app.zip",
+
+                      "mkdir /etc/gu",
+
+                      {"Fn::Join":["", ["aws --region ", { "Ref": "AWS::Region" }, " s3 cp s3://gu-promotions-tool-private/", { "Ref" : "Stage" }, "/memsub-promotions-keys.conf /etc/gu"]]},
+                      "chown membership /etc/gu/memsub-promotions-keys.conf",
+                      "chmod 0600 /etc/gu/memsub-promotions-keys.conf",
 
                       "wget https://s3.amazonaws.com/aws-cloudwatch/downloads/latest/awslogs-agent-setup.py",
                       {"Fn::Join": ["", ["sed -i",
