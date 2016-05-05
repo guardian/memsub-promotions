@@ -77,6 +77,14 @@
     }
   },
 
+  "Mappings": {
+    "StageVariables": {
+      "PROD": {
+        "DynamoDBTable": "arn:aws:dynamodb:*:*:table/MembershipSub-Promotions-PROD"
+      }
+    }
+  },
+
   "Resources": {
     "ServerRole": {
       "Type": "AWS::IAM::Role",
@@ -105,6 +113,24 @@
                 "Effect": "Allow",
                 "Action": "ec2:DescribeTags",
                 "Resource": "*"
+              },
+              {
+                "Effect": "Allow",
+                "Action": [
+                  "dynamodb:PutItem",
+                  "dynamodb:BatchWriteItem",
+                  "dynamodb:GetItem",
+                  "dynamodb:BatchGetItem",
+                  "dynamodb:UpdateItem",
+                  "dynamodb:DeleteItem",
+                  "dynamodb:Scan",
+                  "dynamodb:Query"
+                ],
+                "Resource": {
+                  "Fn::FindInMap": ["StageVariables", {
+                    "Ref": "Stage"
+                  }, "DynamoDBTable"]
+                }
               },
               {
                 "Effect": "Allow",
