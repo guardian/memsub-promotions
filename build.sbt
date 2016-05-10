@@ -29,9 +29,15 @@ libraryDependencies ++= Seq(
   cache,
   ws,
   "org.scalaz" %% "scalaz-core" % "7.1.3",
-  "com.gu" %% "membership-common" % "0.195",
-"org.scalatestplus.play" %% "scalatestplus-play" % "1.5.1" % Test
+  "com.gu" %% "membership-common" % "0.203-SNAPSHOT",
+  "com.softwaremill.macwire" %% "macros" % "2.2.2" % "provided",
+  "com.softwaremill.macwire" %% "util" % "2.2.2",
+  "com.softwaremill.macwire" %% "proxy" % "2.2.2",
+  "org.scalatestplus.play" %% "scalatestplus-play" % "1.5.1" % Test
 )
+
+// membership-common has macros compiled against play-json 2.4.6...
+dependencyOverrides += "com.typesafe.play" %% "play-json" % "2.4.6"
 
 resolvers ++= Seq(
   "Guardian Github Releases" at "https://guardian.github.io/maven/repo-releases",
