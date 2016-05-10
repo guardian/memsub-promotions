@@ -12,7 +12,7 @@ export default class {
         let promos = this.service.all().then(res => res.data);
         promos.then(r => this.$scope.campaigns = r.map(i => i.campaignName).filter((v, i, self) => self.indexOf(v) === i));
 
-        let byCampaign = name ? promos.then(p => p.filter(v => v.campaignName == name)) : promotions;
+        let byCampaign = name ? promos.then(p => p.filter(v => v.campaignName == name)) : promos;
         byCampaign.then(res => this.$scope.promotions = res)
     }
 }
