@@ -1,4 +1,4 @@
-export default class PromotionListController {
+export default class {
 
     /* @ngInject */
     constructor($scope, promotionService) {

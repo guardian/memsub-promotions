@@ -1,4 +1,4 @@
-export default class PromotionService {
+export default class {
 
     /* @ngInject */
     constructor($http) {

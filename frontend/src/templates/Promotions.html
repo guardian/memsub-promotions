@@ -2,15 +2,17 @@
     <thead>
     <tr>
         <th class="mdl-data-table__cell--non-numeric">Name</th>
-        <th>Quantity</th>
-        <th>Unit price</th>
+        <th class="mdl-data-table__cell--non-numeric">Campaign</th>
+        <th>Starts</th>
+        <th>Expires</th>
     </tr>
     </thead>
     <tbody>
     <tr ng-repeat="promotion in promotions">
         <td class="mdl-data-table__cell--non-numeric">{{promotion.name}}</td>
-        <td>{{promotion.codes}}</td>
-        <td>$2.90</td>
+        <td class="mdl-data-table__cell--non-numeric">{{promotion.campaignName}}</td>
+        <td>{{promotion.starts | date:"dd MMM yy"}}</td>
+        <td>{{promotion.expires | date:"dd MMM yy"}}</td>
     </tr>
     </tbody>
 </table>
