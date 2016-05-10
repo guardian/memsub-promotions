@@ -6,6 +6,7 @@ export default () => {
         scope: true,
         restrict: 'A',
         template: table,
-        controller: 'promotionListController'
+        controller: 'promotionListController',
+        controllerAs: 'ctrl'
     };
 }
