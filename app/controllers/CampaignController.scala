@@ -17,7 +17,6 @@ class CampaignController(service: JsonDynamoService[Campaign, Future]) {
 
   def upsert = Action.async { request =>
     request.body.asJson.map { json =>
-      println(json)
       json.validate[Campaign].map { campaign => {
           service.add(campaign).map(_ => Ok(Json.obj("status" -> "ok")))
         }
