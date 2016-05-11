@@ -1,0 +1,28 @@
+<form>
+    <div class="mdl-grid">
+        <div class="mdl-cell mdl-cell--12-col mdl-cell--2-offset">
+            <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                <input class="mdl-textfield__input" type="text" id="name" ng-model="promotion.name">
+                <label class="mdl-textfield__label" for="name">Promotion name</label>
+            </div>
+        </div>
+        <div class="mdl-cell mdl-cell--12-col mdl-cell--2-offset">
+            <div class="mdl-textfield mdl-js-textfield">
+                <textarea class="mdl-textfield__input" type="text" rows= "3" id="description" style="resize: none">{{promotion.description}}</textarea>
+                <label class="mdl-textfield__label" for="description">Description</label>
+            </div>
+        </div>
+
+        <div class="mdl-cell mdl-cell--2-col" ng-repeat="(name, plans) in ratePlans" ng-class="$first ? 'mdl-cell--2-offset' : ''">
+            <h5>{{name}}</h5>
+            <label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" ng-repeat="(key, name) in plans" for="checkbox-{{key}}" mdl-upgrade>
+                <input type="checkbox" id="checkbox-{{key}}" class="mdl-checkbox__input" checked>
+                <span class="mdl-checkbox__label">{{name}}</span>
+            </label>
+        </div>
+
+        <div class="mdl-cell mdl-cell--12-col mdl-cell--2-offset">
+            <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect" ng-click="ctrl.save(promotion)">Update</button>
+        </div>
+    </div>
+</form>
