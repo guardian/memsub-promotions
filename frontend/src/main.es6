@@ -4,8 +4,10 @@ import form from "text!templates/Form.html"
 
 // directives
 import stageMenu from 'directives/StageMenu'
+import mdlUpgrade from 'directives/MdlUpgrade'
 
 // services
+import RatePlanService from "services/RatePlanService"
 import PromotionService from "services/PromotionService"
 
 // controllers
@@ -16,10 +18,13 @@ import StageController from "controllers/StageController"
 let module = angular.module("Promotions", ['ui.router', 'ngCookies']);
 
 module.service('promotionService', PromotionService)
+      .service('ratePlanService', RatePlanService)
       .controller('promotionListController', PromotionListController)
       .controller('editPromotionController', EditPromotionController)
       .controller('stageController', StageController)
-      .directive('stageMenu', stageMenu);
+      .directive('stageMenu', stageMenu)
+      .directive('mdlUpgrade', mdlUpgrade)
+;
 
 module.config(($stateProvider, $urlRouterProvider) => {
    $urlRouterProvider.otherwise("/");

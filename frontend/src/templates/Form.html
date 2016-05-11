@@ -12,6 +12,15 @@
                 <label class="mdl-textfield__label" for="description">Description</label>
             </div>
         </div>
+
+        <div class="mdl-cell mdl-cell--2-col" ng-repeat="(name, plans) in ratePlans" ng-class="$first ? 'mdl-cell--2-offset' : ''">
+            <h5>{{name}}</h5>
+            <label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" ng-repeat="(key, name) in plans" for="checkbox-{{key}}" mdl-upgrade>
+                <input type="checkbox" id="checkbox-{{key}}" class="mdl-checkbox__input" checked>
+                <span class="mdl-checkbox__label">{{name}}</span>
+            </label>
+        </div>
+
         <div class="mdl-cell mdl-cell--12-col mdl-cell--2-offset">
             <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect" ng-click="ctrl.save(promotion)">Update</button>
         </div>

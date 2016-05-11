@@ -1,11 +1,12 @@
 export default class {
 
     /* @ngInject */
-    constructor($stateParams, $scope, promotionService) {
+    constructor($stateParams, $scope, promotionService, ratePlanService) {
         this.service = promotionService;
         $scope.promotions = [];
         this.$scope = $scope;
         this.fetchPromotion($stateParams.uuid);
+        ratePlanService.all().then(plans => $scope.ratePlans = plans.data);
     }
 
     fetchPromotion(uuid) {

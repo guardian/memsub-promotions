@@ -7,7 +7,8 @@ import play.api.mvc.Results._
 class RatePlanController(membershipIds: MembershipRatePlanIds, digipackIds: DigitalPackRatePlanIds) {
 
   def all = Action {
-    Ok(Json.toJson(Map(
+    Ok(Json.obj(
+      "Membership" -> Json.toJson(Map(
       membershipIds.friend.get -> "Friend",
       membershipIds.supporterMonthly.get -> "Supporter monthly",
       membershipIds.supporterYearly.get -> "Supporter yearly",
@@ -15,11 +16,11 @@ class RatePlanController(membershipIds: MembershipRatePlanIds, digipackIds: Digi
       membershipIds.partnerYearly.get -> "Partner yearly",
       membershipIds.patronMonthly.get -> "Patron monthly",
       membershipIds.patronYearly.get -> "Patron yearly"
-    ) ++
-    Map(
+    )),
+    "Subscriptions" -> Json.toJson(Map(
       digipackIds.digitalPackMonthly.get -> "Digital pack monthly",
       digipackIds.digitalPackQuaterly.get -> "Digital pack quarterly",
       digipackIds.digitalPackYearly.get -> "Digital pack yearly"
-    )))
+    ))))
   }
 }
