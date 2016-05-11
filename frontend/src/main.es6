@@ -3,7 +3,7 @@ import table from "text!templates/Promotions.html"
 import form from "text!templates/Form.html"
 
 // directives
-import promotionList from 'directives/PromotionList'
+import stageMenu from 'directives/StageMenu'
 
 // services
 import PromotionService from "services/PromotionService"
@@ -11,12 +11,15 @@ import PromotionService from "services/PromotionService"
 // controllers
 import PromotionListController from "controllers/PromotionListController"
 import EditPromotionController from "controllers/EditPromotionController"
+import StageController from "controllers/StageController"
 
-let module = angular.module("Promotions", ['ui.router']);
+let module = angular.module("Promotions", ['ui.router', 'ngCookies']);
 
 module.service('promotionService', PromotionService)
       .controller('promotionListController', PromotionListController)
-      .controller('editPromotionController', EditPromotionController);
+      .controller('editPromotionController', EditPromotionController)
+      .controller('stageController', StageController)
+      .directive('stageMenu', stageMenu);
 
 module.config(($stateProvider, $urlRouterProvider) => {
    $urlRouterProvider.otherwise("/");
