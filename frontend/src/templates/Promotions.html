@@ -12,7 +12,7 @@
     <div class="mdl-cell mdl-cell--4-col">
         <h5>Promotions</h5>
         <ul class="mdl-list">
-            <li class="mdl-list__item mdl-list__item--two-line" ng-repeat="promotion in promotions">
+            <li class="mdl-list__item mdl-list__item--two-line" ng-repeat="promotion in promotions" ui-sref="editPromotion({uuid: promotion.uuid})">
                 <span class="mdl-list__item-primary-content">
                   <span>{{promotion.name}}</span>
                   <span class="mdl-list__item-sub-title" style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap">
