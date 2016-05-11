@@ -13,12 +13,12 @@ import wiring.AppComponents.Stage
 class AppComponents(private val stage: Stage, builtInComponents: BuiltInComponents) {
 
   import builtInComponents._
+  import AppComponents.ratePlanPath
   lazy val config = ConfigFactory.load()
   lazy val promoService = com.gu.memsub.services.PromoStorageService.forStage(config, stage.name)
 
-  val ratePlanPath = s"touchpoint.backend.environments.${stage.name}.zuora.ratePlanIds"
-  lazy val membershipRatePlanIds = MembershipRatePlanIds.fromConfig(config.getConfig(ratePlanPath + ".membership"))
-  lazy val digipackRatePlanIds = DigitalPackRatePlanIds.fromConfig(config.getConfig(ratePlanPath + ".digitalpack"))
+  lazy val membershipRatePlanIds = MembershipRatePlanIds.fromConfig(config.getConfig(ratePlanPath(stage) + ".membership"))
+  lazy val digipackRatePlanIds = DigitalPackRatePlanIds.fromConfig(config.getConfig(ratePlanPath(stage) + ".digitalpack"))
 
   lazy val healthController = wire[HealthCheckController]
   lazy val promoController = wire[PromotionController]
@@ -32,6 +32,8 @@ class AppComponents(private val stage: Stage, builtInComponents: BuiltInComponen
 }
 
 object AppComponents {
+  def ratePlanPath(stage: Stage) = s"touchpoint.backend.environments.${stage.name}.zuora.ratePlanIds"
+
   sealed trait Stage { def name: String }
   case object DEV extends Stage { override def name = "DEV" }
   case object UAT extends Stage { override def name = "UAT" }
