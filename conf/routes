@@ -7,6 +7,10 @@ GET     /                           controllers.StaticController.index
 
 GET     /promotions                 controllers.PromotionController.all
 
+GET     /campaigns                  controllers.CampaignController.all
+
+POST    /campaign                   controllers.CampaignController.upsert
+
 GET     /plans                      controllers.RatePlanController.all
 
 # Map static resources from the /public folder to the /assets URL path

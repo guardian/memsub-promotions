@@ -1,26 +1,29 @@
 package wiring
 import com.gu.config.{DigitalPackRatePlanIds, MembershipRatePlanIds}
-import com.gu.memsub.services.CatalogService
+import com.gu.memsub.promo.{Campaign, DynamoTables}
+import com.gu.memsub.promo.Promotion.AnyPromotion
 import play.api.BuiltInComponents
 import play.api.libs.concurrent.Execution.Implicits._
-import com.typesafe.config.{Config, ConfigFactory}
+import com.typesafe.config.ConfigFactory
 import com.softwaremill.macwire._
 import controllers._
 import play.api.routing.Router
-import router.Routes
 import wiring.AppComponents.Stage
+import router.Routes
 
 class AppComponents(private val stage: Stage, builtInComponents: BuiltInComponents) {
 
   import builtInComponents._
   lazy val config = ConfigFactory.load()
-  lazy val promoService = com.gu.memsub.services.PromoStorageService.forStage(config, stage.name)
+  lazy val promoService = com.gu.memsub.services.JsonDynamoService.forTable[AnyPromotion](DynamoTables.promotions(config, stage.name))
+  lazy val campaignService = com.gu.memsub.services.JsonDynamoService.forTable[Campaign](DynamoTables.campaigns(config, stage.name))
 
   lazy val membershipRatePlanIds = MembershipRatePlanIds.fromConfig(config.getConfig(AppComponents.ratePlanPath(stage) + ".membership"))
   lazy val digipackRatePlanIds = DigitalPackRatePlanIds.fromConfig(config.getConfig(AppComponents.ratePlanPath(stage) + ".digitalpack"))
 
   lazy val healthController = wire[HealthCheckController]
   lazy val promoController = wire[PromotionController]
+  lazy val campaignController = wire[CampaignController]
   lazy val planController = wire[RatePlanController]
   lazy val homeController = wire[StaticController]
   lazy val assetController = wire[Assets]
