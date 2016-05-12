@@ -1,8 +1,11 @@
-<div class="mdl-shadow--4dp" ng-repeat="(channel, codes) in promotion.codes">
-    <h6 class="mdl-typography--title">{{channel}}</h6>
+<h5>Channels/Codes</h5>
+<div ng-repeat="(channel, codes) in promotion.codes">
+    <h7>{{channel}}</h7>
+    <i class="material-icons mdl-list__item-icon" ng-click="ctrl.deleteChannel(promotion.codes, channel)">delete</i>
     <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label" ng-repeat="code in codes">
         <input class="mdl-textfield__input" type="text" id="code" ng-model="codes[$index]">
         <label class="mdl-textfield__label" for="code">Code</label>
+        <i class="material-icons mdl-list__item-icon" ng-click="ctrl.deleteCode(promotion.codes, channel, code)">delete</i>
     </div>
     <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
         <input class="mdl-textfield__input" type="text" id="newCode" ng-model="newCode">
@@ -13,7 +16,7 @@
     </div>
 </div>
 
-<div class="mdl-shadow--4dp">
+<div>
     <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
         <input class="mdl-textfield__input" type="text" id="channelName" ng-model="newChannelName">
         <label class="mdl-textfield__label" for="channelName">Channel name</label>
