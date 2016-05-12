@@ -1,0 +1,20 @@
+<form name="campaignForm" ng-submit="ctrl.save(campaign)">
+    <div class="mdl-grid">
+        <div class="mdl-cell mdl-cell--12-col mdl-cell--2-offset" mdl-upgrade>
+            <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                <input class="mdl-textfield__input" type="text" id="code" name="code" ng-model="campaign.code" ng-required="true">
+                <label class="mdl-textfield__label" for="code">Campaign code</label>
+            </div>
+        </div>
+        <div class="mdl-cell mdl-cell--12-col mdl-cell--2-offset" mdl-upgrade>
+            <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                <input class="mdl-textfield__input" type="text" id="name" name="name" ng-model="campaign.name" ng-required="true">
+                <label class="mdl-textfield__label" for="name">Campaign name</label>
+            </div>
+        </div>
+
+        <div class="mdl-cell mdl-cell--12-col mdl-cell--2-offset">
+            <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect" type="submit" ng-disabled="campaignForm.$invalid">Update</button>
+        </div>
+    </div>
+</form>

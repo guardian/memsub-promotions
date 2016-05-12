@@ -1,18 +1,20 @@
 export default class {
 
     /* @ngInject */
-    constructor($stateParams, $scope, promotionService) {
-        this.service = promotionService;
+    constructor($stateParams, $scope, campaignService, promotionService) {
+        this.promotionService = promotionService;
+        this.campaignService = campaignService;
         $scope.promotions = [];
         this.$scope = $scope;
         this.fetchPromotions($stateParams.code);
     }
 
-    fetchPromotions(name) {
-        let promos = this.service.all().then(res => res.data);
-        promos.then(r => this.$scope.campaigns = r.map(i => i.campaignName).filter((v, i, self) => self.indexOf(v) === i));
+    fetchPromotions(code) {
+        let promos = this.promotionService.all().then(res => res.data);
 
-        let byCampaign = name ? promos.then(p => p.filter(v => v.campaignName == name)) : promos;
+        let byCampaign = code ? promos.then(p => p.filter(v => v.campaignCode == code)) : promos;
         byCampaign.then(res => this.$scope.promotions = res)
+
+        this.campaignService.all().then(campaigns => this.$scope.campaigns = campaigns)
     }
 }

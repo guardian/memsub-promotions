@@ -2,12 +2,22 @@
     <div class="mdl-cell mdl-cell--4-col">
         <h5>Campaigns</h5>
         <ul class="mdl-list">
-            <li class="mdl-list__item" ng-repeat="campaign in campaigns">
-                <span class="mdl-list__item-primary-content mdl-js-ripple-effect" ui-sref="singleCampaign({code: campaign})">
-                  <span>{{campaign}}</span>
+            <li class="mdl-list__item mdl-list__item--two-line" ng-repeat="campaign in campaigns">
+                <span class="mdl-list__item-primary-content mdl-js-ripple-effect" ui-sref="singleCampaign({code: campaign.code})">
+                  <span>{{campaign.code}}</span>
+                    <span class="mdl-list__item-sub-title" style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap">
+                    {{campaign.name}}
+                  </span>
+                </span>
+                <span class="mdl-list__item-secondary-action">
+                    <a class="mdl-list__item-secondary-action" ui-sref="editCampaign({code: campaign.code})"><i class="material-icons">mode edit</i></a>
                 </span>
             </li>
         </ul>
+        <!-- Colored FAB button with ripple -->
+        <button class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored" ui-sref="editCampaign">
+            <i class="material-icons">add</i>
+        </button>
     </div>
     <div class="mdl-cell mdl-cell--4-col">
         <h5>Promotions</h5>
