@@ -1,9 +1,9 @@
 <div class="mdl-grid">
-    <div class="mdl-cell mdl-cell--4-col">
+    <div class="mdl-cell mdl-cell--3-col">
         <h5>Campaigns</h5>
         <ul class="mdl-list">
             <li class="mdl-list__item mdl-list__item--two-line" ng-repeat="campaign in campaigns">
-                <span class="mdl-list__item-primary-content mdl-js-ripple-effect" ui-sref="singleCampaign({code: campaign.code})">
+                <span class="mdl-list__item-primary-content mdl-js-ripple-effect" ui-sref="allPromotions.singleCampaign({code: campaign.code})">
                   <span>{{campaign.code}}</span>
                     <span class="mdl-list__item-sub-title" style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap">
                     {{campaign.name}}
@@ -19,18 +19,7 @@
             <i class="material-icons">add</i>
         </button>
     </div>
-    <div class="mdl-cell mdl-cell--4-col">
-        <h5>Promotions</h5>
-        <ul class="mdl-list">
-            <li class="mdl-list__item mdl-list__item--two-line" ng-repeat="promotion in promotions" ui-sref="editPromotion({uuid: promotion.uuid})">
-                <span class="mdl-list__item-primary-content">
-                  <span>{{promotion.name}}</span>
-                  <span class="mdl-list__item-sub-title" style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap">
-                    {{promotion.description}}
-                  </span>
-                </span>
-            </li>
-        </ul>
+    <div class="mdl-cell mdl-cell--5-col" ui-view>
     </div>
 </div>
 

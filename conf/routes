@@ -6,12 +6,13 @@
 GET     /                           controllers.StaticController.index
 
 GET     /promotions                 controllers.PromotionController.all
+POST    /promotion                 controllers.PromotionController.upsert
 
 GET     /campaigns                  controllers.CampaignController.all
-
 POST    /campaign                   controllers.CampaignController.upsert
 
 GET     /plans                      controllers.RatePlanController.all
+GET     /countries                  controllers.CountryController.all
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)

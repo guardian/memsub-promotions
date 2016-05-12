@@ -10,10 +10,8 @@ export default class {
     }
 
     fetchPromotions(code) {
-        let promos = this.promotionService.all().then(res => res.data);
-
-        let byCampaign = code ? promos.then(p => p.filter(v => v.campaignCode == code)) : promos;
-        byCampaign.then(res => this.$scope.promotions = res)
+        let promos = code ? this.promotionService.byCampaign(code) : this.promotionService.all();
+        promos.then(res => this.$scope.promotions = res);
 
         this.campaignService.all().then(campaigns => this.$scope.campaigns = campaigns)
     }

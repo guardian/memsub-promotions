@@ -5,10 +5,10 @@ export default class {
     /* @ngInject */
     constructor($state, $rootScope, $scope, $cookies) {
         this.$state = $state;
-        $rootScope.stage = {name: "PROD"};
-        this.$scope = $scope;
+        let cookieValue = $cookies.get(STAGE);
+        $rootScope.stage = {name: cookieValue ? cookieValue : "PROD"};
         this.$cookies = $cookies;
-        this.$scope.stage.name = this.$cookies.get(STAGE);
+        this.$scope = $scope;
     }
 
     setStage(stage) {

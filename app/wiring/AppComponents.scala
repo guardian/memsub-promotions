@@ -24,6 +24,7 @@ class AppComponents(private val stage: Stage, builtInComponents: BuiltInComponen
   lazy val healthController = wire[HealthCheckController]
   lazy val promoController = wire[PromotionController]
   lazy val campaignController = wire[CampaignController]
+  lazy val countryController = wire[CountryController]
   lazy val planController = wire[RatePlanController]
   lazy val homeController = wire[StaticController]
   lazy val assetController = wire[Assets]
