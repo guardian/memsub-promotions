@@ -1,0 +1,24 @@
+<div class="mdl-shadow--4dp" ng-repeat="(channel, codes) in promotion.codes">
+    <h6 class="mdl-typography--title">{{channel}}</h6>
+    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label" ng-repeat="code in codes">
+        <input class="mdl-textfield__input" type="text" id="code" ng-model="codes[$index]">
+        <label class="mdl-textfield__label" for="code">Code</label>
+    </div>
+    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+        <input class="mdl-textfield__input" type="text" id="newCode" ng-model="newCode">
+        <label class="mdl-textfield__label" for="newCode">Code</label>
+    </div>
+    <div class="mdl-cell mdl-cell--12-col mdl-cell--2-offset">
+        <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect" ng-click="ctrl.addCode(promotion.codes, channel, newCode); newCode = '';">Add code</button>
+    </div>
+</div>
+
+<div class="mdl-shadow--4dp">
+    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+        <input class="mdl-textfield__input" type="text" id="channelName" ng-model="newChannelName">
+        <label class="mdl-textfield__label" for="channelName">Channel name</label>
+    </div>
+    <div class="mdl-cell mdl-cell--12-col mdl-cell--2-offset">
+        <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect" ng-click="ctrl.addChannel(promotion.codes, newChannelName); newChannelName = '';">Add channel</button>
+    </div>
+</div>

@@ -34,15 +34,25 @@ export default class {
         this.$scope.ratePlanIds = this.arrayToMap(promotion.appliesTo.productRatePlanIds)
     }
 
+    applyRatePlans(ratePlanIds) {
+        this.$scope.promotion.appliesTo.productRatePlanIds = Object.keys(ratePlanIds).filter(id => ratePlanIds[id] == true)
+    }
+
     populateCountryGroups(promotion) {
         this.countryGroups.then(countryGroups => {
             this.$scope.selectedCountryGroups = this.arrayToMap(promotion.appliesTo.countries.map(countryCode =>
-                countryGroups.filter(cg => cg.countries.indexOf(countryCode) != -1)[0]).map(cg => cg.id));
+                countryGroups.filter(cg => cg.countries.includes(countryCode))[0]).map(cg => cg.id));
         });
     }
 
-    applyRatePlans(ratePlanIds) {
-        this.$scope.promotion.appliesTo.productRatePlanIds = Object.keys(ratePlanIds).filter(id => ratePlanIds[id] == true)
+    applyCountryGroups(countryGroupIds) {
+        countryGroupIds = Object.keys(countryGroupIds).filter(id => countryGroupIds[id] == true);
+        let selectedCountries = this.countryGroups.then(countryGroups => countryGroups
+            .filter(group => countryGroupIds.includes(group.id))
+            .map(group => group.countries)
+            .reduce((arr, countries) => arr.concat(countries), [])
+        );
+        selectedCountries.then(countries => this.$scope.promotion.appliesTo.countries = countries);
     }
 
     save(promotion) {

@@ -11,6 +11,7 @@ import chooseCampaign from "text!templates/ChooseCampaign.html"
 // directives
 import stageMenu from 'directives/StageMenu'
 import mdlUpgrade from 'directives/MdlUpgrade'
+import channelCodes from 'directives/ChannelCodes'
 
 // services
 import RatePlanService from "services/RatePlanService"
@@ -22,6 +23,7 @@ import CountryService from "services/CountryService"
 import PromotionListController from "controllers/PromotionListController"
 import EditPromotionController from "controllers/EditPromotionController"
 import EditCampaignController from "controllers/EditCampaignController"
+import ChannelCodesController from "controllers/ChannelCodesController"
 import StageController from "controllers/StageController"
 
 let module = angular.module("Promotions", ['ui.router', 'ngCookies']);
@@ -33,8 +35,10 @@ module.service('promotionService', PromotionService)
       .controller('promotionListController', PromotionListController)
       .controller('editPromotionController', EditPromotionController)
       .controller('editCampaignController', EditCampaignController)
+      .controller('channelCodesController', ChannelCodesController)
       .controller('stageController', StageController)
       .directive('stageMenu', stageMenu)
+      .directive('channelCodes', channelCodes)
       .directive('mdlUpgrade', mdlUpgrade)
 ;
 
