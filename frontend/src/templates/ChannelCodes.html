@@ -12,11 +12,18 @@
             </div>
         </div>
         <div class="add-code-container">
-            <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                <input class="mdl-textfield__input" type="text" id="newCode" ng-model="newCode">
-                <label class="mdl-textfield__label" for="newCode">Code</label>
+            <div class="mdl-grid">
+                <div class="mdl-cell mdl-cell--9-col">
+                    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label mdl-textfield__short">
+                        <input class="mdl-textfield__input" type="text" id="newCode" ng-model="newCode">
+                        <label class="mdl-textfield__label" for="newCode">Code</label>
+                    </div>
+                </div>
+                <div class="mdl-cell mdl-cell--3-col">
+                    <button class="mdl-button mdl-js-button mdl-button--primary" ng-click="ctrl.addCode(promotion.codes, channel, newCode); newCode = '';">Add code</button>
+                </div>
             </div>
-            <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect" ng-click="ctrl.addCode(promotion.codes, channel, newCode); newCode = '';">Add code</button>
+
         </div>
     </modal>
 </div>
