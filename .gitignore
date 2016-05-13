@@ -8,3 +8,4 @@ target
 /RUNNING_PID
 frontend/node_modules
 public/
+.DS_Store
