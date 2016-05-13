@@ -1,19 +1,24 @@
 <h5>Channels/Codes</h5>
 <div ng-repeat="(channel, codes) in promotion.codes">
-    <h7>{{channel}}</h7>
+
+    <h7 ng-click="showModal = true">{{channel}}</h7>
     <i class="material-icons mdl-list__item-icon" ng-click="ctrl.deleteChannel(promotion.codes, channel)">delete</i>
-    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label" ng-repeat="code in codes">
-        <input class="mdl-textfield__input" type="text" id="code" ng-model="codes[$index]">
-        <label class="mdl-textfield__label" for="code">Code</label>
-        <i class="material-icons mdl-list__item-icon" ng-click="ctrl.deleteCode(promotion.codes, channel, code)">delete</i>
-    </div>
-    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-        <input class="mdl-textfield__input" type="text" id="newCode" ng-model="newCode">
-        <label class="mdl-textfield__label" for="newCode">Code</label>
-    </div>
-    <div class="mdl-cell mdl-cell--12-col mdl-cell--2-offset">
-        <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect" ng-click="ctrl.addCode(promotion.codes, channel, newCode); newCode = '';">Add code</button>
-    </div>
+
+    <modal title="Edit codes" show="showModal">
+        <div class="mdl-cell mdl-cell--6-col" ng-repeat="code in codes track by $index">
+            <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label" >
+                <input class="mdl-textfield__input" type="text" id="code" ng-model="codes[$index]" ng-change="ctrl.codeUpdated(promotion.codes, channel, codes[$index])">
+                <label class="mdl-textfield__label" for="code">Code</label>
+            </div>
+        </div>
+        <div class="add-code-container">
+            <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                <input class="mdl-textfield__input" type="text" id="newCode" ng-model="newCode">
+                <label class="mdl-textfield__label" for="newCode">Code</label>
+            </div>
+            <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect" ng-click="ctrl.addCode(promotion.codes, channel, newCode); newCode = '';">Add code</button>
+        </div>
+    </modal>
 </div>
 
 <div>

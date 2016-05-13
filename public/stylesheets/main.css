@@ -10596,3 +10596,27 @@ _:-ms-input-placeholder, :root .mdl-slider.mdl-slider.is-upgraded {
     .mdl-grid.mdl-grid--no-spacing > .mdl-cell--11-offset, .mdl-grid.mdl-grid--no-spacing >
     .mdl-cell--11-offset-desktop.mdl-cell--11-offset-desktop {
       margin-left: 91.66667%; } }
+
+.modal {
+  z-index: 2;
+  position: fixed;
+  background-color: white;
+  left: 20%;
+  right: 20%;
+  bottom: 20%;
+  top: 20%; }
+
+.modal__backdrop {
+  position: fixed;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0; }
+
+.add-code-container {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0; }

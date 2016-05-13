@@ -3,7 +3,7 @@
         <h5>Campaigns</h5>
         <ul class="mdl-list">
             <li class="mdl-list__item mdl-list__item--two-line" ng-repeat="campaign in campaigns">
-                <span class="mdl-list__item-primary-content mdl-js-ripple-effect" ui-sref="allPromotions.singleCampaign({code: campaign.code})">
+                <span class="mdl-list__item-primary-content" ui-sref="allPromotions.singleCampaign({code: campaign.code})">
                   <span>{{campaign.code}}</span>
                     <span class="mdl-list__item-sub-title" style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap">
                     {{campaign.name}}

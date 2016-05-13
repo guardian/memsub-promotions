@@ -26,11 +26,18 @@ export default class {
     }
 
     deleteCode(currentChannels, channel, code) {
-        if (code) {
-            if (currentChannels[channel].includes(code)) {
-                currentChannels[channel].splice(currentChannels[channel].indexOf(code), 1);
-                this.$scope.promotion.codes = currentChannels;
-            }
+        if (currentChannels[channel].includes(code)) {
+            currentChannels[channel].splice(currentChannels[channel].indexOf(code), 1);
+            this.$scope.promotion.codes = currentChannels;
+        }
+    }
+
+    codeUpdated(currentChannels, channel, code) {
+        console.log(currentChannels, channel, code);
+
+        if (!code) {
+            console.log(currentChannels, channel, code);
+            this.deleteCode(currentChannels, channel, code);
         }
     }
 

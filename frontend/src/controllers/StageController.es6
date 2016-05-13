@@ -14,6 +14,6 @@ export default class {
     setStage(stage) {
         this.$scope.stage.name = stage;
         this.$cookies.put(STAGE, stage);
-        this.$state.go('allPromotions', {}, {reload: true});
+        this.$state.go(this.$state.current, {}, {reload: true});
     }
 }

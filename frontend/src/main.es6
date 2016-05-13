@@ -6,12 +6,12 @@ import campaignList from "text!templates/Campaignlist.html"
 import promotionList from "text!templates/PromotionList.html"
 import promotionForm from "text!templates/PromotionForm.html"
 import campaignForm from "text!templates/CampaignForm.html"
-import chooseCampaign from "text!templates/ChooseCampaign.html"
 
 // directives
 import stageMenu from 'directives/StageMenu'
 import mdlUpgrade from 'directives/MdlUpgrade'
 import channelCodes from 'directives/ChannelCodes'
+import modal from 'directives/Modal'
 
 // services
 import RatePlanService from "services/RatePlanService"
@@ -21,6 +21,7 @@ import CountryService from "services/CountryService"
 
 // controllers
 import PromotionListController from "controllers/PromotionListController"
+import CampaignListController from "controllers/CampaignListController"
 import EditPromotionController from "controllers/EditPromotionController"
 import EditCampaignController from "controllers/EditCampaignController"
 import ChannelCodesController from "controllers/ChannelCodesController"
@@ -33,6 +34,7 @@ module.service('promotionService', PromotionService)
       .service('ratePlanService', RatePlanService)
       .service('countryService', CountryService)
       .controller('promotionListController', PromotionListController)
+      .controller('campaignListController', CampaignListController)
       .controller('editPromotionController', EditPromotionController)
       .controller('editCampaignController', EditCampaignController)
       .controller('channelCodesController', ChannelCodesController)
@@ -40,6 +42,7 @@ module.service('promotionService', PromotionService)
       .directive('stageMenu', stageMenu)
       .directive('channelCodes', channelCodes)
       .directive('mdlUpgrade', mdlUpgrade)
+      .directive('modal', modal)
 ;
 
 module.config(($stateProvider, $urlRouterProvider) => {
@@ -47,7 +50,7 @@ module.config(($stateProvider, $urlRouterProvider) => {
     $stateProvider
     .state('allPromotions', {
         template: campaignList,
-        controller: 'promotionListController',
+        controller: 'campaignListController',
         controllerAs: 'ctrl',
         abstract: true
     })
@@ -58,7 +61,7 @@ module.config(($stateProvider, $urlRouterProvider) => {
         controllerAs: 'ctrl'
     })
     .state('allPromotions.chooseCampaign', {
-        template: chooseCampaign,
+        template: '',
         url: "/"
     })
     .state('editPromotion', {
