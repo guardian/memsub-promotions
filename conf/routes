@@ -6,7 +6,7 @@
 GET     /                           controllers.StaticController.index
 
 GET     /promotions                 controllers.PromotionController.all
-POST    /promotion                 controllers.PromotionController.upsert
+POST    /promotion                  controllers.PromotionController.upsert
 
 GET     /campaigns                  controllers.CampaignController.all
 POST    /campaign                   controllers.CampaignController.upsert

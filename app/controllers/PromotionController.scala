@@ -1,7 +1,8 @@
 package controllers
 
-import com.gu.memsub.promo.Campaign
+import com.gu.memsub.promo._
 import com.gu.memsub.promo.Promotion.AnyPromotion
+import org.joda.time.Days
 import play.api.libs.concurrent.Execution.Implicits._
 import com.gu.memsub.services.{JsonDynamoService}
 import com.gu.memsub.promo.Formatters._
@@ -17,8 +18,15 @@ class PromotionController(service: JsonDynamoService[AnyPromotion, Future]) {
   }
 
   def upsert = Action.async { request =>
-    request.body.asJson.flatMap(_.validate[AnyPromotion].asOpt).fold[Future[Result]](Future.successful(BadRequest("No promotion")))(
-      p => service.add(p).map(_ => Ok(Json.obj("status" -> "ok")))
-    )
+    request.body.asJson.map { json =>
+      json.validate[AnyPromotion].map { promotion => {
+        service.add(promotion).map(_ => Ok(Json.obj("status" -> "ok")))
+      }
+      }.recoverTotal{
+        e => Future(BadRequest("Detected error:"+ JsError.toJson(e)))
+      }
+    }.getOrElse {
+      Future(BadRequest("Could not parse campaign data"))
+    }
   }
 }

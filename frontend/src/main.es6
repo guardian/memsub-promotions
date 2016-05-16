@@ -11,6 +11,8 @@ import campaignForm from "text!templates/CampaignForm.html"
 import stageMenu from 'directives/StageMenu'
 import mdlUpgrade from 'directives/MdlUpgrade'
 import channelCodes from 'directives/ChannelCodes'
+import promotionType from 'directives/PromotionType'
+import deleteEmpty from 'directives/DeleteEmpty'
 import modal from 'directives/Modal'
 
 // services
@@ -25,6 +27,7 @@ import CampaignListController from "controllers/CampaignListController"
 import EditPromotionController from "controllers/EditPromotionController"
 import EditCampaignController from "controllers/EditCampaignController"
 import ChannelCodesController from "controllers/ChannelCodesController"
+import PromotionTypeController from "controllers/PromotionTypeController"
 import StageController from "controllers/StageController"
 
 let module = angular.module("Promotions", ['ui.router', 'ngCookies']);
@@ -38,9 +41,12 @@ module.service('promotionService', PromotionService)
       .controller('editPromotionController', EditPromotionController)
       .controller('editCampaignController', EditCampaignController)
       .controller('channelCodesController', ChannelCodesController)
+      .controller('promotionTypeController', PromotionTypeController)
       .controller('stageController', StageController)
+      .directive('promotionType', promotionType)
       .directive('stageMenu', stageMenu)
       .directive('channelCodes', channelCodes)
+      .directive('deleteEmpty', deleteEmpty)
       .directive('mdlUpgrade', mdlUpgrade)
       .directive('modal', modal)
 ;

@@ -5,9 +5,8 @@ import template from "text!templates/Modal.html"
 export default () => {
     return {
         scope: {
-            show: '=show',
-            title: '@title',
-            promotion: '=promotion'
+            show: '=',
+            title: '@title'
         },
         restrict: 'E',
         template: template,
