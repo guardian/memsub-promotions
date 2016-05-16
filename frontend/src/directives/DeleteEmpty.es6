@@ -9,8 +9,10 @@ export default () => {
             scope.$watch(attrs.ngModel, (n) => {
                 if (!n) {
                     let c = scope.$eval(container);
-                    delete c[variable];
-                    scope.$eval(container + ' = b', {b: c});
+                    if (c) {
+                        delete c[variable];
+                        scope.$eval(container + ' = b', {b: c});
+                    }
                 } else {
                     scope.$eval(container + '[key] = n', {key: variable, n: n});
                 }

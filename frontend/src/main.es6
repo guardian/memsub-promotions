@@ -1,6 +1,11 @@
 import "material-design-lite"
 import 'babel-polyfill/dist/polyfill.min'
 
+import 'angular'
+import 'angular-ui-router'
+import 'angular-cookies'
+import 'angular-material'
+
 //views
 import campaignList from "text!templates/Campaignlist.html"
 import promotionList from "text!templates/PromotionList.html"
@@ -13,7 +18,11 @@ import mdlUpgrade from 'directives/MdlUpgrade'
 import channelCodes from 'directives/ChannelCodes'
 import promotionType from 'directives/PromotionType'
 import deleteEmpty from 'directives/DeleteEmpty'
+import promotionDates from 'directives/PromotionDates'
 import modal from 'directives/Modal'
+
+//config
+import dateConfig from 'config/DateConfig'
 
 // services
 import RatePlanService from "services/RatePlanService"
@@ -27,10 +36,11 @@ import CampaignListController from "controllers/CampaignListController"
 import EditPromotionController from "controllers/EditPromotionController"
 import EditCampaignController from "controllers/EditCampaignController"
 import ChannelCodesController from "controllers/ChannelCodesController"
+import PromotionDatesController from "controllers/PromotionDatesController"
 import PromotionTypeController from "controllers/PromotionTypeController"
 import StageController from "controllers/StageController"
 
-let module = angular.module("Promotions", ['ui.router', 'ngCookies']);
+let module = angular.module("Promotions", ['ui.router', 'ngCookies', 'ngMaterial']);
 
 module.service('promotionService', PromotionService)
       .service('campaignService', CampaignService)
@@ -42,6 +52,7 @@ module.service('promotionService', PromotionService)
       .controller('editCampaignController', EditCampaignController)
       .controller('channelCodesController', ChannelCodesController)
       .controller('promotionTypeController', PromotionTypeController)
+      .controller('promotionDatesController', PromotionDatesController)
       .controller('stageController', StageController)
       .directive('promotionType', promotionType)
       .directive('stageMenu', stageMenu)
@@ -49,6 +60,8 @@ module.service('promotionService', PromotionService)
       .directive('deleteEmpty', deleteEmpty)
       .directive('mdlUpgrade', mdlUpgrade)
       .directive('modal', modal)
+      .directive('promotionDates', promotionDates)
+      .config(dateConfig)
 ;
 
 module.config(($stateProvider, $urlRouterProvider) => {

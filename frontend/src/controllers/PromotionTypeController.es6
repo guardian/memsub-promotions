@@ -1,23 +1,20 @@
 export default class {
 
     /* @ngInject */
-    constructor($scope, $timeout) {
-
-        $timeout(() => {
-            $scope.types = {
-                incentive: "Incentive",
-                free_trial: "Free trial",
-                percent_discount: "Discount",
-                tracking: "Tracking"
-            };
-
-
-        }, 0);
-
-
+    constructor($scope) {
+        this.types = [
+            'incentive',
+            'free_trial',
+            'percent_discount',
+            'tracking'
+        ];
         this.$scope = $scope;
     }
 
+    updateSelectedTab(promotionTypeName) {
+        this.$scope.selectedTab = this.types.indexOf(promotionTypeName)
+    }
+    
     setPromotionType(oldName, newName) {
         if (oldName != newName) {
             this.$scope.promotion.promotionType = {name: newName}
