@@ -1,28 +1,19 @@
 <form name="promotionForm">
     <div layout="column" layout-padding>
-        <h5>Edit promotion</h5>
 
         <md-input-container class="mdl-cell mdl-cell--12-col md-block">
             <label>Name</label><input name="name" ng-model="promotion.name" required>
-            <div ng-messages="promotionForm.name.$error"><div ng-message="required">This is required.</div></div>
         </md-input-container>
 
         <md-input-container class=" mdl-cell mdl-cell--12-col md-block">
             <label>Description</label><textarea ng-model="promotion.description" name="description" rows="3" required></textarea>
-            <div ng-messages="promotionForm.description.$error"><div ng-message="required">This is required.</div></div>
         </md-input-container>
 
 
         <div layout="row"  layout-align="center top">
-            <div layout="column" ng-repeat="(name, plans) in ratePlans" flex layout-align="top center">
-                <h5>{{name}}</h5>
-                <div layout="column">
-                    <md-checkbox ng-model="ratePlanIds[key]" aria-label="{{name}}" ng-repeat="(key, name) in plans" ng-change="ctrl.applyRatePlans(ratePlanIds)">
-                        {{name}}
-                    </md-checkbox>
-                </div>
 
-            </div>
+            <rate-plan-list product-rate-plan-ids="promotion.appliesTo.productRatePlanIds"></rate-plan-list>
+
             <div layout="column" flex layout-align="top center">
                 <h5>Availability</h5>
                 <div layout="column">
@@ -36,6 +27,7 @@
         <channel-codes promotion="promotion"></channel-codes>
         <promotion-type promotion="promotion"></promotion-type>
         <promotion-dates promotion="promotion"></promotion-dates>
+
         <landing-page landing-page="promotion.landingPage"></landing-page>
         <div>
             <md-button ng-click="ctrl.save(promotion)" class="md-raised md-primary">Update</md-button>

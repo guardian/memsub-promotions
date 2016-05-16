@@ -10,7 +10,6 @@ export default () => {
         template: types,
         controller: 'promotionTypeController',
         controllerAs: 'ctrl',
-        
         link: (scope, elem, attrs, controller) => {
             scope.$watch('promotion', (n) => {
                 if (n) {

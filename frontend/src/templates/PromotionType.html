@@ -1,7 +1,6 @@
-<div class="mdl-grid">
-    <h5 class="mdl-cell mdl-cell--12-col">Promotion type</h5>
-
-    <md-tabs md-dynamic-height class="mdl-cell mdl-cell--12-col" md-selected="selectedTab" ng-init="ctrl.setupSelectedTab(promotion)">
+<div layout="column">
+    <h5>Promotion type</h5>
+    <md-tabs md-dynamic-height md-selected="selectedTab" ng-init="ctrl.setupSelectedTab(promotion)">
 
         <!-- Incentives -->
         <md-tab label="Incentive" ng-click="ctrl.setPromotionType(promotion.promotionType.name, 'incentive')">
