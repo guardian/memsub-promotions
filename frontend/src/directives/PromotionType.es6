@@ -12,10 +12,10 @@ export default () => {
         controllerAs: 'ctrl',
         
         link: (scope, elem, attrs, controller) => {
-            scope.$watch('promotion', (n, o) => {
-                if (!n) return;
-                console.log(n, o, controller)
-                controller.updateSelectedTab(n.promotionType.name)
+            scope.$watch('promotion', (n) => {
+                if (n) {
+                    controller.updateSelectedTab(n.promotionType.name)
+                }
             })
         }
     };
