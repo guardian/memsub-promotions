@@ -2,19 +2,11 @@
 export default () => {
     return {
         restrict: 'A',
-        scope: true,
         link: (scope, elem, attrs) => {
-
-            let parts = attrs.deleteEmpty.split('.');
+            let parts = attrs.ngModel.split('.');
             let variable = parts.pop();
             let container = parts.join('.');
-
-            scope.$watch(attrs.deleteEmpty, (n) => {
-                elem.val(n)
-            });
-
-            elem.bind("keyup", () => {
-                let n = elem.val();
+            scope.$watch(attrs.ngModel, (n) => {
                 if (!n) {
                     let c = scope.$eval(container);
                     delete c[variable];
@@ -22,7 +14,7 @@ export default () => {
                 } else {
                     scope.$eval(container + '[key] = n', {key: variable, n: n});
                 }
-                scope.$apply()
+                setTimeout(() => scope.$apply, 0);
             });
         }
     };

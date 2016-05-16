@@ -15,7 +15,7 @@
         <label class="mdl-textfield__label" for="redemptionInstructions">Redemption instructions</label>
     </div>
     <div class="mdl-textfield mdl-js-textfield mdl-cell mdl-cell--8-col" ng-if="promotion.promotionType.name == 'incentive'">
-        <textarea class="mdl-textfield__input" type="text" rows= "3" id="tsandcs" delete-empty="promotion.promotionType.termsAndConditions"></textarea>
+        <textarea class="mdl-textfield__input" type="text" rows= "3" id="tsandcs" ng-model="promotion.promotionType.termsAndConditions" delete-empty></textarea>
         <label class="mdl-textfield__label" for="tsandcs">Terms & conditions</label>
     </div>
 
@@ -29,7 +29,7 @@
 
     <!-- Percent discounts -->
     <div class="mdl-textfield mdl-js-textfield mdl-cell mdl-cell--8-col" ng-if="promotion.promotionType.name == 'percent_discount'">
-        <input class="mdl-textfield__input" type="number" id="durationMonths" delete-empty="promotion.promotionType.durationMonths">
+        <input class="mdl-textfield__input" type="number" id="durationMonths" ng-model="promotion.promotionType.durationMonths" delete-empty>
         <label class="mdl-textfield__label" for="duration">Duration (months)</label>
     </div>
 

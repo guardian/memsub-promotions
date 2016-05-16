@@ -27,11 +27,4 @@ export default class {
             data: promotion
         }).then(response => response.data)
     }
-
-    types() {
-        return this.$http({
-            method: 'GET',
-            url: '/promotion/types'
-        }).then(response => response.data)
-    }
 }
