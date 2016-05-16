@@ -19,6 +19,7 @@ import channelCodes from 'directives/ChannelCodes'
 import promotionType from 'directives/PromotionType'
 import deleteEmpty from 'directives/DeleteEmpty'
 import promotionDates from 'directives/PromotionDates'
+import landingPage from 'directives/LandingPage'
 import modal from 'directives/Modal'
 
 //config
@@ -55,6 +56,7 @@ module.service('promotionService', PromotionService)
       .controller('promotionDatesController', PromotionDatesController)
       .controller('stageController', StageController)
       .directive('promotionType', promotionType)
+      .directive('landingPage', landingPage)
       .directive('stageMenu', stageMenu)
       .directive('channelCodes', channelCodes)
       .directive('deleteEmpty', deleteEmpty)
