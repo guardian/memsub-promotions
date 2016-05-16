@@ -1,46 +1,43 @@
-<form>
-    <div class="mdl-grid">
-        <div class="mdl-cell mdl-cell--12-col mdl-cell--2-offset" mdl-upgrade>
-            <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                <input class="mdl-textfield__input" type="text" id="name" ng-model="promotion.name">
-                <label class="mdl-textfield__label" for="name">Promotion name</label>
+<form name="promotionForm">
+    <div layout="column" layout-padding>
+        <h5>Edit promotion</h5>
+
+        <md-input-container class="mdl-cell mdl-cell--12-col md-block">
+            <label>Name</label><input name="name" ng-model="promotion.name" required>
+            <div ng-messages="promotionForm.name.$error"><div ng-message="required">This is required.</div></div>
+        </md-input-container>
+
+        <md-input-container class=" mdl-cell mdl-cell--12-col md-block">
+            <label>Description</label><textarea ng-model="promotion.description" name="description" rows="3" required></textarea>
+            <div ng-messages="promotionForm.description.$error"><div ng-message="required">This is required.</div></div>
+        </md-input-container>
+
+
+        <div layout="row"  layout-align="center top">
+            <div layout="column" ng-repeat="(name, plans) in ratePlans" flex layout-align="top center">
+                <h5>{{name}}</h5>
+                <div layout="column">
+                    <md-checkbox ng-model="ratePlanIds[key]" aria-label="{{name}}" ng-repeat="(key, name) in plans" ng-change="ctrl.applyRatePlans(ratePlanIds)">
+                        {{name}}
+                    </md-checkbox>
+                </div>
+
+            </div>
+            <div layout="column" flex layout-align="top center">
+                <h5>Availability</h5>
+                <div layout="column">
+                    <md-checkbox ng-model="selectedCountryGroups[group.id]" aria-label="{{group.name}}" ng-repeat="group in countryGroups" ng-change="ctrl.applyCountryGroups(selectedCountryGroups)">
+                        {{group.name}}
+                    </md-checkbox>
+                </div>
+
             </div>
         </div>
-        <div class="mdl-cell mdl-cell--12-col mdl-cell--2-offset" mdl-upgrade>
-            <div class="mdl-textfield mdl-js-textfield">
-                <textarea class="mdl-textfield__input" type="text" rows= "3" id="description" ng-model="promotion.description" style="resize: none"></textarea>
-                <label class="mdl-textfield__label" for="description">Description</label>
-            </div>
+        <channel-codes promotion="promotion"></channel-codes>
+        <promotion-type promotion="promotion"></promotion-type>
+        <promotion-dates promotion="promotion"></promotion-dates>
+        <div>
+            <md-button ng-click="ctrl.save(promotion)" class="md-raised md-primary">Update</md-button>
         </div>
-
-        <div class="mdl-cell mdl-cell--3-col" ng-repeat="(name, plans) in ratePlans" ng-class="$first ? 'mdl-cell--2-offset' : ''">
-            <h5>{{name}}</h5>
-            <label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" ng-repeat="(key, name) in plans" for="checkbox-{{key}}">
-                <input type="checkbox" id="checkbox-{{key}}" class="mdl-checkbox__input" ng-model="ratePlanIds[key]" checked ng-change="ctrl.applyRatePlans(ratePlanIds)">
-                <span class="mdl-checkbox__label">{{name}}</span>
-            </label>
-        </div>
-
-        <div class="mdl-cell mdl-cell--3-col mdl-cell--2-offset">
-            <h5>Availability</h5>
-            <label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" ng-repeat="group in countryGroups" for="checkbox-{{group.id}}">
-                <input type="checkbox" id="checkbox-{{group.id}}" class="mdl-checkbox__input" ng-model="selectedCountryGroups[group.id]" ng-change="ctrl.applyCountryGroups(selectedCountryGroups)" checked>
-                <span class="mdl-checkbox__label">{{group.name}}</span>
-            </label>
-        </div>
-
-        <div class="mdl-cell mdl-cell--3-col">
-            <channel-codes promotion="promotion"></channel-codes>
-        </div>
-
-        <div class="mdl-cell mdl-cell--6-col mdl-cell--2-offset">
-            <promotion-type promotion="promotion"></promotion-type>
-        </div>
-
-        <div class="mdl-cell mdl-cell--12-col mdl-cell--2-offset">
-            <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect" ng-click="ctrl.save(promotion)">Update</button>
-        </div>
-
-
     </div>
 </form>

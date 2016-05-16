@@ -1,6 +1,54 @@
 <div class="mdl-grid">
     <h5 class="mdl-cell mdl-cell--12-col">Promotion type</h5>
 
+    <md-tabs md-dynamic-height class="mdl-cell mdl-cell--12-col" md-selected="selectedTab" ng-init="ctrl.setupSelectedTab(promotion)">
+
+        <!-- Incentives -->
+        <md-tab label="Incentive" ng-click="ctrl.setPromotionType(promotion.promotionType.name, 'incentive')">
+            <md-content class="md-padding md-tab-content">
+                <md-input-container class="md-block" flex-gt-sm>
+                    <label>Redemption instructions</label>
+                    <input ng-model="promotion.promotionType.redemptionInstructions">
+                </md-input-container>
+                <md-input-container class="md-block" flex-gt-sm>
+                    <label>Terms and conditions</label>
+                    <input ng-model="promotion.promotionType.termsAndConditions" delete-empty>
+                </md-input-container>
+            </md-content>
+        </md-tab>
+
+        <!-- Free trials -->
+        <md-tab label="Free trial" ng-click="ctrl.setPromotionType(promotion.promotionType.name, 'free_trial')">
+            <md-content class="md-padding md-tab-content">
+                <md-input-container class="md-block" flex-gt-sm>
+                    <label>Duration (days)</label>
+                    <input type="number" ng-model="promotion.promotionType.duration">
+                </md-input-container>
+            </md-content>
+        </md-tab>
+
+        <!-- Percent discounts -->
+        <md-tab label="Discount" ng-click="ctrl.setPromotionType(promotion.promotionType.name, 'discount')">
+            <md-content class="md-padding md-tab-content">
+                <md-input-container class="md-block" flex-gt-sm>
+                    <label>Duration (months)</label>
+                    <input type="number" ng-model="promotion.promotionType.durationMonths" delete-empty>
+                </md-input-container>
+                <md-input-container class="md-block" flex-gt-sm>
+                    <label>Amount (%)</label>
+                    <input type="number" ng-model="promotion.promotionType.amount" delete-empty>
+                </md-input-container>
+            </md-content>
+        </md-tab>
+
+        <!-- Tracking -->
+        <md-tab label="Tracking" ng-click="ctrl.setPromotionType(promotion.promotionType.name, 'tracking')">
+            <md-content class="md-padding md-tab-content"></md-content>
+        </md-tab>
+    </md-tabs>
+</div>
+
+<!--
     <div class="mdl-cell mdl-cell--3-col" ng-repeat="(name, label) in types">
         <label class="mdl-radio mdl-js-radio mdl-js-ripple-effect" for="option-{{name}}">
             <input type="radio" id="option-{{name}}" class="mdl-radio__button" name="promotionType" value="{{name}}" ng-checked="promotion.promotionType.name == name" ng-click="ctrl.setPromotionType(promotion.promotionType.name, name)">
@@ -9,7 +57,7 @@
     </div>
 
 
-    <!-- Incentives -->
+    <!-- Incentives
     <div class="mdl-textfield mdl-js-textfield mdl-cell mdl-cell--8-col" ng-if="promotion.promotionType.name == 'incentive'">
         <input class="mdl-textfield__input" type="text" id="redemptionInstructions" ng-model="promotion.promotionType.redemptionInstructions">
         <label class="mdl-textfield__label" for="redemptionInstructions">Redemption instructions</label>
@@ -20,14 +68,14 @@
     </div>
 
 
-    <!-- Free trials -->
+    <!-- Free trials
     <div class="mdl-textfield mdl-js-textfield mdl-cell mdl-cell--8-col" ng-if="promotion.promotionType.name == 'free_trial'">
         <input class="mdl-textfield__input" type="number" id="duration" ng-model="promotion.promotionType.duration">
         <label class="mdl-textfield__label" for="duration">Duration (days)</label>
     </div>
 
 
-    <!-- Percent discounts -->
+    <!-- Percent discounts
     <div class="mdl-textfield mdl-js-textfield mdl-cell mdl-cell--8-col" ng-if="promotion.promotionType.name == 'percent_discount'">
         <input class="mdl-textfield__input" type="number" id="durationMonths" ng-model="promotion.promotionType.durationMonths" delete-empty>
         <label class="mdl-textfield__label" for="duration">Duration (months)</label>
@@ -39,3 +87,4 @@
     </div>
 </div>
 
+-->

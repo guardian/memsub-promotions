@@ -1,0 +1,4 @@
+<h5>Duration</h5>
+<md-datepicker aria-label="Start date" ng-model="promotion.starts" md-placeholder="Start date"></md-datepicker>
+<md-datepicker ng-show="promotion.expires" aria-label="Expiry date" ng-model="promotion.expires" md-placeholder="Expiry date" delete-empty></md-datepicker>
+<md-button ng-show="!promotion.expires" ng-click="ctrl.addExpiryDate()">Add expiry</md-button>

@@ -16,7 +16,9 @@ export default class {
 
     fetchPromotion(uuid) {
         let self = this;
-        let promo = this.service.get(uuid);
+        let promo = this.service.get(uuid)
+                        .then(this.transformDates.bind(self));
+
         promo.then(p => this.$scope.promotion = p);
         promo.then(this.populateRatePlans.bind(self));
         promo.then(this.populateCountryGroups.bind(self));
@@ -32,6 +34,11 @@ export default class {
 
     populateRatePlans(promotion) {
         this.$scope.ratePlanIds = this.arrayToMap(promotion.appliesTo.productRatePlanIds)
+    }
+
+    transformDates(promotion) {
+        let expires = promotion.expires ? {expires: new Date(promotion.expires)} : {};
+        return Object.assign({}, promotion, {starts: new Date(promotion.starts)}, expires)
     }
 
     applyRatePlans(ratePlanIds) {

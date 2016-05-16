@@ -9,6 +9,14 @@ export default () => {
         restrict: 'E',
         template: types,
         controller: 'promotionTypeController',
-        controllerAs: 'ctrl'
+        controllerAs: 'ctrl',
+        
+        link: (scope, elem, attrs, controller) => {
+            scope.$watch('promotion', (n, o) => {
+                if (!n) return;
+                console.log(n, o, controller)
+                controller.updateSelectedTab(n.promotionType.name)
+            })
+        }
     };
 }
