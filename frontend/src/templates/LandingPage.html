@@ -1,0 +1,23 @@
+<div layout="column">
+    <h5>Landing page</h5>
+    <md-input-container>
+        <label>Title</label><input name="title" ng-model="landingPage.title" delete-empty>
+    </md-input-container>
+    <md-input-container>
+        <label>Description</label><input name="description" ng-model="landingPage.description" delete-empty>
+    </md-input-container>
+    <md-input-container>
+        <label>Roundel HTML</label><input name="roundel-html" ng-model="landingPage.roundelHtml" delete-empty>
+    </md-input-container>
+    <md-input-container>
+        <label>Image URL</label><input name="image-url" ng-model="landingPage.imageUrl" delete-empty>
+    </md-input-container>
+    <div layout="row">
+        <label>Section colour</label>
+        <md-radio-group layout="row" ng-model="landingPage.sectionColour">
+            <md-radio-button value="blue" class="md-primary">Blue</md-radio-button>
+            <md-radio-button value="grey">Grey</md-radio-button>
+            <md-radio-button value="white">White</md-radio-button>
+        </md-radio-group>
+    </div>
+</div>
