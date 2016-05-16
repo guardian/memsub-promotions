@@ -1,6 +1,8 @@
 <form name="promotionForm">
     <div layout="column" layout-padding>
 
+        <h5>Details</h5>
+
         <md-input-container class="mdl-cell mdl-cell--12-col md-block">
             <label>Name</label><input name="name" ng-model="promotion.name" required>
         </md-input-container>
@@ -9,21 +11,8 @@
             <label>Description</label><textarea ng-model="promotion.description" name="description" rows="3" required></textarea>
         </md-input-container>
 
-
-        <div layout="row"  layout-align="center top">
-
-            <rate-plan-list product-rate-plan-ids="promotion.appliesTo.productRatePlanIds"></rate-plan-list>
-
-            <div layout="column" flex layout-align="top center">
-                <h5>Availability</h5>
-                <div layout="column">
-                    <md-checkbox ng-model="selectedCountryGroups[group.id]" aria-label="{{group.name}}" ng-repeat="group in countryGroups" ng-change="ctrl.applyCountryGroups(selectedCountryGroups)">
-                        {{group.name}}
-                    </md-checkbox>
-                </div>
-
-            </div>
-        </div>
+        <rate-plan-list product-rate-plan-ids="promotion.appliesTo.productRatePlanIds"></rate-plan-list>
+        <available-countries countries="promotion.appliesTo.countries"></available-countries>
         <channel-codes promotion="promotion"></channel-codes>
         <promotion-type promotion="promotion"></promotion-type>
         <promotion-dates promotion="promotion"></promotion-dates>

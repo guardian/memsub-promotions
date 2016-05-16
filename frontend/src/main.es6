@@ -14,13 +14,13 @@ import campaignForm from "text!templates/CampaignForm.html"
 
 // directives
 import stageMenu from 'directives/StageMenu'
-import mdlUpgrade from 'directives/MdlUpgrade'
 import channelCodes from 'directives/ChannelCodes'
 import promotionType from 'directives/PromotionType'
 import deleteEmpty from 'directives/DeleteEmpty'
 import promotionDates from 'directives/PromotionDates'
 import landingPage from 'directives/LandingPage'
 import ratePlanList from 'directives/RatePLanList'
+import availableCountries from 'directives/AvailableCountries'
 import modal from 'directives/Modal'
 
 //config
@@ -41,6 +41,7 @@ import ChannelCodesController from "controllers/ChannelCodesController"
 import PromotionDatesController from "controllers/PromotionDatesController"
 import PromotionTypeController from "controllers/PromotionTypeController"
 import RatePlanListController from "controllers/RatePlanListController"
+import AvailableCountriesController from "controllers/AvailableCountriesController"
 import StageController from "controllers/StageController"
 
 let module = angular.module("Promotions", ['ui.router', 'ngCookies', 'ngMaterial']);
@@ -58,15 +59,16 @@ module.service('promotionService', PromotionService)
       .controller('promotionDatesController', PromotionDatesController)
       .controller('stageController', StageController)
       .controller('ratePlanListController', RatePlanListController)
+      .controller('availableCountriesController', AvailableCountriesController)
       .directive('promotionType', promotionType)
       .directive('landingPage', landingPage)
       .directive('stageMenu', stageMenu)
       .directive('channelCodes', channelCodes)
       .directive('deleteEmpty', deleteEmpty)
-      .directive('mdlUpgrade', mdlUpgrade)
       .directive('modal', modal)
       .directive('promotionDates', promotionDates)
       .directive('ratePlanList', ratePlanList)
+      .directive('availableCountries', availableCountries)
       .config(dateConfig)
 ;
 
