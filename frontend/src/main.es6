@@ -7,7 +7,7 @@ import 'angular-cookies'
 import 'angular-material'
 
 //views
-import campaignList from "text!templates/Campaignlist.html"
+import campaignList from "text!templates/CampaignList.html"
 import promotionList from "text!templates/PromotionList.html"
 import promotionForm from "text!templates/PromotionForm.html"
 import campaignForm from "text!templates/CampaignForm.html"
