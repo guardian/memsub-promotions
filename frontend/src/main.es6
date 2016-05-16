@@ -20,6 +20,7 @@ import promotionType from 'directives/PromotionType'
 import deleteEmpty from 'directives/DeleteEmpty'
 import promotionDates from 'directives/PromotionDates'
 import landingPage from 'directives/LandingPage'
+import ratePlanList from 'directives/RatePLanList'
 import modal from 'directives/Modal'
 
 //config
@@ -39,6 +40,7 @@ import EditCampaignController from "controllers/EditCampaignController"
 import ChannelCodesController from "controllers/ChannelCodesController"
 import PromotionDatesController from "controllers/PromotionDatesController"
 import PromotionTypeController from "controllers/PromotionTypeController"
+import RatePlanListController from "controllers/RatePlanListController"
 import StageController from "controllers/StageController"
 
 let module = angular.module("Promotions", ['ui.router', 'ngCookies', 'ngMaterial']);
@@ -55,6 +57,7 @@ module.service('promotionService', PromotionService)
       .controller('promotionTypeController', PromotionTypeController)
       .controller('promotionDatesController', PromotionDatesController)
       .controller('stageController', StageController)
+      .controller('ratePlanListController', RatePlanListController)
       .directive('promotionType', promotionType)
       .directive('landingPage', landingPage)
       .directive('stageMenu', stageMenu)
@@ -63,6 +66,7 @@ module.service('promotionService', PromotionService)
       .directive('mdlUpgrade', mdlUpgrade)
       .directive('modal', modal)
       .directive('promotionDates', promotionDates)
+      .directive('ratePlanList', ratePlanList)
       .config(dateConfig)
 ;
 
