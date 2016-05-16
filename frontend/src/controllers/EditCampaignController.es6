@@ -16,6 +16,5 @@ export default class {
 
     save(campaign) {
         this.service.save(campaign);
-        console.log(campaign, "is saved now");
     }
 }

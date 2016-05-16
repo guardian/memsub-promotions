@@ -7,4 +7,5 @@ target
 /.settings
 /RUNNING_PID
 frontend/node_modules
-public/javascripts
+public/
+.DS_Store

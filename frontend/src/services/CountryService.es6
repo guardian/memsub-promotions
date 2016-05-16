@@ -8,7 +8,7 @@ export default class {
     all() {
         return this.$http({
             method: 'GET',
-            url: '/plans'
-        }).then(res => res.data)
+            url: '/countries'
+        }).then(response => response.data)
     }
 }
