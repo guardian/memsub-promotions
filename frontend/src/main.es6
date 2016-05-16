@@ -1,4 +1,3 @@
-import "material-design-lite"
 import 'babel-polyfill/dist/polyfill.min'
 
 import 'angular'
