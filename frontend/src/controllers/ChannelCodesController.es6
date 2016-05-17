@@ -15,17 +15,17 @@ export default class {
         }
     }
 
-    addCode(currentChannels, channelName, newCode) {
+    addCode(currentChannels, channelName) {
         this.$scope.channels = currentChannels.map(c => {
             if (c.name == channelName) {
-                c.codes.push(newCode);
+                c.codes.push("");
             }
             return c;
         });
-        this.$scope.newCode = "";
     }
 
     deleteCode(currentChannels, channelName, code) {
+        console.log(currentChannels, channelName, code);
         this.$scope.channels = currentChannels.map(c => {
             if (c.name == channelName) {
                 if (c.codes.includes(code)) {
