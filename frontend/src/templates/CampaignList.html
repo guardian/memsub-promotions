@@ -1,25 +1,22 @@
-<div class="mdl-grid">
-    <div class="mdl-cell mdl-cell--3-col">
-        <h5>Campaigns</h5>
-        <ul class="mdl-list">
-            <li class="mdl-list__item mdl-list__item--two-line" ng-repeat="campaign in campaigns">
-                <span class="mdl-list__item-primary-content" ui-sref="allPromotions.singleCampaign({code: campaign.code})">
-                  <span>{{campaign.code}}</span>
-                    <span class="mdl-list__item-sub-title" style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap">
-                    {{campaign.name}}
-                  </span>
-                </span>
-                <span class="mdl-list__item-secondary-action">
-                    <a class="mdl-list__item-secondary-action" ui-sref="editCampaign({code: campaign.code})"><i class="material-icons">mode edit</i></a>
-                </span>
-            </li>
-        </ul>
-        <!-- Colored FAB button with ripple -->
-        <button class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored" ui-sref="editCampaign">
-            <i class="material-icons">add</i>
-        </button>
+<div layout="row" layout-align=" stretch" flex>
+
+    <!-- campaign list -->
+    <div layout="column" flex="25" style="border-right: 1px solid #BBB" layout-align=" stretch">
+        <md-list>
+            <md-subheader>Campaigns</md-subheader>
+            <md-list-item class="md-3-line md-clickable" ng-repeat="campaign in campaigns" md-ink-ripple="#AAAAAA">
+                <div class="md-list-item-text" layout="column" ui-sref="allPromotions.singleCampaign({code: campaign.code})">
+                    <h3>{{ campaign.code }}</h3>
+                    <h4>{{ campaign.name }}</h4>
+                    <p><!-- this space for rent --></p>
+                </div>
+                <md-divider></md-divider>
+            </md-list-item>
+        </md-list>
     </div>
-    <div class="mdl-cell mdl-cell--5-col" ui-view>
+
+    <!-- nested view -->
+    <div layout="column" ui-view flex="75">
     </div>
 </div>
 
