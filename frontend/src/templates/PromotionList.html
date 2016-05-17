@@ -1,11 +1,22 @@
-<h5>Promotions</h5>
-<ul class="mdl-list">
-    <li class="mdl-list__item mdl-list__item--two-line" ng-repeat="promotion in promotions" ui-sref="editPromotion({uuid: promotion.uuid})">
-        <span class="mdl-list__item-primary-content">
-          <span>{{promotion.name}}</span>
-          <span class="mdl-list__item-sub-title" style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap">
-            {{promotion.description}}
-          </span>
-        </span>
-    </li>
-</ul>
+<md-list>
+    <md-subheader>Promotions</md-subheader>
+    <md-list-item class="md-3-line md-clickable" ng-repeat="promotion in promotions" md-ink-ripple="#AAAAAA">
+        <div class="md-list-item-text" layout="column">
+            <h3>{{ promotion.name }}</h3>
+            <h4 style="max-width: 90%">{{ promotion.description }}</h4>
+            <p>
+                <md-icon md-font-set="material-icons">date_range</md-icon>
+                {{ promotion.starts | date:"dd MMM yy" }} - {{ promotion.expires | date:"dd MMM yy" }}
+            </p>
+            <p>
+                <md-icon md-font-set="material-icons" class="md-secondary" ui-sref="editPromotion({uuid: promotion.uuid})">mode_edit</md-icon>
+            </p>
+        </div>
+        <md-divider></md-divider>
+    </md-list-item>
+    <section layout="column" layout-sm="column" layout-align="center center" layout-wrap>
+        <md-button class="md-fab md-secondary" aria-label="Add">
+            <md-icon md-font-set="material-icons">add</md-icon>
+        </md-button>
+    </section>
+</md-list>

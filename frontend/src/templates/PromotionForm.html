@@ -3,17 +3,17 @@
 
         <h5>Details</h5>
 
-        <md-input-container class="mdl-cell mdl-cell--12-col md-block">
+        <md-input-container>
             <label>Name</label><input name="name" ng-model="promotion.name" required>
         </md-input-container>
 
-        <md-input-container class=" mdl-cell mdl-cell--12-col md-block">
+        <md-input-container>
             <label>Description</label><textarea ng-model="promotion.description" name="description" rows="3" required></textarea>
         </md-input-container>
 
         <rate-plan-list product-rate-plan-ids="promotion.appliesTo.productRatePlanIds"></rate-plan-list>
         <available-countries countries="promotion.appliesTo.countries"></available-countries>
-        <channel-codes promotion="promotion"></channel-codes>
+        <channel-codes codes="promotion.codes"></channel-codes>
         <promotion-type promotion="promotion"></promotion-type>
         <promotion-dates promotion="promotion"></promotion-dates>
 

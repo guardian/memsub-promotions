@@ -1,8 +1,26 @@
-<div class="mdl-layout__drawer">
-    <span class="mdl-layout-title">Environment</span>
-    <nav class="mdl-navigation">
-        <a class="mdl-navigation__link" ng-click="ctrl.setStage('DEV')">DEV</a>
-        <a class="mdl-navigation__link" ng-click="ctrl.setStage('UAT')">UAT</a>
-        <a class="mdl-navigation__link" ng-click="ctrl.setStage('PROD')">PROD</a>
-    </nav>
-</div>
+<md-menu>
+    <md-button aria-label="Select environment" class="md-icon-button" ng-click="$mdOpenMenu($event)">
+        <i class="material-icons">menu</i>
+    </md-button>
+    <md-menu-content width="4">
+        <md-menu-item>
+            <md-button ng-click="ctrl.setStage('DEV')">
+                <md-icon md-font-set="material-icons" md-menu-align-target>motorcycle</md-icon>
+                DEV
+            </md-button>
+        </md-menu-item>
+        <md-menu-item>
+            <md-button ng-click="ctrl.setStage('UAT')">
+                <md-icon md-font-set="material-icons" md-menu-align-target>supervisor_account</md-icon>
+                UAT
+            </md-button>
+        </md-menu-item>
+        <md-menu-divider></md-menu-divider>
+        <md-menu-item>
+            <md-button ng-click="ctrl.setStage('PROD')">
+                <md-icon md-font-set="material-icons" md-menu-align-target>business</md-icon>
+                PROD
+            </md-button>
+        </md-menu-item>
+    </md-menu-content>
+</md-menu>
