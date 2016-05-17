@@ -5,40 +5,53 @@ export default class {
         this.$scope = $scope;
     }
 
-    addChannel(currentChannels, newChannelName) {
-        currentChannels[newChannelName] = [];
-        this.$scope.promotion.codes = currentChannels;
+    addChannel(newChannelName) {
+        this.$scope.channels.push({name: newChannelName, codes: []});
     }
 
-    deleteChannel(currentChannels, channel) {
-        if (channel) {
-            delete currentChannels[channel];
-            this.$scope.promotion.codes = currentChannels;
+    deleteChannel(currentChannels, channelName) {
+        if (channelName) {
+            this.$scope.channels = currentChannels.filter(c => c.name != channelName);
         }
     }
 
-    addCode(currentChannels, channel, newCode) {
-        if (newCode) {
-            currentChannels[channel].push(newCode);
-            this.$scope.promotion.codes = currentChannels;
-            this.$scope.newCode = "";
-        }
+    addCode(currentChannels, channelName, newCode) {
+        this.$scope.channels = currentChannels.map(c => {
+            if (c.name == channelName) {
+                c.codes.push(newCode);
+            }
+            return c;
+        });
+        this.$scope.newCode = "";
     }
 
-    deleteCode(currentChannels, channel, code) {
-        if (currentChannels[channel].includes(code)) {
-            currentChannels[channel].splice(currentChannels[channel].indexOf(code), 1);
-            this.$scope.promotion.codes = currentChannels;
-        }
+    deleteCode(currentChannels, channelName, code) {
+        this.$scope.channels = currentChannels.map(c => {
+            if (c.name == channelName) {
+                if (c.codes.includes(code)) {
+                    c.codes.splice(c.codes.indexOf(code), 1);
+                }
+            }
+            return c;
+        });
     }
 
-    codeUpdated(currentChannels, channel, code) {
-        console.log(currentChannels, channel, code);
-
+    codeUpdated(currentChannels, channelName, code) {
         if (!code) {
-            console.log(currentChannels, channel, code);
-            this.deleteCode(currentChannels, channel, code);
+            this.deleteCode(currentChannels, channelName, code);
         }
+    }
+
+    populateChannels(channels) {
+        this.$scope.channels = Object.keys(channels).map(k => { return {"name": k, "codes": channels[k]} })
+    }
+
+    applyChannels(channels) {
+        this.$scope.codes = channels.map(c => {
+            let o = {};
+            o[c.name] = c.codes;
+            return o
+        }).reduce((arr, codes) => Object.assign(arr, codes), {})
     }
 
 }
