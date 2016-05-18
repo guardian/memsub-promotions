@@ -13,7 +13,7 @@ export default class {
         this.campaignService.all()
             .then(campaigns => {this.$scope.campaigns = campaigns; return campaigns})
             .then(campaigns => {
-                if (campaigns) {
+                if (campaigns && campaigns.length) {
                     this.$state.go('allPromotions.singleCampaign', {code: campaigns[0].code})
                 }
             })
