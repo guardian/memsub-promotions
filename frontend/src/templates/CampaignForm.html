@@ -1,6 +1,6 @@
 <form name="campaignForm" ng-submit="ctrl.save(campaign)">
     <div layout="column" layout-padding>
-        <h5>Details</h5>
+        <h5>{{editing ? 'Edit' : 'Add'}} campaign</h5>
         <md-input-container>
             <label>Code</label><input type="text" id="code" name="code" ng-model="campaign.code" ng-required="true" ng-disabled="editing">
         </md-input-container>
@@ -10,6 +10,6 @@
         </md-input-container>
     </div>
     <div>
-        <md-button ng-click="ctrl.save(campaign)" class="md-raised md-primary">Update</md-button>
+        <md-button ng-click="ctrl.save(campaign)" class="md-raised md-primary">Save</md-button>
     </div>
 </form>

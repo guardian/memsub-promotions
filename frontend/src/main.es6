@@ -104,7 +104,7 @@ module.config(($stateProvider, $urlRouterProvider) => {
         controllerAs: 'ctrl'
     })
     .state('editCampaign', {
-        url: "/campaign/edit/:code",
+        url: "/campaign/:code",
         template: campaignForm,
         controller: 'editCampaignController',
         controllerAs: 'ctrl'
