@@ -18,7 +18,7 @@ import promotionType from 'directives/PromotionType'
 import deleteEmpty from 'directives/DeleteEmpty'
 import promotionDates from 'directives/PromotionDates'
 import landingPage from 'directives/LandingPage'
-import ratePlanList from 'directives/RatePLanList'
+import ratePlanList from 'directives/RatePlanList'
 import availableCountries from 'directives/AvailableCountries'
 import modal from 'directives/Modal'
 
