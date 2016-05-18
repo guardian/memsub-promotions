@@ -82,7 +82,7 @@ module.config(($stateProvider, $urlRouterProvider) => {
         abstract: true
     })
     .state('allPromotions.singleCampaign', {
-        url: "/campaign/:code",
+        url: "/campaign/promotions/:code",
         template: promotionList,
         controller: 'promotionListController',
         controllerAs: 'ctrl'
