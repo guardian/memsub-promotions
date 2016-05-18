@@ -1,5 +1,10 @@
-<md-list>
-    <md-subheader>Promotions</md-subheader>
+<md-list ng-cloak>
+    <md-subheader layout="row">
+        <span>
+            Promotions
+            <md-icon class="add-button" md-font-set="material-icons" ui-sref="createPromotion({campaignCode: code})">add</md-icon>
+        </span>
+    </md-subheader>
     <md-list-item class="md-3-line md-clickable" ng-repeat="promotion in promotions" md-ink-ripple="#AAAAAA">
         <div class="md-list-item-text" layout="column">
             <h3>{{ promotion.name }}</h3>
@@ -9,14 +14,9 @@
                 {{ promotion.starts | date:"dd MMM yy" }} - {{ promotion.expires | date:"dd MMM yy" }}
             </p>
             <p>
-                <md-icon md-font-set="material-icons" class="md-secondary" ui-sref="editPromotion({uuid: promotion.uuid})">mode_edit</md-icon>
+                <md-icon md-font-set="material-icons" class="md-secondary" ui-sref="promotion({uuid: promotion.uuid})">mode_edit</md-icon>
             </p>
         </div>
         <md-divider></md-divider>
     </md-list-item>
-    <section layout="column" layout-sm="column" layout-align="center center" layout-wrap>
-        <md-button class="md-fab md-secondary" aria-label="Add">
-            <md-icon md-font-set="material-icons">add</md-icon>
-        </md-button>
-    </section>
 </md-list>

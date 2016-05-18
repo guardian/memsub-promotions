@@ -1,10 +1,33 @@
+const emptyPromotion = {
+  appliesTo: {
+    productRatePlanIds: [],
+    countries: []
+  },
+  codes: {},
+  promotionType: { name: "tracking" },
+  landingPage: {}
+};
+
 export default class {
 
     /* @ngInject */
-    constructor($stateParams, $scope, promotionService) {
+    constructor($state, $stateParams, $scope, promotionService, uuid) {
         this.service = promotionService;
         this.$scope = $scope;
-        this.fetchPromotion($stateParams.uuid);
+        this.$state = $state;
+        this.uuid = uuid;
+        
+        if ($stateParams.uuid) {
+            this.fetchPromotion($stateParams.uuid);
+        } else if ($stateParams.campaignCode) {
+            this.createNewPromotion($stateParams.campaignCode);
+        } else {
+            // Later
+        }
+    }
+
+    createNewPromotion(campaignCode) {
+        this.$scope.promotion = Object.assign({}, emptyPromotion, {campaignCode: campaignCode, uuid: this.uuid.v4()});
     }
 
     fetchPromotion(uuid) {
@@ -30,6 +53,9 @@ export default class {
     }
 
     save(promotion) {
-        this.service.save(this.removeEmptyCodes(promotion));
+        this.$scope.saving = true;
+        this.service.save(this.removeEmptyCodes(promotion)).then(() =>
+            this.$state.go('allPromotions.singleCampaign', {code: promotion.campaignCode})
+        );
     }
 }

@@ -4,6 +4,7 @@ import 'angular'
 import 'angular-ui-router'
 import 'angular-cookies'
 import 'angular-material'
+import 'angular-uuid'
 
 //views
 import campaignList from "text!templates/CampaignList.html"
@@ -34,7 +35,7 @@ import CountryService from "services/CountryService"
 // controllers
 import PromotionListController from "controllers/PromotionListController"
 import CampaignListController from "controllers/CampaignListController"
-import EditPromotionController from "controllers/EditPromotionController"
+import PromotionFormController from "controllers/PromotionFormController"
 import EditCampaignController from "controllers/EditCampaignController"
 import ChannelCodesController from "controllers/ChannelCodesController"
 import PromotionDatesController from "controllers/PromotionDatesController"
@@ -43,7 +44,7 @@ import RatePlanListController from "controllers/RatePlanListController"
 import AvailableCountriesController from "controllers/AvailableCountriesController"
 import StageController from "controllers/StageController"
 
-let module = angular.module("Promotions", ['ui.router', 'ngCookies', 'ngMaterial']);
+let module = angular.module("Promotions", ['ui.router', 'ngCookies', 'ngMaterial', 'angular-uuid']);
 
 module.service('promotionService', PromotionService)
       .service('campaignService', CampaignService)
@@ -51,7 +52,7 @@ module.service('promotionService', PromotionService)
       .service('countryService', CountryService)
       .controller('promotionListController', PromotionListController)
       .controller('campaignListController', CampaignListController)
-      .controller('editPromotionController', EditPromotionController)
+      .controller('promotionFormController', PromotionFormController)
       .controller('editCampaignController', EditCampaignController)
       .controller('channelCodesController', ChannelCodesController)
       .controller('promotionTypeController', PromotionTypeController)
@@ -90,10 +91,16 @@ module.config(($stateProvider, $urlRouterProvider) => {
         template: '',
         url: "/"
     })
-    .state('editPromotion', {
-        url: "/promotion/edit/:uuid",
+    .state('promotion', {
+        url: "/promotion/:uuid",
         template: promotionForm,
-        controller: 'editPromotionController',
+        controller: 'promotionFormController',
+        controllerAs: 'ctrl'
+    })
+    .state('createPromotion', {
+        url: "/promotion/new/:campaignCode",
+        template: promotionForm,
+        controller: 'promotionFormController',
         controllerAs: 'ctrl'
     })
     .state('editCampaign', {

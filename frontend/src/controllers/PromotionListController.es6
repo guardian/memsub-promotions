@@ -6,6 +6,7 @@ export default class {
         $scope.promotions = [];
         this.$scope = $scope;
         this.fetchPromotions($stateParams.code);
+        this.$scope.code = $stateParams.code;
     }
 
     fetchPromotions(code) {
