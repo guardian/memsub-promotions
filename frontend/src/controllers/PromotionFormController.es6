@@ -11,11 +11,12 @@ const emptyPromotion = {
 export default class {
 
     /* @ngInject */
-    constructor($stateParams, $scope, promotionService, uuid) {
+    constructor($state, $stateParams, $scope, promotionService, uuid) {
         this.service = promotionService;
         this.$scope = $scope;
-
+        this.$state = $state;
         this.uuid = uuid;
+        
         if ($stateParams.uuid) {
             this.fetchPromotion($stateParams.uuid);
         } else if ($stateParams.campaignCode) {
@@ -27,11 +28,6 @@ export default class {
 
     createNewPromotion(campaignCode) {
         this.$scope.promotion = Object.assign({}, emptyPromotion, {campaignCode: campaignCode, uuid: this.uuid.v4()});
-        this.countryGroups = countryService.all();
-        this.ratePlans = ratePlanService.all();
-
-        this.ratePlans.then(plans => $scope.ratePlans = plans);
-        this.countryGroups.then(countries => $scope.countryGroups = countries);
     }
 
     fetchPromotion(uuid) {
@@ -57,6 +53,9 @@ export default class {
     }
 
     save(promotion) {
-        this.service.save(this.removeEmptyCodes(promotion));
+        this.$scope.saving = true;
+        this.service.save(this.removeEmptyCodes(promotion)).then(() =>
+            this.$state.go('allPromotions.singleCampaign', {code: promotion.campaignCode})
+        );
     }
 }
