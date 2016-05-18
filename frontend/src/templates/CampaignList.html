@@ -3,11 +3,8 @@
     <!-- campaign list -->
     <md-content layout="column" flex="33" style="border-right: 1px solid #BBB" layout-align=" stretch" md-scroll-y ng-cloak>
         <md-list>
-            <md-subheader layout="row">
-                <span>
-                    Campaigns
-                    <md-icon class="add-button" md-font-set="material-icons" ui-sref="editCampaign">add</md-icon>
-                </span>
+            <md-subheader>
+                Campaigns <md-icon class="add-button" md-font-set="material-icons" ui-sref="editCampaign">add</md-icon>
             </md-subheader>
             <md-list-item class="md-3-line md-clickable" ng-repeat="campaign in campaigns" md-ink-ripple="#AAAAAA">
                 <div class="md-list-item-text" layout="column">
