@@ -15,7 +15,8 @@ export default class {
         }
         let campaign = this.service.all();
         campaign.then(r => r.filter(v => v.code == code)[0]).then(r => {
-            this.$scope.campaign = r
+            this.$scope.editing = true;
+            this.$scope.campaign = r;
         });
     }
 
