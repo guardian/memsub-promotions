@@ -1,10 +1,37 @@
+const emptyPromotion = {
+  appliesTo: {
+    productRatePlanIds: [],
+    countries: []
+  },
+  codes: {},
+  promotionType: { name: "tracking" },
+  landingPage: {}
+};
+
 export default class {
 
     /* @ngInject */
-    constructor($stateParams, $scope, promotionService) {
+    constructor($stateParams, $scope, promotionService, uuid) {
         this.service = promotionService;
         this.$scope = $scope;
-        this.fetchPromotion($stateParams.uuid);
+
+        this.uuid = uuid;
+        if ($stateParams.uuid) {
+            this.fetchPromotion($stateParams.uuid);
+        } else if ($stateParams.campaignCode) {
+            this.createNewPromotion($stateParams.campaignCode);
+        } else {
+            // Later
+        }
+    }
+
+    createNewPromotion(campaignCode) {
+        this.$scope.promotion = Object.assign({}, emptyPromotion, {campaignCode: campaignCode, uuid: this.uuid.v4()});
+        this.countryGroups = countryService.all();
+        this.ratePlans = ratePlanService.all();
+
+        this.ratePlans.then(plans => $scope.ratePlans = plans);
+        this.countryGroups.then(countries => $scope.countryGroups = countries);
     }
 
     fetchPromotion(uuid) {
