@@ -4,6 +4,19 @@
     </md-button>
     <md-menu-content width="4">
         <md-menu-item>
+            <md-button ng-click="ctrl.setProductFamily('membership')">
+                <md-icon md-font-set="material-icons" md-menu-align-target>shopping_cart</md-icon>
+                Membership
+            </md-button>
+        </md-menu-item>
+        <md-menu-item>
+            <md-button ng-click="ctrl.setProductFamily('digitalpack')">
+                <md-icon md-font-set="material-icons" md-menu-align-target>shopping_cart</md-icon>
+                Subscriptions
+            </md-button>
+        </md-menu-item>
+        <md-menu-divider></md-menu-divider>
+        <md-menu-item>
             <md-button ng-click="ctrl.setStage('DEV')">
                 <md-icon md-font-set="material-icons" md-menu-align-target>motorcycle</md-icon>
                 DEV
@@ -15,7 +28,6 @@
                 UAT
             </md-button>
         </md-menu-item>
-        <md-menu-divider></md-menu-divider>
         <md-menu-item>
             <md-button ng-click="ctrl.setStage('PROD')">
                 <md-icon md-font-set="material-icons" md-menu-align-target>business</md-icon>

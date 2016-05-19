@@ -1,7 +1,8 @@
 export default class {
 
     /* @ngInject */
-    constructor(campaignService, $stateParams, $scope, $state) {
+    constructor(campaignService, $stateParams, $scope, $state, environmentService) {
+        this.environmentService = environmentService;
         this.service = campaignService;
         this.$scope = $scope;
         this.$state = $state;
@@ -10,7 +11,7 @@ export default class {
 
     fetchCampaign(code) {
         if (!code) {
-            this.$scope.campaign = {name: "", code: ""};
+            this.$scope.campaign = {name: "", code: "", productFamily: this.environmentService.getProduct()};
             return;
         }
         let campaign = this.service.all();

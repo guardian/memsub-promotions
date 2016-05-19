@@ -1,5 +1,5 @@
-<div layout="column" ng-repeat="(name, plans) in ratePlans">
-    <h5>{{name}}</h5>
+<div layout="column" ng-repeat="(name, plans) in ratePlans" ng-show="name == product">
+    <h5>Rate plans</h5>
     <div layout="row">
         <md-checkbox ng-model="ratePlanIds[key]" aria-label="{{name}}" ng-repeat="(key, name) in plans" ng-change="ctrl.applyRatePlans(ratePlanIds)">
             {{name}}

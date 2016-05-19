@@ -2,13 +2,12 @@
 # This file defines all application routes (Higher priority routes first)
 # ~~~~
 
-# An example controller showing a sample home page
 GET     /                           controllers.StaticController.index
 
 GET     /promotions                 controllers.PromotionController.all
 POST    /promotion                  controllers.PromotionController.upsert
 
-GET     /campaigns                  controllers.CampaignController.all
+GET     /campaigns                  controllers.CampaignController.all(productFamily: Option[String])
 POST    /campaign                   controllers.CampaignController.upsert
 
 GET     /plans                      controllers.RatePlanController.all

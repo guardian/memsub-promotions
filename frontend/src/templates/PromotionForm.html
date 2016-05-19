@@ -16,7 +16,7 @@
             <span>{{ promotion.campaignCode }}</span>
         </div>
 
-        <rate-plan-list product-rate-plan-ids="promotion.appliesTo.productRatePlanIds"></rate-plan-list>
+        <rate-plan-list product-rate-plan-ids="promotion.appliesTo.productRatePlanIds" product="environment.product"></rate-plan-list>
         <available-countries countries="promotion.appliesTo.countries"></available-countries>
         <channel-codes codes="promotion.codes"></channel-codes>
         <promotion-type promotion="promotion"></promotion-type>
