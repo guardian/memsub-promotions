@@ -1,7 +1,12 @@
 <form name="promotionForm" ng-cloak>
     <div layout="column" layout-padding>
 
-        <h5>Details</h5>
+        <div layout="column">
+            <h5>Campaign</h5>
+            <span>{{ promotion.campaignCode }} — {{ promotion.campaignName }}</span>
+        </div>
+
+        <h4>Promotion Details</h4>
 
         <md-input-container>
             <label>Name</label><input name="name" ng-model="promotion.name" required>
@@ -10,11 +15,6 @@
         <md-input-container>
             <label>Description</label><textarea ng-model="promotion.description" name="description" rows="3" required></textarea>
         </md-input-container>
-
-        <div layout="column">
-            <h5>Campaign</h5>
-            <span>{{ promotion.campaignCode }}</span>
-        </div>
 
         <rate-plan-list product-rate-plan-ids="promotion.appliesTo.productRatePlanIds" product="environment.product"></rate-plan-list>
         <available-countries countries="promotion.appliesTo.countries"></available-countries>

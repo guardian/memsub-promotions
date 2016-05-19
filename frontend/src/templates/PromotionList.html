@@ -6,7 +6,7 @@
         <md-list-item class="md-3-line md-clickable" ng-repeat="promotion in promotions" md-ink-ripple="#AAAAAA">
             <div class="md-list-item-text" layout="column">
                 <h3>{{ promotion.name }}</h3>
-                <h4 style="max-width: 90%">{{ promotion.description }}</h4>
+                <h4><a target="_blank" href="https://{{ productDomain }}/p/{{ promotion.uuid }}">https://{{ productDomain }}/p/{{ promotion.uuid }}</a></h4>
                 <p>
                     <md-icon md-font-set="material-icons">date_range</md-icon>
                     {{ promotion.starts | date:"dd MMM yy" }} - {{ promotion.expires | date:"dd MMM yy" }}

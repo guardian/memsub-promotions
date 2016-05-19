@@ -11,8 +11,9 @@ const emptyPromotion = {
 export default class {
 
     /* @ngInject */
-    constructor($state, $stateParams, $scope, promotionService, uuid) {
+    constructor($state, $stateParams, $scope, promotionService, campaignService, uuid) {
         this.service = promotionService;
+        this.campaignService = campaignService;
         this.$scope = $scope;
         this.$state = $state;
         this.uuid = uuid;
@@ -28,18 +29,26 @@ export default class {
 
     createNewPromotion(campaignCode) {
         this.$scope.promotion = Object.assign({}, emptyPromotion, {campaignCode: campaignCode, uuid: this.uuid.v4()});
+        return this.fillCampaignInfo(this.$scope.promotion)
     }
 
     fetchPromotion(uuid) {
         let self = this;
         this.service.get(uuid)
             .then(this.transformDates.bind(self))
+            .then(this.fillCampaignInfo.bind(self))
             .then(p => this.$scope.promotion = p);
     }
 
     transformDates(promotion) {
         let expires = promotion.expires ? {expires: new Date(promotion.expires)} : {};
         return Object.assign({}, promotion, {starts: new Date(promotion.starts)}, expires)
+    }
+
+    fillCampaignInfo(promotion) {
+        return this.campaignService.fetchCampaign(promotion.campaignCode)
+            .then(c => promotion.campaignName = c.name) // overwrites deprecated legacy value on the promotion model
+            .then(c => promotion)
     }
 
     removeEmptyCodes(promotion) {

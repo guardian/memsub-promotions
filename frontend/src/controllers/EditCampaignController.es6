@@ -9,12 +9,16 @@ export default class {
         this.fetchCampaign($stateParams.code);
     }
 
+    generateSuggestedCampaignCode() {
+        return 'C_' + new Date().getTime().toString(36).toUpperCase();
+    }
+
     fetchCampaign(code) {
         if (!code) {
-            this.$scope.campaign = {name: "", code: "", productFamily: this.environmentService.getProduct()};
+            this.$scope.campaign = { name: "", code: this.generateSuggestedCampaignCode(), productFamily: this.environmentService.getProduct()} ;
             return;
         }
-        this.service.get(code).then(r => {
+        this.campaignService.get(code).then(r => {
             this.$scope.editing = true;
             this.$scope.campaign = r;
         });

@@ -1,8 +1,13 @@
 export default class {
 
     /* @ngInject */
-    constructor($scope) {
+    constructor($scope, environmentService) {
         this.$scope = $scope;
+        this.environmentService = environmentService;
+    }
+
+    generateSuggestedPromoCode() {
+        return this.environmentService.getProductPrefix() + new Date().getTime().toString(36).toUpperCase();
     }
 
     addChannel(newChannelName) {
@@ -18,7 +23,7 @@ export default class {
     addCode(currentChannels, channelName) {
         this.$scope.channels = currentChannels.map(c => {
             if (c.name == channelName) {
-                c.codes.push("");
+                c.codes.push(this.generateSuggestedPromoCode());
             }
             return c;
         });

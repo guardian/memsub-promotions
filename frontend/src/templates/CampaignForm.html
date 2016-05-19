@@ -1,12 +1,11 @@
 <form name="campaignForm" ng-submit="ctrl.save(campaign)">
     <div layout="column" layout-padding>
-        <h5>{{editing ? 'Edit' : 'Add'}} campaign</h5>
+        <h5>{{editing ? 'Edit' : 'Create'}} campaign</h5>
         <md-input-container>
-            <label>Code</label><input type="text" id="code" name="code" ng-model="campaign.code" ng-required="true" ng-disabled="editing">
+            <label>Name</label><input type="text" id="name" name="name" ng-model="campaign.name" ng-required="true"/>
         </md-input-container>
-
         <md-input-container>
-            <label>Name</label><input type="text" id="name" name="name" ng-model="campaign.name" ng-required="true">
+            <label>Code</label><input type="text" id="code" name="code" ng-model="campaign.code" ng-required="true" ng-disabled="editing"/>
         </md-input-container>
     </div>
     <div>
