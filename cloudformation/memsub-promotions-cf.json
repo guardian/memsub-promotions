@@ -126,6 +126,7 @@
                 "Action": [
                   "dynamodb:PutItem",
                   "dynamodb:BatchWriteItem",
+                  "dynamodb:DescribeTable",
                   "dynamodb:GetItem",
                   "dynamodb:BatchGetItem",
                   "dynamodb:UpdateItem",
