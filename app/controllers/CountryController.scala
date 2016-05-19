@@ -1,5 +1,5 @@
 package controllers
-import com.gu.memsub.promo.Formatters.countryFormat
+import com.gu.memsub.promo.Formatters.Common._
 import com.gu.config.{DigitalPackRatePlanIds, MembershipRatePlanIds}
 import com.gu.i18n.{Currency, Country, CountryGroup}
 import play.api.libs.json._

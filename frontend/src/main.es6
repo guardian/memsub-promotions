@@ -13,7 +13,7 @@ import promotionForm from "text!templates/PromotionForm.html"
 import campaignForm from "text!templates/CampaignForm.html"
 
 // directives
-import stageMenu from 'directives/StageMenu'
+import environmentMenu from 'directives/EnvironmentMenu'
 import channelCodes from 'directives/ChannelCodes'
 import promotionType from 'directives/PromotionType'
 import deleteEmpty from 'directives/DeleteEmpty'
@@ -31,6 +31,7 @@ import RatePlanService from "services/RatePlanService"
 import PromotionService from "services/PromotionService"
 import CampaignService from "services/CampaignService"
 import CountryService from "services/CountryService"
+import EnvironmentService from "services/EnvironmentService"
 
 // controllers
 import PromotionListController from "controllers/PromotionListController"
@@ -42,7 +43,7 @@ import PromotionDatesController from "controllers/PromotionDatesController"
 import PromotionTypeController from "controllers/PromotionTypeController"
 import RatePlanListController from "controllers/RatePlanListController"
 import AvailableCountriesController from "controllers/AvailableCountriesController"
-import StageController from "controllers/StageController"
+import EnvironmentController from "controllers/EnvironmentController"
 
 let module = angular.module("Promotions", ['ui.router', 'ngCookies', 'ngMaterial', 'angular-uuid']);
 
@@ -50,6 +51,7 @@ module.service('promotionService', PromotionService)
       .service('campaignService', CampaignService)
       .service('ratePlanService', RatePlanService)
       .service('countryService', CountryService)
+      .service('environmentService', EnvironmentService)
       .controller('promotionListController', PromotionListController)
       .controller('campaignListController', CampaignListController)
       .controller('promotionFormController', PromotionFormController)
@@ -57,12 +59,12 @@ module.service('promotionService', PromotionService)
       .controller('channelCodesController', ChannelCodesController)
       .controller('promotionTypeController', PromotionTypeController)
       .controller('promotionDatesController', PromotionDatesController)
-      .controller('stageController', StageController)
+      .controller('environmentController', EnvironmentController)
       .controller('ratePlanListController', RatePlanListController)
       .controller('availableCountriesController', AvailableCountriesController)
       .directive('promotionType', promotionType)
       .directive('landingPage', landingPage)
-      .directive('stageMenu', stageMenu)
+      .directive('environmentMenu', environmentMenu)
       .directive('channelCodes', channelCodes)
       .directive('deleteEmpty', deleteEmpty)
       .directive('modal', modal)

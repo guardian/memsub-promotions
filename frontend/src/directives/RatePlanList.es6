@@ -4,7 +4,8 @@ import template from "text!templates/RatePlanList.html"
 export default () => {
     return {
         scope: {
-            'productRatePlanIds': '='
+            'productRatePlanIds': '=',
+            'product': '='
         },
         restrict: 'E',
         template: template,

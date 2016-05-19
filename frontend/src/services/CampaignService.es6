@@ -1,14 +1,16 @@
 export default class {
 
     /* @ngInject */
-    constructor($http) {
+    constructor($http, environmentService) {
+        this.env = environmentService;
         this.$http = $http;
     }
 
     all() {
         return this.$http({
             method: 'GET',
-            url: '/campaigns'
+            url: '/campaigns',
+            params: {productFamily: this.env.getProduct()}
         }).then(response => response.data)
     }
 

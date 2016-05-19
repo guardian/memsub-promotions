@@ -1,15 +1,13 @@
 package controllers
 
-import com.gu.memsub.promo._
 import com.gu.memsub.promo.Promotion.AnyPromotion
-import org.joda.time.Days
 import play.api.libs.concurrent.Execution.Implicits._
-import com.gu.memsub.services.{JsonDynamoService}
-import com.gu.memsub.promo.Formatters._
+import com.gu.memsub.services.JsonDynamoService
+import com.gu.memsub.promo.Formatters.PromotionFormatters._
 import play.api.libs.json.{JsError, Json}
-import play.api.mvc.{Result, Action}
 import scala.concurrent.Future
 import play.api.mvc.Results._
+import play.api.mvc.Action
 
 class PromotionController(service: JsonDynamoService[AnyPromotion, Future]) {
 

@@ -1,4 +1,4 @@
-import menu from "text!templates/StageMenu.html"
+import menu from "text!templates/EnvironmentMenu.html"
 
 /* @ngInject */
 export default () => {
@@ -7,7 +7,7 @@ export default () => {
         restrict: 'A',
         template: menu,
         replace: true,
-        controller: 'stageController',
+        controller: 'environmentController',
         controllerAs: 'ctrl'
     };
 }

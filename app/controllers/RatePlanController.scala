@@ -1,5 +1,6 @@
 package controllers
 import com.gu.config.{DigitalPackRatePlanIds, MembershipRatePlanIds}
+import com.gu.memsub.{Digipack, Membership}
 import play.api.libs.json._
 import play.api.mvc.Action
 import play.api.mvc.Results._
@@ -8,7 +9,7 @@ class RatePlanController(membershipIds: MembershipRatePlanIds, digipackIds: Digi
 
   def all = Action {
     Ok(Json.obj(
-      "Membership" -> Json.toJson(Map(
+      Membership.id -> Json.toJson(Map(
       membershipIds.friend.get -> "Friend",
       membershipIds.supporterMonthly.get -> "Supporter monthly",
       membershipIds.supporterYearly.get -> "Supporter yearly",
@@ -17,7 +18,7 @@ class RatePlanController(membershipIds: MembershipRatePlanIds, digipackIds: Digi
       membershipIds.patronMonthly.get -> "Patron monthly",
       membershipIds.patronYearly.get -> "Patron yearly"
     )),
-    "Subscriptions" -> Json.toJson(Map(
+    Digipack.id -> Json.toJson(Map(
       digipackIds.digitalPackMonthly.get -> "Digital pack monthly",
       digipackIds.digitalPackQuaterly.get -> "Digital pack quarterly",
       digipackIds.digitalPackYearly.get -> "Digital pack yearly"
