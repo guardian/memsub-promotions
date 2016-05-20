@@ -5,14 +5,18 @@
         </md-subheader>
         <md-list-item class="md-3-line md-clickable" ng-repeat="promotion in promotions" md-ink-ripple="#AAAAAA">
             <div class="md-list-item-text" layout="column">
-                <h3>{{ promotion.name }}</h3>
-                <h4><a target="_blank" href="https://{{ productDomain }}/q/{{ promotion.uuid }}">https://{{ productDomain }}/q/{{ promotion.uuid }}</a></h4>
-                <p>
+                <h3 ui-sref="promotion({uuid: promotion.uuid})">{{ promotion.name }}</h3>
+                <h4 ui-sref="promotion({uuid: promotion.uuid})" class="promotion-code-list">
+                    <span ng-repeat="(channel, code) in promotion.codes">{{ code.join(" ") }}</span>
+                </h4>
+                <p ui-sref="promotion({uuid: promotion.uuid})">
                     <md-icon md-font-set="material-icons">date_range</md-icon>
                     {{ promotion.starts | date:"dd MMM yy" }} - {{ promotion.expires | date:"dd MMM yy" }}
                 </p>
                 <p>
-                    <md-icon md-font-set="material-icons" class="md-secondary" ui-sref="promotion({uuid: promotion.uuid})">mode_edit</md-icon>
+                    <a target="_blank" href="https://{{ productDomain }}/q/{{ promotion.uuid }}">
+                        <md-icon md-font-set="material-icons" class="md-secondary">launch</md-icon>
+                    </a>
                 </p>
             </div>
             <md-divider></md-divider>
