@@ -4,6 +4,7 @@ export default class {
     constructor($scope, environmentService) {
         this.$scope = $scope;
         this.environmentService = environmentService;
+        this.$scope.productDomain = this.environmentService.getProductDomain();
     }
 
     generateSuggestedPromoCode() {

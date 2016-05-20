@@ -2,6 +2,7 @@ export default class {
 
     /* @ngInject */
     constructor(campaignService, $stateParams, $scope, $state, environmentService) {
+        this.campaignService = campaignService;
         this.environmentService = environmentService;
         this.service = campaignService;
         this.$scope = $scope;

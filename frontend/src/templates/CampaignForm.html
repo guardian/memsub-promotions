@@ -1,6 +1,7 @@
-<form name="campaignForm" ng-submit="ctrl.save(campaign)">
-    <div layout="column" layout-padding>
-        <h5>{{editing ? 'Edit' : 'Create'}} campaign</h5>
+<form name="campaignForm" ng-submit="ctrl.save(campaign)" layout-padding>
+    <div layout="column">
+        <h3>{{editing ? 'Edit' : 'Create'}} campaign</h3>
+
         <md-input-container>
             <label>Name</label><input type="text" id="name" name="name" ng-model="campaign.name" ng-required="true"/>
         </md-input-container>
