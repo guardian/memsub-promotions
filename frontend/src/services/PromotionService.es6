@@ -13,11 +13,19 @@ export default class {
     }
 
     get(uuid) {
-        return this.all().then(r => r.filter(v => v.uuid == uuid)[0]);
+        return this.$http({
+            method: 'GET',
+            url: '/promotion',
+            params: {uuid: uuid}
+        }).then(response => response.data)
     }
 
     byCampaign(campaignCode) {
-        return this.all().then(p => p.filter(v => v.campaignCode == campaignCode))
+        return this.$http({
+            method: 'GET',
+            url: '/promotions',
+            params: {campaignCode: campaignCode}
+        }).then(response => response.data)
     }
 
     save(promotion) {
