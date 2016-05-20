@@ -14,6 +14,14 @@ export default class {
         }).then(response => response.data)
     }
 
+    get(code) {
+        return this.$http({
+            method: 'GET',
+            url: '/campaign',
+            params: {code: code}
+        }).then(response => response.data)
+    }
+
     save(campaign) {
         return this.$http({
             method: 'POST',

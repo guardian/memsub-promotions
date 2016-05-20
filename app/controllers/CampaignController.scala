@@ -1,12 +1,12 @@
 package controllers
 
 import com.gu.memsub.ProductFamily
-import com.gu.memsub.promo.Campaign
+import com.gu.memsub.promo.{Campaign, CampaignCode}
 import play.api.libs.concurrent.Execution.Implicits._
 import com.gu.memsub.promo.Formatters.CampaignFormatters._
 import com.gu.memsub.services.JsonDynamoService
 import play.api.libs.json.{JsError, Json}
-import play.api.mvc.Action
+import play.api.mvc.{Action, Result}
 
 import scala.concurrent.Future
 import play.api.mvc.Results._
@@ -17,6 +17,12 @@ class CampaignController(service: JsonDynamoService[Campaign, Future], stage: St
   def all(productFamily: Option[String]) = Action.async {
     val campaigns = productFamily.flatMap(ProductFamily.fromId).fold(service.all)(service.find)
     campaigns.map(c => Ok(Json.toJson(c)))
+  }
+
+  def get(code: Option[String]) = Action.async {
+    code.map(CampaignCode).map(c => service.find(c)).fold[Future[Result]](Future.successful(BadRequest)) { campaigns =>
+      campaigns.map(_.headOption.fold[Result](NotFound)(c => Ok(Json.toJson(c))))
+    }
   }
 
   def upsert = Action.async { request =>
