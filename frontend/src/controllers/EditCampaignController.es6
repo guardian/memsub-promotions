@@ -2,9 +2,8 @@ export default class {
 
     /* @ngInject */
     constructor(campaignService, $stateParams, $scope, $state, environmentService) {
-        this.campaignService = campaignService;
         this.environmentService = environmentService;
-        this.service = campaignService;
+        this.campaignService = campaignService;
         this.$scope = $scope;
         this.$state = $state;
         this.fetchCampaign($stateParams.code);
@@ -26,7 +25,7 @@ export default class {
     }
 
     save(campaign) {
-        this.service.save(campaign).then(
+        this.campaignService.save(campaign).then(
             this.$state.go('allPromotions.singleCampaign', {code: campaign.code})
         );
     }
