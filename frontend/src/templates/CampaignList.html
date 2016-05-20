@@ -9,8 +9,8 @@
             <md-list-item class="md-3-line md-clickable" ng-repeat="campaign in campaigns | orderBy:'code'" md-ink-ripple="#AAAAAA">
                 <div class="md-list-item-text" layout="column">
                     <div ui-sref="allPromotions.singleCampaign({code: campaign.code})">
-                        <h3>{{ campaign.code }}</h3>
-                        <h4>{{ campaign.name }}</h4>
+                        <h3>{{ campaign.name }}</h3>
+                        <h4>{{ campaign.code }}</h4>
                     </div>
                     <md-icon class="md-secondary" md-font-set="material-icons" ui-sref="editCampaign({code: campaign.code})">mode_edit</md-icon>
                 </div>

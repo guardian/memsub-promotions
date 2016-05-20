@@ -1,12 +1,14 @@
 export default class {
 
     /* @ngInject */
-    constructor($stateParams, $scope, promotionService) {
+    constructor($stateParams, $scope, promotionService, environmentService) {
         this.promotionService = promotionService;
+        this.environmentService = environmentService;
         $scope.promotions = [];
         this.$scope = $scope;
         this.fetchPromotions($stateParams.code);
         this.$scope.code = $stateParams.code;
+        this.$scope.productDomain = this.environmentService.getProductDomain();
     }
 
     fetchPromotions(code) {

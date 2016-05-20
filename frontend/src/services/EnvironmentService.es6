@@ -25,6 +25,22 @@ export default class {
         return getOrDefault(this.$cookies, PRODUCT, 'digitalpack')
     }
 
+    getProductPrefix() {
+        switch (this.getProduct()) {
+            case 'membership': return 'M';
+            case 'digitalpack': return 'D';
+        }
+        return ''
+    }
+
+    getProductDomain() {
+        switch (this.getProduct()) {
+            case 'membership': return 'membership.theguardian.com';
+            case 'digitalpack': return 'subscribe.theguardian.com';
+        }
+        return ''
+    }
+
     getStage() {
         return getOrDefault(this.$cookies, STAGE, 'PROD')
     }
