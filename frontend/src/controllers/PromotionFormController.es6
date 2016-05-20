@@ -46,7 +46,7 @@ export default class {
     }
 
     fillCampaignInfo(promotion) {
-        return this.campaignService.fetchCampaign(promotion.campaignCode)
+        return this.campaignService.get(promotion.campaignCode)
             .then(c => promotion.campaignName = c.name) // overwrites deprecated legacy value on the promotion model
             .then(c => promotion)
     }
