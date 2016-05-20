@@ -14,8 +14,7 @@ export default class {
             this.$scope.campaign = {name: "", code: "", productFamily: this.environmentService.getProduct()};
             return;
         }
-        let campaign = this.service.all();
-        campaign.then(r => r.filter(v => v.code == code)[0]).then(r => {
+        this.service.get(code).then(r => {
             this.$scope.editing = true;
             this.$scope.campaign = r;
         });

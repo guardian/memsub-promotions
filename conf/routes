@@ -9,6 +9,7 @@ GET     /promotion                  controllers.PromotionController.get(uuid: Op
 POST    /promotion                  controllers.PromotionController.upsert
 
 GET     /campaigns                  controllers.CampaignController.all(productFamily: Option[String])
+GET     /campaign                   controllers.CampaignController.get(code: Option[String])
 POST    /campaign                   controllers.CampaignController.upsert
 
 GET     /plans                      controllers.RatePlanController.all
