@@ -1,10 +1,10 @@
 <div class="modal__backdrop" ng-show="show" ng-click="show = !show"></div>
 <div class="modal mdl-cell mdl-cell--6-col" ng-show="show">
-    <header class="mdl-layout__header">
-        <div class="mdl-layout__header-row">
-            <span class="mdl-layout-title">{{title}}</span>
+    <md-toolbar ng-class="environment.product">
+        <div class="md-toolbar-tools">
+            <h2>The Grid</h2>
+            <span flex></span>
         </div>
-    </header>
-    <div class="mdl-grid" ng-transclude>
-    </div>
+    </md-toolbar>
+    <md-content style="overflow: auto" md-scroll-y ng-transclude></md-content>
 </div>

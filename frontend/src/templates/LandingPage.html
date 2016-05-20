@@ -9,9 +9,7 @@
     <md-input-container>
         <label>Roundel HTML</label><input name="roundel-html" ng-model="landingPage.roundelHtml" delete-empty>
     </md-input-container>
-    <md-input-container>
-        <label>Image URL</label><input name="image-url" ng-model="landingPage.imageUrl" delete-empty>
-    </md-input-container>
+    <grid-image-selector landing-page="landingPage"></grid-image-selector>
     <div layout="row">
         <label>Section colour</label>
         <md-radio-group layout="row" ng-model="landingPage.sectionColour">

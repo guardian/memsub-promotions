@@ -23,6 +23,8 @@ import ratePlanList from 'directives/RatePlanList'
 import availableCountries from 'directives/AvailableCountries'
 import modal from 'directives/Modal'
 import refreshableIframe from 'directives/RefreshableIframe'
+import gridImageSelector from 'directives/GridImageSelector'
+
 
 //config
 import dateConfig from 'config/DateConfig'
@@ -72,6 +74,7 @@ module.service('promotionService', PromotionService)
       .directive('promotionDates', promotionDates)
       .directive('ratePlanList', ratePlanList)
       .directive('availableCountries', availableCountries)
+      .directive('gridImageSelector', gridImageSelector)
       .directive('refreshableIframe', refreshableIframe)
       .config(dateConfig)
 ;
