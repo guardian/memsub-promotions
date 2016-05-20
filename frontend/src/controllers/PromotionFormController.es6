@@ -11,13 +11,16 @@ const emptyPromotion = {
 export default class {
 
     /* @ngInject */
-    constructor($state, $stateParams, $scope, promotionService, campaignService, uuid) {
+    constructor($state, $stateParams, $scope, promotionService, campaignService, environmentService, uuid) {
         this.service = promotionService;
         this.campaignService = campaignService;
+        this.environmentService = environmentService;
         this.$scope = $scope;
         this.$state = $state;
         this.uuid = uuid;
-        
+
+        this.$scope.productDomain = this.environmentService.getProductDomain();
+
         if ($stateParams.uuid) {
             this.fetchPromotion($stateParams.uuid);
         } else if ($stateParams.campaignCode) {
@@ -37,7 +40,8 @@ export default class {
         this.service.get(uuid)
             .then(this.transformDates.bind(self))
             .then(this.fillCampaignInfo.bind(self))
-            .then(p => this.$scope.promotion = p);
+            .then(p => this.$scope.promotion = p)
+            .then(this.refreshIframe.bind(self));
     }
 
     transformDates(promotion) {
@@ -61,9 +65,19 @@ export default class {
         return promoCopy;
     }
 
+    refreshIframe() {
+        this.$scope.refreshIframe = true;
+    }
+
+    update(promotion) {
+        let self = this;
+        let sanitised = this.removeEmptyCodes(promotion);
+        return this.service.save(sanitised)
+            .then(this.refreshIframe.bind(self));
+    }
+
     save(promotion) {
-        this.$scope.saving = true;
-        this.service.save(this.removeEmptyCodes(promotion)).then(() =>
+        this.update(promotion).then(() =>
             this.$state.go('allPromotions.singleCampaign', {code: promotion.campaignCode})
         );
     }

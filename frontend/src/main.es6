@@ -22,6 +22,7 @@ import landingPage from 'directives/LandingPage'
 import ratePlanList from 'directives/RatePlanList'
 import availableCountries from 'directives/AvailableCountries'
 import modal from 'directives/Modal'
+import refreshableIframe from 'directives/RefreshableIframe'
 
 //config
 import dateConfig from 'config/DateConfig'
@@ -71,6 +72,7 @@ module.service('promotionService', PromotionService)
       .directive('promotionDates', promotionDates)
       .directive('ratePlanList', ratePlanList)
       .directive('availableCountries', availableCountries)
+      .directive('refreshableIframe', refreshableIframe)
       .config(dateConfig)
 ;
 
