@@ -47,6 +47,10 @@ export default class {
         return ''
     }
 
+    getGridUrl() {
+        return 'https://media.test.dev-gutools.co.uk'
+    }
+
     getProductDomain() {
         return PRODUCT_DOMAINS[this.getStage()][this.getProduct()] || '';
     }

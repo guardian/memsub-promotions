@@ -28,6 +28,7 @@ import gridImageSelector from 'directives/GridImageSelector'
 
 //config
 import dateConfig from 'config/DateConfig'
+import urlConfig from 'config/UrlConfig'
 
 // services
 import RatePlanService from "services/RatePlanService"
@@ -46,6 +47,7 @@ import PromotionDatesController from "controllers/PromotionDatesController"
 import PromotionTypeController from "controllers/PromotionTypeController"
 import RatePlanListController from "controllers/RatePlanListController"
 import AvailableCountriesController from "controllers/AvailableCountriesController"
+import GridImageSelectorController from "controllers/GridImageSelectorController"
 import EnvironmentController from "controllers/EnvironmentController"
 
 let module = angular.module("Promotions", ['ui.router', 'ngCookies', 'ngMaterial', 'angular-uuid']);
@@ -65,6 +67,7 @@ module.service('promotionService', PromotionService)
       .controller('environmentController', EnvironmentController)
       .controller('ratePlanListController', RatePlanListController)
       .controller('availableCountriesController', AvailableCountriesController)
+      .controller('gridImageSelectorController', GridImageSelectorController)
       .directive('promotionType', promotionType)
       .directive('landingPage', landingPage)
       .directive('environmentMenu', environmentMenu)
@@ -77,6 +80,7 @@ module.service('promotionService', PromotionService)
       .directive('gridImageSelector', gridImageSelector)
       .directive('refreshableIframe', refreshableIframe)
       .config(dateConfig)
+      .config(urlConfig)
 ;
 
 module.config(($stateProvider, $urlRouterProvider) => {
@@ -117,7 +121,6 @@ module.config(($stateProvider, $urlRouterProvider) => {
         controllerAs: 'ctrl'
     });
 });
-
 
 module.run(($rootScope, $state, $stateParams) => {
     $rootScope.$stateParams = $stateParams;

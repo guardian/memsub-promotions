@@ -8,13 +8,18 @@ export default () => {
         },
         restrict: 'E',
         template: template,
-        link: (scope, elem, attrs) => {
+        controller: 'gridImageSelectorController',
+        controllerAs: 'ctrl',
+        link: (scope, elem, attrs, ctrl) => {
+            
+            scope.$watch('landingPage.imageUrl', function(newValue) {
+                ctrl.imageUrlChanged(newValue);
+            });
+            
             window.addEventListener('message', (event) => {
-                scope.$apply(function(s) {
+                scope.$apply(function() {
                     let assets = event.data.crop.data.assets;
-                    assets.sort((b, a) => (a.dimensions.width * a.dimensions.height) - (b.dimensions.width * b.dimensions.height));
-                    s.landingPage.imageUrl = assets[0].file;
-                    s.show = false;
+                    ctrl.imageSelected(assets);
                 });
             }, false);
         }

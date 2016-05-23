@@ -6,7 +6,8 @@ export default () => {
     return {
         scope: {
             show: '=',
-            title: '@title'
+            title: '@title',
+            product: '='
         },
         restrict: 'E',
         template: template,
