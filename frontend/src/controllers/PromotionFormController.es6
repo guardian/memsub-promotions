@@ -41,7 +41,7 @@ export default class {
             .then(this.transformDates.bind(self))
             .then(this.fillCampaignInfo.bind(self))
             .then(p => this.$scope.promotion = p)
-            .then(this.refreshIframe.bind(self));
+            .then(function() { setTimeout(self.refreshIframe.bind(self), 1000) });
     }
 
     transformDates(promotion) {

@@ -1,5 +1,19 @@
 const PRODUCT = 'product';
 const STAGE = 'stage';
+const PRODUCT_DOMAINS = {
+    'DEV': {
+        'membership': 'mem.thegulocal.com',
+        'digitalpack': 'sub.thegulocal.com'
+    },
+    'PROD': {
+        'membership': 'membership.theguardian.com',
+        'digitalpack': 'subscribe.theguardian.com'
+    },
+    'UAT': {
+        'membership': 'membership.theguardian.com',
+        'digitalpack': 'subscribe.theguardian.com'
+    }
+};
 
 function getOrDefault($cookies, key, def) {
     let fromCookies = $cookies.get(key);
@@ -34,11 +48,7 @@ export default class {
     }
 
     getProductDomain() {
-        switch (this.getProduct()) {
-            case 'membership': return 'membership.theguardian.com';
-            case 'digitalpack': return 'subscribe.theguardian.com';
-        }
-        return ''
+        return PRODUCT_DOMAINS[this.getStage()][this.getProduct()] || '';
     }
 
     getStage() {
