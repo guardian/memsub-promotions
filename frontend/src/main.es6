@@ -5,6 +5,7 @@ import 'angular-ui-router'
 import 'angular-cookies'
 import 'angular-material'
 import 'angular-uuid'
+import 'angular-resizable'
 
 //views
 import campaignList from "text!templates/CampaignList.html"
@@ -22,9 +23,8 @@ import landingPage from 'directives/LandingPage'
 import ratePlanList from 'directives/RatePlanList'
 import availableCountries from 'directives/AvailableCountries'
 import modal from 'directives/Modal'
-import refreshableIframe from 'directives/RefreshableIframe'
+import previewPromotion from 'directives/PreviewPromotion'
 import gridImageSelector from 'directives/GridImageSelector'
-
 
 //config
 import dateConfig from 'config/DateConfig'
@@ -49,8 +49,9 @@ import RatePlanListController from "controllers/RatePlanListController"
 import AvailableCountriesController from "controllers/AvailableCountriesController"
 import GridImageSelectorController from "controllers/GridImageSelectorController"
 import EnvironmentController from "controllers/EnvironmentController"
+import PreviewPromotionController from "controllers/PreviewPromotionController"
 
-let module = angular.module("Promotions", ['ui.router', 'ngCookies', 'ngMaterial', 'angular-uuid']);
+let module = angular.module("Promotions", ['ui.router', 'ngCookies', 'ngMaterial', 'angular-uuid', 'angularResizable']);
 
 module.service('promotionService', PromotionService)
       .service('campaignService', CampaignService)
@@ -67,6 +68,7 @@ module.service('promotionService', PromotionService)
       .controller('environmentController', EnvironmentController)
       .controller('ratePlanListController', RatePlanListController)
       .controller('availableCountriesController', AvailableCountriesController)
+      .controller('previewPromotionController', PreviewPromotionController)
       .controller('gridImageSelectorController', GridImageSelectorController)
       .directive('promotionType', promotionType)
       .directive('landingPage', landingPage)
@@ -78,7 +80,7 @@ module.service('promotionService', PromotionService)
       .directive('ratePlanList', ratePlanList)
       .directive('availableCountries', availableCountries)
       .directive('gridImageSelector', gridImageSelector)
-      .directive('refreshableIframe', refreshableIframe)
+      .directive('previewPromotion', previewPromotion)
       .config(dateConfig)
       .config(urlConfig)
 ;

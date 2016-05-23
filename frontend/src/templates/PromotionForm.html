@@ -1,5 +1,5 @@
 <div layout="row" layout-align=" stretch" flex ng-cloak>
-    <div layout-padding flex="50" style="border-right: 1px solid #BBB; overflow: auto" layout-align="stretch">
+    <div layout-padding style="border-right: 1px solid #BBB; overflow: auto" layout-align="stretch" resizable r-directions="['bottom', 'right']" r-flex="true">
         <form name="promotionForm">
             <div layout="column">
                 <h3>Promotion Details</h3>
@@ -30,7 +30,7 @@
             </div>
         </form>
     </div>
-    <div layout="column" flex="50">
-        <iframe flex refreshable-iframe refreshable-src="https://{{ productDomain }}/q/{{ promotion.uuid }}" frameborder="0"></iframe>
+    <div layout="column" flex>
+        <preview-promotion promotion="promotion"></preview-promotion>
     </div>
 </div>
