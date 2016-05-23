@@ -4,10 +4,10 @@
             Promotions <md-icon class="add-button" md-font-set="material-icons" ui-sref="createPromotion({campaignCode: code})">add</md-icon>
         </md-subheader>
         <md-list-item class="md-3-line md-clickable" ng-repeat="promotion in promotions" md-ink-ripple="#AAAAAA">
-            <div class="md-list-item-text" layout="column">
+            <div class="md-list-item-text promotion-list-item" layout="column">
                 <h3 ui-sref="promotion({uuid: promotion.uuid})">{{ promotion.name }}</h3>
                 <h4 ui-sref="promotion({uuid: promotion.uuid})" class="promotion-code-list">
-                    <span ng-repeat="(channel, code) in promotion.codes">{{ code.join(" ") }}</span>
+                    <span ng-repeat="(channel, code) in promotion.codes">{{ code.join(", ") }}</span>
                 </h4>
                 <p ui-sref="promotion({uuid: promotion.uuid})">
                     <md-icon md-font-set="material-icons">date_range</md-icon>
