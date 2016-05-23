@@ -34,7 +34,8 @@ module.exports = {
         path: '../public/',
         chunkFilename:  'webpack/[chunkhash].js',
         filename: "javascripts/[name].js",
-        publicPath: '/'
+        publicPath: '/',
+        sourceMapFilename: "[file].map"
     },
 
     entry: {
