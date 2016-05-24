@@ -7,6 +7,7 @@ GET     /                           controllers.StaticController.index
 GET     /promotions                 controllers.PromotionController.all(campaignCode: Option[String])
 GET     /promotion                  controllers.PromotionController.get(uuid: Option[String])
 POST    /promotion                  controllers.PromotionController.upsert
+POST    /promotion/validate         controllers.PromotionController.validate
 
 GET     /campaigns                  controllers.CampaignController.all(productFamily: Option[String])
 GET     /campaign                   controllers.CampaignController.get(code: Option[String])

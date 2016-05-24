@@ -41,7 +41,6 @@ export default class {
             .then(this.transformDates.bind(self))
             .then(this.fillCampaignInfo.bind(self))
             .then(p => this.$scope.promotion = p)
-            .then(function() { setTimeout(self.refreshIframe.bind(self), 1000) });
     }
 
     transformDates(promotion) {
@@ -63,10 +62,6 @@ export default class {
             return newChannel
         }).reduce((acc, n) => Object.assign(acc, n), {});
         return promoCopy;
-    }
-
-    refreshIframe() {
-        this.$scope.refreshIframe = true;
     }
 
     update(promotion) {
