@@ -13,11 +13,6 @@
                     <md-icon md-font-set="material-icons">date_range</md-icon>
                     {{ promotion.starts | date:"dd MMM yy" }} - {{ promotion.expires | date:"dd MMM yy" }}
                 </p>
-                <p>
-                    <a target="_blank" href="https://{{ productDomain }}/q/{{ promotion.uuid }}">
-                        <md-icon md-font-set="material-icons" class="md-secondary">launch</md-icon>
-                    </a>
-                </p>
             </div>
             <md-divider></md-divider>
         </md-list-item>
