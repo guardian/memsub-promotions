@@ -19,7 +19,7 @@ export default () => {
             window.addEventListener('message', (event) => {
                 scope.$apply(function() {
                     let assets = event.data.crop.data.assets;
-                    ctrl.imageSelected(assets);
+                    ctrl.imageSelected(assets, event.origin);
                 });
             }, false);
         }

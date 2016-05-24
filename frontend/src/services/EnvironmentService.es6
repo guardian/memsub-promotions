@@ -4,17 +4,17 @@ const PRODUCT_DOMAINS = {
     'DEV': {
         'membership': 'mem.thegulocal.com',
         'digitalpack': 'sub.thegulocal.com',
-        'grid': 'https://media.test.dev-gutools.co.uk'
+        'grid': 'media.test.dev-gutools.co.uk'
     },
     'PROD': {
         'membership': 'membership.theguardian.com',
         'digitalpack': 'subscribe.theguardian.com',
-        'grid': 'https://media.gutools.co.uk'
+        'grid': 'media.gutools.co.uk'
     },
     'UAT': {
         'membership': 'membership.theguardian.com',
         'digitalpack': 'subscribe.theguardian.com',
-        'grid': 'https://media.gutools.co.uk'
+        'grid': 'media.gutools.co.uk'
     }
 };
 
