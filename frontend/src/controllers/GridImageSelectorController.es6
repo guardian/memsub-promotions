@@ -18,7 +18,7 @@ export default class {
 
         let matched = newUrl.match(/\/([A-Za-z0-9]+)\/.*$/);
 
-        if (typeof matched[1] != 'undefined') {
+        if (matched && typeof matched[1] != 'undefined') {
             this.$scope.gridUrl = this.gridOrigin+ '/images/' + matched[1];
         }
     }
