@@ -16,7 +16,7 @@
       "Type": "String",
       "Default": "Membership-and-Subscriptions"
     },
-    "TouchpointAccountARN": {
+    "TouchPointDynamoViewPromoRoleName": {
       "Description": "AWS Account ARN for the Touchpoint team",
       "Type": "String",
       "MinLength": 5
@@ -126,7 +126,7 @@
             }
           ]
         },
-        "Users": [ { "Ref": "TouchpointAccountARN" } ]
+        "Roles": [ { "Ref": "TouchPointDynamoViewPromoRoleName" } ]
       }
     },
     "ServerRole": {
