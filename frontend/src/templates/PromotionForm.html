@@ -2,32 +2,31 @@
     <div layout-padding flex="50" style="border-right: 1px solid #BBB; overflow: auto" layout-align="stretch">
         <form name="promotionForm">
             <div layout="column">
-            <h3>Promotion Details</h3>
+                <h3>Promotion Details</h3>
 
-            <md-input-container>
-                <label>Campaign</label><input ng-disabled="true" type="text" value="{{ promotion.campaignCode }} — {{ promotion.campaignName }}"/>
-            </md-input-container>
+                <md-input-container>
+                    <label>Campaign</label><input ng-disabled="true" type="text" value="{{ promotion.campaignCode }} — {{ promotion.campaignName }}"/>
+                </md-input-container>
 
-            <md-input-container>
-                <label>Name</label><input name="name" ng-model="promotion.name" required/>
-            </md-input-container>
+                <md-input-container>
+                    <label>Name</label><input name="name" ng-model="promotion.name" required/>
+                </md-input-container>
 
-            <md-input-container>
-                <label>Description (for checkout page when promotion applied)</label><textarea ng-model="promotion.description" name="description" ng-trim="false" rows="3" required></textarea>
-            </md-input-container>
+                <md-input-container>
+                    <label>Description (for checkout page when promotion applied)</label><textarea ng-model="promotion.description" name="description" ng-trim="false" rows="3" required></textarea>
+                </md-input-container>
 
-            <promotion-type promotion="promotion"></promotion-type>
-            <rate-plan-list product-rate-plan-ids="promotion.appliesTo.productRatePlanIds" product="environment.product"></rate-plan-list>
-            <available-countries countries="promotion.appliesTo.countries"></available-countries>
-            <promotion-dates promotion="promotion"></promotion-dates>
-            <channel-codes codes="promotion.codes"></channel-codes>
+                <promotion-type promotion="promotion"></promotion-type>
+                <rate-plan-list product-rate-plan-ids="promotion.appliesTo.productRatePlanIds" product="environment.product"></rate-plan-list>
+                <available-countries countries="promotion.appliesTo.countries"></available-countries>
+                <promotion-dates promotion="promotion"></promotion-dates>
+                <channel-codes codes="promotion.codes"></channel-codes>
 
-            <landing-page landing-page="promotion.landingPage" product="environment.product"></landing-page>
-
-            <div>
-                <md-button ng-click="ctrl.update(promotion)" class="md-raised md-primary">Update</md-button>
-                <md-button ng-click="ctrl.save(promotion)" class="md-raised md-primary">Save and Close</md-button>
-            </div>
+                <landing-page landing-page="promotion.landingPage" product="environment.product"></landing-page>
+                <section layout="row" layout-sm="column" layout-align="end center" layout-wrap>
+                    <md-button ng-click="ctrl.update(promotion)" class="md-raised md-primary">Save and Preview</md-button>
+                    <md-button ng-click="ctrl.save(promotion)" class="md-raised md-primary">Save and Close</md-button>
+                </section>
             </div>
         </form>
     </div>

@@ -1,5 +1,5 @@
 <div layout="column">
-    <h5>Landing page</h5>
+    <h4>Landing page</h4>
     <md-input-container>
         <label>Title</label><input name="title" ng-model="landingPage.title" delete-empty>
     </md-input-container>
@@ -9,14 +9,13 @@
     <md-input-container>
         <label>Roundel HTML</label><input name="roundel-html" ng-model="landingPage.roundelHtml" delete-empty>
     </md-input-container>
+
     <grid-image-selector landing-page="landingPage"></grid-image-selector>
-    <div layout="row">
-        <label>Section colour</label>
-        <md-radio-group layout="row" ng-model="landingPage.sectionColour">
-            <span flex="5"></span>
-            <md-radio-button value="blue" class="md-primary">Blue</md-radio-button>
-            <md-radio-button value="grey">Grey</md-radio-button>
-            <md-radio-button value="white">White</md-radio-button>
-        </md-radio-group>
-    </div>
+
+    <h5>Subs stripe colour</h5>
+    <md-radio-group layout="row" ng-model="landingPage.sectionColour">
+        <md-radio-button value="blue" class="md-primary">Blue</md-radio-button>
+        <md-radio-button value="grey">Grey</md-radio-button>
+        <md-radio-button value="white">White</md-radio-button>
+    </md-radio-group>
 </div>
