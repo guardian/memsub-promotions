@@ -18,7 +18,7 @@ export default class {
         }
         this.currentTimeout = this.$timeout(() => {
             this.promotionService.validate(promotion).then(() => {
-                this.$scope.src = 'https://' + this.environmentService.getProductDomain() + '/q?json=' + JSON.stringify(promotion)
+                this.$scope.src = 'https://' + this.environmentService.getProductDomain() + '/q?json=' + encodeURIComponent(JSON.stringify(promotion));
                 this.$scope.invalid = false;
             }, () => {
                 this.$scope.invalid = true;
