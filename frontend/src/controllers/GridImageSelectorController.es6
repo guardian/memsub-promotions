@@ -18,7 +18,7 @@ export default class {
 
         let matched = newUrl.match(/\/([A-Za-z0-9]+)\/.*$/);
 
-        if (typeof matched[1] != 'undefined') {
+        if (matched && typeof matched[1] != 'undefined') {
             this.$scope.gridUrl = this.gridOrigin+ '/images/' + matched[1];
         }
     }
@@ -29,7 +29,7 @@ export default class {
         }
 
         images.sort((b, a) => (a.dimensions.width * a.dimensions.height) - (b.dimensions.width * b.dimensions.height));
-        this.$scope.landingPage.imageUrl = images[0].file;
+        this.$scope.landingPage.imageUrl = images[0].secureUrl;
         this.$scope.show = false;
     }
 }
