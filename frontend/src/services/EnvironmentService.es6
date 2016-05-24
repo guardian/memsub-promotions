@@ -3,15 +3,18 @@ const STAGE = 'stage';
 const PRODUCT_DOMAINS = {
     'DEV': {
         'membership': 'mem.thegulocal.com',
-        'digitalpack': 'sub.thegulocal.com'
+        'digitalpack': 'sub.thegulocal.com',
+        'grid': 'media.test.dev-gutools.co.uk'
     },
     'PROD': {
         'membership': 'membership.theguardian.com',
-        'digitalpack': 'subscribe.theguardian.com'
+        'digitalpack': 'subscribe.theguardian.com',
+        'grid': 'media.gutools.co.uk'
     },
     'UAT': {
         'membership': 'membership.theguardian.com',
-        'digitalpack': 'subscribe.theguardian.com'
+        'digitalpack': 'subscribe.theguardian.com',
+        'grid': 'media.gutools.co.uk'
     }
 };
 
@@ -45,6 +48,10 @@ export default class {
             case 'digitalpack': return 'D';
         }
         return ''
+    }
+
+    getGridUrl() {
+        return PRODUCT_DOMAINS[this.getStage()]['grid'] || '';
     }
 
     getProductDomain() {

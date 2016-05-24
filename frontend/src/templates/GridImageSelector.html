@@ -1,0 +1,10 @@
+<modal show="show" product="product">
+    <iframe ng-src="{{gridUrl}}" height="1200px" width="100%" style="border: none"></iframe>
+</modal>
+
+<div class="landing-page-image landing-page-image-placeholder"
+     ng-style="landingPage.imageUrl ? {'background-image': 'url(' + landingPage.imageUrl + ')'} : {}"
+     ng-click="show = true"
+     layout-align="center center" layout="column">
+    <span ng-show="!landingPage.imageUrl">Click to choose an image</span>
+</div>
