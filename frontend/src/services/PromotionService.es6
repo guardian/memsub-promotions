@@ -35,4 +35,12 @@ export default class {
             data: promotion
         }).then(response => response.data)
     }
+
+    validate(promotion) {
+        return this.$http({
+            method: 'POST',
+            url: '/promotion/validate',
+            data: promotion
+        }).then(response => response.data)
+    }
 }

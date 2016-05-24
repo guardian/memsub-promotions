@@ -1,5 +1,5 @@
 <div layout="row" layout-align=" stretch" flex ng-cloak>
-    <div layout-padding flex="50" style="border-right: 1px solid #BBB; overflow: auto" layout-align="stretch">
+    <div layout-padding style="border-right: 1px solid #BBB; overflow: auto" layout-align="stretch" flex="50">
         <form name="promotionForm">
             <div layout="column">
                 <h3>Promotion Details</h3>
@@ -24,13 +24,12 @@
 
                 <landing-page landing-page="promotion.landingPage" product="environment.product"></landing-page>
                 <section layout="row" layout-sm="column" layout-align="end center" layout-wrap>
-                    <md-button ng-click="ctrl.update(promotion)" class="md-raised md-primary">Save and Preview</md-button>
                     <md-button ng-click="ctrl.save(promotion)" class="md-raised md-primary">Save and Close</md-button>
                 </section>
             </div>
         </form>
     </div>
-    <div layout="column" flex="50">
-        <iframe flex refreshable-iframe refreshable-src="https://{{ productDomain }}/q/{{ promotion.uuid }}" frameborder="0"></iframe>
+    <div layout="column" flex>
+        <preview-promotion layout="column" flex promotion="promotion"></preview-promotion>
     </div>
 </div>

@@ -1,16 +1,20 @@
 package controllers
 
 import java.util.UUID
+
 import com.gu.memsub.promo._
 import com.gu.memsub.promo.Promotion.AnyPromotion
 import play.api.libs.concurrent.Execution.Implicits._
 import com.gu.memsub.services.JsonDynamoService
 import com.gu.memsub.promo.Formatters.PromotionFormatters._
 import com.gu.memsub.promo.Formatters.Common._
-import play.api.libs.json.{JsError, Json}
+import play.api.data.validation.ValidationError
+import play.api.libs.json.{JsError, JsPath, Json}
 import play.api.mvc.{Action, Result}
+
 import scala.concurrent.Future
 import play.api.mvc.Results._
+
 import scala.util.Try
 
 class PromotionController(service: JsonDynamoService[AnyPromotion, Future]) {
@@ -23,6 +27,13 @@ class PromotionController(service: JsonDynamoService[AnyPromotion, Future]) {
     uuid.flatMap(i => Try(UUID.fromString(i)).toOption).map {
       i => service.find(i).map(_.headOption.fold[Result](NotFound)(promo => Ok(Json.toJson(promo))))
     }.getOrElse[Future[Result]](Future.successful(BadRequest))
+  }
+
+  def validate = Action { request =>
+    (for {
+      jsonToTest <- request.body.asJson.toRight[Seq[(JsPath, Seq[ValidationError])]](Seq.empty).right
+      promo <- Json.fromJson[AnyPromotion](jsonToTest).asEither.right
+    } yield promo).fold(e => BadRequest(JsError.toJson(e)), p => Ok(Json.toJson(p)))
   }
 
   def upsert = Action.async { request =>
