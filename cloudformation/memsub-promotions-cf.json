@@ -16,6 +16,11 @@
       "Type": "String",
       "Default": "Membership-and-Subscriptions"
     },
+    "TouchPointDynamoViewPromoRoleName": {
+      "Description": "AWS Account ARN for the Touchpoint team",
+      "Type": "String",
+      "MinLength": 5
+    },
     "InstanceType": {
       "Description": "EC2 instance type",
       "Type": "String",
@@ -87,12 +92,43 @@
           "arn:aws:dynamodb:*:*:table/MembershipSub-Campaigns-PROD",
           "arn:aws:dynamodb:*:*:table/MembershipSub-Campaigns-UAT",
           "arn:aws:dynamodb:*:*:table/MembershipSub-Campaigns-DEV"
+        ],
+        "DynamoDBTableViews": [
+          "arn:aws:dynamodb:*:*:table/MembershipSub-PromoCode-View-PROD",
+          "arn:aws:dynamodb:*:*:table/MembershipSub-PromoCode-View-UAT"
         ]
       }
     }
   },
 
   "Resources": {
+    "TouchPointDynamoViewPolicy": {
+      "Type": "AWS::IAM::Policy",
+      "Properties": {
+        "PolicyName": "TouchPointDynamoViewPolicy",
+        "PolicyDocument": {
+          "Version" : "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Action": [
+                "dynamodb:DescribeTable",
+                "dynamodb:GetItem",
+                "dynamodb:BatchGetItem",
+                "dynamodb:Scan",
+                "dynamodb:Query"
+              ],
+              "Resource": {
+                "Fn::FindInMap": ["StageVariables", {
+                  "Ref": "Stage"
+                }, "DynamoDBTableViews"]
+              }
+            }
+          ]
+        },
+        "Roles": [ { "Ref": "TouchPointDynamoViewPromoRoleName" } ]
+      }
+    },
     "ServerRole": {
       "Type": "AWS::IAM::Role",
       "Properties": {
