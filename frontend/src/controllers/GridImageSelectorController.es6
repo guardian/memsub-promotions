@@ -29,7 +29,7 @@ export default class {
         }
 
         images.sort((b, a) => (a.dimensions.width * a.dimensions.height) - (b.dimensions.width * b.dimensions.height));
-        this.$scope.landingPage.imageUrl = images[0].file;
+        this.$scope.landingPage.imageUrl = images[0].secureUrl;
         this.$scope.show = false;
     }
 }

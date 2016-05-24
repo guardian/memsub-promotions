@@ -58,17 +58,15 @@ export default class {
         let promoCopy = Object.assign({}, promotion);
         promoCopy.codes = Object.keys(promoCopy.codes).map(channel => {
             let newChannel = {};
-            newChannel[channel] =promoCopy.codes[channel].filter(code => code != "");
+            newChannel[channel] = promoCopy.codes[channel].filter(code => code != "");
             return newChannel
         }).reduce((acc, n) => Object.assign(acc, n), {});
         return promoCopy;
     }
 
     update(promotion) {
-        let self = this;
         let sanitised = this.removeEmptyCodes(promotion);
         return this.service.save(sanitised)
-            .then(this.refreshIframe.bind(self));
     }
 
     save(promotion) {
