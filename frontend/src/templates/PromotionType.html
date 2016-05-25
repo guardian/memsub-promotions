@@ -42,7 +42,9 @@
 
         <!-- Tracking -->
         <md-tab label="Tracking" ng-click="ctrl.setPromotionType('tracking')">
-            <md-content class="md-padding md-tab-content"></md-content>
+            <md-content class="md-padding md-tab-content">
+                <p ng-show="product == 'membership'">For Tracking promotions, the <b>Rate plans</b> below are only used to choose the landing page tier.</p>
+            </md-content>
         </md-tab>
     </md-tabs>
 </div>

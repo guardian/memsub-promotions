@@ -16,7 +16,7 @@
                     <label>Description (for checkout page when promotion applied)</label><textarea ng-model="promotion.description" name="description" ng-trim="false" rows="3" required></textarea>
                 </md-input-container>
 
-                <promotion-type promotion="promotion"></promotion-type>
+                <promotion-type promotion="promotion" product="environment.product"></promotion-type>
                 <rate-plan-list product-rate-plan-ids="promotion.appliesTo.productRatePlanIds" product="environment.product"></rate-plan-list>
                 <available-countries countries="promotion.appliesTo.countries"></available-countries>
                 <promotion-dates promotion="promotion"></promotion-dates>
