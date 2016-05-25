@@ -4,7 +4,8 @@ import types from "text!templates/PromotionType.html"
 export default () => {
     return {
         scope: {
-            promotion: '='
+            promotion: '=',
+            product: '='
         },
         restrict: 'E',
         template: types,
