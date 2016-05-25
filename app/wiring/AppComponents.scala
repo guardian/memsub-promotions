@@ -1,4 +1,5 @@
 package wiring
+import actions.GoogleAuthAction
 import com.gu.config.{DigitalPackRatePlanIds, MembershipRatePlanIds}
 import com.gu.memsub.promo.{Campaign, DynamoTables}
 import com.gu.memsub.promo.Promotion.AnyPromotion
@@ -7,13 +8,14 @@ import play.api.libs.concurrent.Execution.Implicits._
 import com.typesafe.config.ConfigFactory
 import com.softwaremill.macwire._
 import controllers._
+import play.api.libs.ws.ahc.AhcWSComponents
 import play.api.routing.Router
 import wiring.AppComponents.Stage
 import router.Routes
 
-class AppComponents(private val stage: Stage, builtInComponents: BuiltInComponents) {
+class AppComponents(private val stage: Stage, c: BuiltInComponents with AhcWSComponents) {
 
-  import builtInComponents._
+  import c._
   lazy val config = ConfigFactory.load()
   lazy val promoService = com.gu.memsub.services.JsonDynamoService.forTable[AnyPromotion](DynamoTables.promotions(config, stage.name))
   lazy val campaignService = com.gu.memsub.services.JsonDynamoService.forTable[Campaign](DynamoTables.campaigns(config, stage.name))
@@ -21,6 +23,10 @@ class AppComponents(private val stage: Stage, builtInComponents: BuiltInComponen
   lazy val membershipRatePlanIds = MembershipRatePlanIds.fromConfig(config.getConfig(AppComponents.ratePlanPath(stage) + ".membership"))
   lazy val digipackRatePlanIds = DigitalPackRatePlanIds.fromConfig(config.getConfig(AppComponents.ratePlanPath(stage) + ".digitalpack"))
 
+  lazy val googleAuthAction = wire[GoogleAuthAction]
+  import googleAuthAction._
+
+  lazy val authController = wire[AuthController]
   lazy val healthController = wire[HealthCheckController]
   lazy val promoController = wire[PromotionController]
   lazy val campaignController = wire[CampaignController]

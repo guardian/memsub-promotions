@@ -2,6 +2,8 @@ package controllers
 
 import java.util.UUID
 
+import actions.GoogleAuthAction
+import actions.GoogleAuthAction._
 import com.gu.memsub.promo._
 import com.gu.memsub.promo.Promotion.AnyPromotion
 import play.api.libs.concurrent.Execution.Implicits._
@@ -17,26 +19,26 @@ import play.api.mvc.Results._
 
 import scala.util.Try
 
-class PromotionController(service: JsonDynamoService[AnyPromotion, Future]) {
+class PromotionController(googleAuthAction: GoogleAuthenticatedAction, service: JsonDynamoService[AnyPromotion, Future]) {
 
-  def all(campaignCode: Option[String]) = Action.async {
+  def all(campaignCode: Option[String]) = googleAuthAction.async {
     campaignCode.map(CampaignCode).fold(service.all)(service.find).map(promos => Ok(Json.toJson(promos)))
   }
 
-  def get(uuid: Option[String]) = Action.async {
+  def get(uuid: Option[String]) = googleAuthAction.async {
     uuid.flatMap(i => Try(UUID.fromString(i)).toOption).map {
       i => service.find(i).map(_.headOption.fold[Result](NotFound)(promo => Ok(Json.toJson(promo))))
     }.getOrElse[Future[Result]](Future.successful(BadRequest))
   }
 
-  def validate = Action { request =>
+  def validate = googleAuthAction { request =>
     (for {
       jsonToTest <- request.body.asJson.toRight[Seq[(JsPath, Seq[ValidationError])]](Seq.empty).right
       promo <- Json.fromJson[AnyPromotion](jsonToTest).asEither.right
     } yield promo).fold(e => BadRequest(JsError.toJson(e)), p => Ok(Json.toJson(p)))
   }
 
-  def upsert = Action.async { request =>
+  def upsert = googleAuthAction.async { request =>
     request.body.asJson.map { json =>
       json.validate[AnyPromotion].map { promotion => {
         service.add(promotion).map(_ => Ok(Json.obj("status" -> "ok")))
