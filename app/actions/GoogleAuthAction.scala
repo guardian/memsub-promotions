@@ -8,17 +8,23 @@ import controllers.routes
 import play.api.mvc.ActionBuilder
 import play.api.mvc.Security.AuthenticatedRequest
 
-class GoogleAuthAction(config: Config) extends googleauth.Actions with googleauth.Filters {
+import scala.concurrent.ExecutionContext
 
+class GoogleAuthAction(config: Config)(implicit ec: ExecutionContext) extends googleauth.Actions with googleauth.Filters {
 
   val authConfig = googleAuthConfigFor(config)
-
   val loginTarget = routes.AuthController.loginAction()
-
   lazy val groupChecker = googleGroupCheckerFor(config)
 
-  val GoogleAuthAction: ActionBuilder[GoogleAuthRequest] = AuthAction
-
+  val GoogleAuthAction: ActionBuilder[GoogleAuthRequest] = AuthAction andThen requireGroup[GoogleAuthRequest](Set(
+    "directteam@guardian.co.uk",
+    "subscriptions.dev@guardian.co.uk",
+    "memsubs.dev@guardian.co.uk",
+    "identitydev@guardian.co.uk",
+    "touchpoint@guardian.co.uk",
+    "crm@guardian.co.uk",
+    "membership.testusers@guardian.co.uk"
+  ))
 }
 
 object GoogleAuthAction {
