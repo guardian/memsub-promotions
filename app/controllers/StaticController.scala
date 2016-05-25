@@ -1,9 +1,11 @@
 package controllers
+import actions.GoogleAuthAction
+import actions.GoogleAuthAction._
 import play.api.mvc._
 
-class StaticController extends Controller {
+class StaticController(googleAuthAction: GoogleAuthenticatedAction) extends Controller {
 
-  def index = Action {
+  def index = googleAuthAction {
     Ok(views.html.index("Your new application is ready."))
   }
 }

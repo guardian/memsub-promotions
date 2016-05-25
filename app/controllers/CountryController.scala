@@ -1,4 +1,5 @@
 package controllers
+import actions.GoogleAuthAction.GoogleAuthenticatedAction
 import com.gu.memsub.promo.Formatters.Common._
 import com.gu.config.{DigitalPackRatePlanIds, MembershipRatePlanIds}
 import com.gu.i18n.{Country, CountryGroup, Currency, GBP}
@@ -6,9 +7,9 @@ import play.api.libs.json._
 import play.api.mvc.Action
 import play.api.mvc.Results._
 
-class CountryController(membershipIds: MembershipRatePlanIds, digipackIds: DigitalPackRatePlanIds) {
+class CountryController(googleAuthAction: GoogleAuthenticatedAction, membershipIds: MembershipRatePlanIds, digipackIds: DigitalPackRatePlanIds) {
 
-  def all = Action {
+  def all = googleAuthAction {
 
     implicit val curWrites = new Writes[Currency] {
       override def writes(in: Currency): JsValue = JsString(in.glyph)
