@@ -23,8 +23,8 @@ class AppComponents(private val stage: Stage, c: BuiltInComponents with AhcWSCom
   lazy val membershipRatePlanIds = MembershipRatePlanIds.fromConfig(config.getConfig(AppComponents.ratePlanPath(stage) + ".membership"))
   lazy val digipackRatePlanIds = DigitalPackRatePlanIds.fromConfig(config.getConfig(AppComponents.ratePlanPath(stage) + ".digitalpack"))
 
-  lazy val googleAuthAction = wire[GoogleAuthAction]
-  import googleAuthAction._
+  lazy val googleAuthAction: GoogleAuthAction = wire[GoogleAuthAction]
+  import googleAuthAction.GoogleAuthAction
 
   lazy val authController = wire[AuthController]
   lazy val healthController = wire[HealthCheckController]
