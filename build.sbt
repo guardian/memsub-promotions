@@ -29,7 +29,7 @@ libraryDependencies ++= Seq(
   cache,
   ws,
   "org.scalaz" %% "scalaz-core" % "7.1.3",
-  "com.gu" %% "membership-common" % "0.205",
+  "com.gu" %% "membership-common" % "0.208",
   "com.softwaremill.macwire" %% "macros" % "2.2.2" % "provided",
   "com.softwaremill.macwire" %% "util" % "2.2.2",
   "com.softwaremill.macwire" %% "proxy" % "2.2.2",

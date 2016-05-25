@@ -3,7 +3,7 @@
     <md-tabs md-dynamic-height md-selected="selectedTab" ng-init="ctrl.setupSelectedTab(promotion)">
 
         <!-- Incentives -->
-        <md-tab label="Incentive" ng-click="ctrl.setPromotionType(promotion.promotionType.name, 'incentive')">
+        <md-tab label="Incentive" ng-click="ctrl.setPromotionType('incentive')">
             <md-content class="md-padding md-tab-content">
                 <md-input-container class="md-block" flex-gt-sm>
                     <label>Redemption instructions</label>
@@ -17,7 +17,7 @@
         </md-tab>
 
         <!-- Free trials -->
-        <md-tab label="Free trial" ng-click="ctrl.setPromotionType(promotion.promotionType.name, 'free_trial')">
+        <md-tab label="Free trial" ng-click="ctrl.setPromotionType('free_trial')">
             <md-content class="md-padding md-tab-content">
                 <md-input-container class="md-block" flex-gt-sm>
                     <label>Duration (days)</label>
@@ -27,7 +27,7 @@
         </md-tab>
 
         <!-- Percent discounts -->
-        <md-tab label="Discount" ng-click="ctrl.setPromotionType(promotion.promotionType.name, 'discount')">
+        <md-tab label="Discount" ng-click="ctrl.setPromotionType('discount')">
             <md-content class="md-padding md-tab-content">
                 <md-input-container class="md-block" flex-gt-sm>
                     <label>Duration (months)</label>
@@ -41,7 +41,7 @@
         </md-tab>
 
         <!-- Tracking -->
-        <md-tab label="Tracking" ng-click="ctrl.setPromotionType(promotion.promotionType.name, 'tracking')">
+        <md-tab label="Tracking" ng-click="ctrl.setPromotionType('tracking')">
             <md-content class="md-padding md-tab-content"></md-content>
         </md-tab>
     </md-tabs>

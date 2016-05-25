@@ -15,9 +15,7 @@ export default class {
         this.$scope.selectedTab = this.types.indexOf(promotionTypeName)
     }
     
-    setPromotionType(oldName, newName) {
-        if (oldName != newName) {
-            this.$scope.promotion.promotionType = {name: newName}
-        }
+    setPromotionType(newName) {
+        this.$scope.promotion.promotionType.name = newName
     }
 }
