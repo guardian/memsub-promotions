@@ -1,20 +1,21 @@
-<div layout="column">
+<ng-form layout="column" name="tabForm">
     <h5>Channels/Codes</h5>
     <md-tabs md-selected="selectedIndex" md-border-bottom md-autoselect class="tall-tabs">
-        <md-tab layout="column"  ng-repeat="channel in channels" label="{{channel.name}}" >
+        <md-tab layout="column" ng-repeat="channel in channels" label="{{channel.name || 'Enter a name'}}" ng-disabled="selectedIndex != $index && tabForm.$invalid">
             <div layout-align="left center" class="code-tab">
-
-                <div layout="row" class="tab-actions-container">
+                <ng-form layout="row" name="singleTabForm" class="tab-actions-container">
                     <md-input-container>
                         <label for="name">Channel name</label>
-                        <input type="text" id="name" ng-model="channel.name">
+                        <input type="text" id="name" name="name" ng-model="channel.name" required>
+                        <div ng-messages="singleTabForm.name.$error" role="alert">
+                            <ng-message when="required">Please enter a name</ng-message>
+                        </div>
                     </md-input-container>
                     <span flex></span>
                     <md-button class="md-icon-button" ng-click="ctrl.deleteChannel(channels, channel.name)">
                         <md-icon md-font-set="material-icons">delete_forever</md-icon>
                     </md-button>
-                </div>
-
+                </ng-form>
                 <div>
                     <md-input-container ng-repeat="code in channel.codes track by $index" class="code-container">
                         <md-icon md-font-set="material-icons" md-menu-align-target><a target="_blank" href="https://{{ productDomain }}/p/{{ channel.codes[$index] }}">open_in_browser</a></md-icon>
@@ -27,7 +28,9 @@
                 </div>
             </div>
         </md-tab>
-        <md-tab layout="column" label="+" ng-click="ctrl.addChannel('Channel ' + channels.length);" md-on-select="selectedIndex = selectedIndex - 1">
+        <md-tab layout="column" label="+"
+                ng-disabled="tabForm.$invalid"
+                ng-click="ctrl.addChannel('Channel ' + channels.length);" md-on-select="selectedIndex = selectedIndex - 1">
         </md-tab>
     </md-tabs>
-</div>
+</ng-form>

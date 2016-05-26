@@ -16,9 +16,7 @@ export default class {
     }
 
     deleteChannel(currentChannels, channelName) {
-        if (channelName) {
-            this.$scope.channels = currentChannels.filter(c => c.name != channelName);
-        }
+        this.$scope.channels = currentChannels.filter(c => c.name != channelName);
     }
 
     addCode(currentChannels, channelName) {
@@ -58,5 +56,4 @@ export default class {
             return o
         }).reduce((arr, codes) => Object.assign(arr, codes), {})
     }
-
 }
