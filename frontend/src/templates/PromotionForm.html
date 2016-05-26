@@ -12,9 +12,9 @@
                         <ng-message when="required">Please enter a name</ng-message>
                     </div>
                 </md-input-container>
-                <md-input-container>
+                <md-input-container class="md-block">
                     <label>Description (for checkout page when promotion applied)</label>
-                    <textarea ng-model="promotion.description" name="description" rows="3" required></textarea>
+                    <textarea ng-model="promotion.description" name="description" required></textarea>
                     <div ng-messages="promotionForm.description.$error" role="alert">
                         <ng-message when="required">Please enter a description</ng-message>
                     </div>

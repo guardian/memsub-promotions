@@ -7,14 +7,14 @@
             <md-content class="md-padding md-tab-content">
                 <md-input-container class="md-block" flex-gt-sm>
                     <label>Redemption instructions</label>
-                    <input ng-model="promotion.promotionType.redemptionInstructions" name="redemption" ng-required="promotion.promotionType.name == 'incentive'">
-                    <div ng-messages="promoType.duration.$error" role="alert">
+                    <textarea ng-model="promotion.promotionType.redemptionInstructions" name="redemption" ng-required="promotion.promotionType.name == 'incentive'"></textarea>
+                    <div ng-messages="promoType.redemption.$error" role="alert">
                         <ng-message when="required">This field is required</ng-message>
                     </div>
                 </md-input-container>
                 <md-input-container class="md-block" flex-gt-sm>
                     <label>Terms and conditions</label>
-                    <input ng-model="promotion.promotionType.termsAndConditions" delete-empty>
+                    <textarea ng-model="promotion.promotionType.termsAndConditions" delete-empty></textarea>
                 </md-input-container>
             </md-content>
         </md-tab>
