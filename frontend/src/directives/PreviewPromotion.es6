@@ -3,14 +3,20 @@ export default () => {
     return {
         restrict: 'E',
         controller: 'previewPromotionController',
-        template: '<iframe flex ng-src="{{src}}" frameborder="0" ng-show="!invalid"></iframe><div layout-align="center center" layout="row" ng-show="invalid" class="preview-error" flex><span>Preview not yet available</span></div>',
+        template: '<iframe flex ng-src="{{src}}" frameborder="0" ng-show="validity"></iframe><div layout-align="center center" layout="row" ng-show="!validity" class="preview-error" flex><span>Preview not yet available</span></div>',
         scope: {
-            'promotion': '='
+            'promotion': '=',
+            'validity': '<'
         },
         link: function (scope, element, attr, ctrl) {
+            
             scope.src = '';
-            scope.$watch('promotion', function(newPromo) {
-                ctrl.promotionUpdated(newPromo);
+            scope.$watch('validity', function() {
+                ctrl.promotionUpdated(scope.promotion, scope.validity);
+            });
+            
+            scope.$watch('promotion', function() {
+                ctrl.promotionUpdated(scope.promotion, scope.validity);
             }, true);
         }
     };

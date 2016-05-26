@@ -81,3 +81,24 @@ md-icon > a
 
 .save-button
   margin-top: 20px
+
+.date-error
+  transition-property: opacity
+  transition-delay: 0.2s
+  transition-duration: 5s
+  margin-left: 63px
+  line-height: 14px
+  font-size: 12px
+  color: red
+
+.server-error
+  background-color: rgb(255,82,82)
+  margin-top: 20px
+  padding: 10px
+  font-weight: bold
+  color: white
+
+
+// fix md-datepicker erroneously being invalid when untouched
+md-datepicker.ng-pristine .md-datepicker-invalid
+  border-bottom-color: rgb(224, 224, 224)

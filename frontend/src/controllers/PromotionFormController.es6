@@ -11,14 +11,16 @@ const emptyPromotion = {
 export default class {
 
     /* @ngInject */
-    constructor($state, $stateParams, $scope, promotionService, campaignService, environmentService, uuid) {
+    constructor($state, $stateParams, $scope, promotionService, campaignService, environmentService, uuid, $q) {
         this.service = promotionService;
         this.campaignService = campaignService;
         this.environmentService = environmentService;
         this.$scope = $scope;
         this.$state = $state;
         this.uuid = uuid;
+        this.$q = $q;
 
+        this.$scope.serverErrors = [];
         this.$scope.productDomain = this.environmentService.getProductDomain();
 
         if ($stateParams.uuid) {
@@ -70,8 +72,10 @@ export default class {
     }
 
     save(promotion) {
-        this.update(promotion).then(() =>
-            this.$state.go('allPromotions.singleCampaign', {code: promotion.campaignCode})
-        );
+        this.$scope.serverErrors = [];
+        this.service.validate(promotion)
+            .then(valid => this.update(valid).then(() => this.$state.go('allPromotions.singleCampaign', {code: promotion.campaignCode})), 
+                  invalid => this.$scope.serverErrors = Object.keys(invalid))
+            
     }
 }

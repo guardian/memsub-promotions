@@ -4,6 +4,7 @@ import 'angular'
 import 'angular-ui-router'
 import 'angular-cookies'
 import 'angular-material'
+import 'angular-messages'
 import 'angular-uuid'
 
 //views
@@ -50,7 +51,7 @@ import GridImageSelectorController from "controllers/GridImageSelectorController
 import EnvironmentController from "controllers/EnvironmentController"
 import PreviewPromotionController from "controllers/PreviewPromotionController"
 
-let module = angular.module("Promotions", ['ui.router', 'ngCookies', 'ngMaterial', 'angular-uuid']);
+let module = angular.module("Promotions", ['ui.router', 'ngMessages', 'ngCookies', 'ngMaterial', 'angular-uuid']);
 
 module.service('promotionService', PromotionService)
       .service('campaignService', CampaignService)
