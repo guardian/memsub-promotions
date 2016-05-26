@@ -8,8 +8,8 @@ export default class {
         this.$scope = $scope;
     }
 
-    promotionUpdated(promotion) {
-        if (!promotion) {
+    promotionUpdated(promotion, isValid) {
+        if (!promotion || !isValid) {
             return;
         }
 
@@ -17,12 +17,7 @@ export default class {
             this.$timeout.cancel(this.currentTimeout);
         }
         this.currentTimeout = this.$timeout(() => {
-            this.promotionService.validate(promotion).then(() => {
-                this.$scope.src = 'https://' + this.environmentService.getProductDomain() + '/q?json=' + encodeURIComponent(JSON.stringify(promotion));
-                this.$scope.invalid = false;
-            }, () => {
-                this.$scope.invalid = true;
-            })
+            this.$scope.src = 'https://' + this.environmentService.getProductDomain() + '/q?json=' + encodeURIComponent(JSON.stringify(promotion));
         }, 500)
     }
 }

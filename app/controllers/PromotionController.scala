@@ -35,7 +35,7 @@ class PromotionController(googleAuthAction: GoogleAuthenticatedAction, service: 
     (for {
       jsonToTest <- request.body.asJson.toRight[Seq[(JsPath, Seq[ValidationError])]](Seq.empty).right
       promo <- Json.fromJson[AnyPromotion](jsonToTest).asEither.right
-    } yield promo).fold(e => BadRequest(JsError.toJson(e)), p => Ok(Json.toJson(p)))
+    } yield promo).fold(e => Ok(JsError.toJson(e)), p => Ok(Json.obj("status" -> "ok")))
   }
 
   def upsert = googleAuthAction.async { request =>

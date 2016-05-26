@@ -1,10 +1,10 @@
-<div layout="column">
+<ng-form layout="column">
     <h4>Landing page</h4>
     <md-input-container>
         <label>Title</label><input name="title" ng-model="landingPage.title" delete-empty>
     </md-input-container>
     <md-input-container>
-        <label>Description</label><input name="description" ng-model="landingPage.description" delete-empty>
+        <label>Description</label><input name="landing-description" ng-model="landingPage.description" delete-empty>
     </md-input-container>
     <md-input-container>
         <label>Roundel HTML</label><input name="roundel-html" ng-model="landingPage.roundelHtml" delete-empty>
@@ -18,4 +18,4 @@
         <md-radio-button value="grey">Grey</md-radio-button>
         <md-radio-button value="white">White</md-radio-button>
     </md-radio-group>
-</div>
+</ng-form>

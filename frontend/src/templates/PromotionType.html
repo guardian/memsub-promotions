@@ -1,4 +1,4 @@
-<div layout="column">
+<ng-form name="promoType" layout="column">
     <h5>Promotion type</h5>
     <md-tabs md-dynamic-height md-selected="selectedTab" ng-init="ctrl.setupSelectedTab(promotion)">
 
@@ -7,11 +7,14 @@
             <md-content class="md-padding md-tab-content">
                 <md-input-container class="md-block" flex-gt-sm>
                     <label>Redemption instructions</label>
-                    <input ng-model="promotion.promotionType.redemptionInstructions">
+                    <textarea ng-model="promotion.promotionType.redemptionInstructions" name="redemption" ng-required="promotion.promotionType.name == 'incentive'"></textarea>
+                    <div ng-messages="promoType.redemption.$error" role="alert">
+                        <ng-message when="required">This field is required</ng-message>
+                    </div>
                 </md-input-container>
                 <md-input-container class="md-block" flex-gt-sm>
                     <label>Terms and conditions</label>
-                    <input ng-model="promotion.promotionType.termsAndConditions" delete-empty>
+                    <textarea ng-model="promotion.promotionType.termsAndConditions" delete-empty></textarea>
                 </md-input-container>
             </md-content>
         </md-tab>
@@ -21,7 +24,11 @@
             <md-content class="md-padding md-tab-content">
                 <md-input-container class="md-block" flex-gt-sm>
                     <label>Duration (days)</label>
-                    <input type="number" ng-model="promotion.promotionType.duration">
+                    <input type="number" name="duration" ng-model="promotion.promotionType.duration" ng-required="promotion.promotionType.name == 'free_trial'">
+                    <div ng-messages="promoType.duration.$error" role="alert">
+                        <ng-message when="required">This field is required</ng-message>
+                        <ng-message when="number">Please enter a number</ng-message>
+                    </div>
                 </md-input-container>
             </md-content>
         </md-tab>
@@ -35,7 +42,7 @@
                 </md-input-container>
                 <md-input-container class="md-block" flex-gt-sm>
                     <label>Amount (%)</label>
-                    <input type="number" ng-model="promotion.promotionType.amount" delete-empty>
+                    <input type="number" ng-model="promotion.promotionType.amount" ng-required="promotion.promotionType.name == 'discount'">
                 </md-input-container>
             </md-content>
         </md-tab>
@@ -47,4 +54,4 @@
             </md-content>
         </md-tab>
     </md-tabs>
-</div>
+</ng-form>

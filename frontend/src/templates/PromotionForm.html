@@ -1,35 +1,49 @@
 <div layout="row" layout-align=" stretch" flex ng-cloak>
     <div layout-padding style="border-right: 1px solid #BBB; overflow: auto" layout-align="stretch" flex="50">
-        <form name="promotionForm">
+        <form name="promotionForm" novalidate ng-submit="promotionForm.$valid && ctrl.save(promotion)">
             <div layout="column">
                 <h3>Promotion Details</h3>
-
                 <md-input-container>
                     <label>Campaign</label><input ng-disabled="true" type="text" value="{{ promotion.campaignCode }} — {{ promotion.campaignName }}"/>
                 </md-input-container>
-
                 <md-input-container>
-                    <label>Name</label><input name="name" ng-model="promotion.name" required/>
+                    <label>Name</label><input name="name" ng-model="promotion.name" ng-required="true"/>
+                    <div ng-messages="promotionForm.name.$error" role="alert">
+                        <ng-message when="required">Please enter a name</ng-message>
+                    </div>
                 </md-input-container>
-
-                <md-input-container>
-                    <label>Description (for checkout page when promotion applied)</label><textarea ng-model="promotion.description" name="description" ng-trim="false" rows="3" required></textarea>
+                <md-input-container class="md-block">
+                    <label>Description (for checkout page when promotion applied)</label>
+                    <textarea ng-model="promotion.description" name="description" required></textarea>
+                    <div ng-messages="promotionForm.description.$error" role="alert">
+                        <ng-message when="required">Please enter a description</ng-message>
+                    </div>
                 </md-input-container>
-
                 <promotion-type promotion="promotion" product="environment.product"></promotion-type>
                 <rate-plan-list product-rate-plan-ids="promotion.appliesTo.productRatePlanIds" product="environment.product"></rate-plan-list>
                 <available-countries countries="promotion.appliesTo.countries"></available-countries>
                 <promotion-dates promotion="promotion"></promotion-dates>
                 <channel-codes codes="promotion.codes"></channel-codes>
-
                 <landing-page landing-page="promotion.landingPage" product="environment.product"></landing-page>
-                <section layout="row" layout-sm="column" layout-align="end center" layout-wrap>
-                    <md-button ng-click="ctrl.save(promotion)" class="md-raised md-primary">Save and Close</md-button>
+
+                <section layout="row" layout-align="end center" layout-wrap>
+                    <div layout="column" layout-align="center center">
+                        <md-button type="submit" class="md-raised md-primary">Save and Close</md-button>
+                        <div class="small-error" ng-show="promotionForm.$submitted && promotionForm.$invalid">
+                            This form has errors
+                        </div>
+                    </div>
                 </section>
+
+                <div class="server-error" ng-if="serverErrors.length">
+                    Internal server error while saving promotion, the following fields are missing:
+                    <ul><li ng-repeat="err in serverErrors">{{err}}</li></ul>
+                    Please send this report to a developer.
+                </div>
             </div>
         </form>
     </div>
     <div layout="column" flex>
-        <preview-promotion layout="column" flex promotion="promotion"></preview-promotion>
+        <preview-promotion layout="column" flex promotion="promotion" validity="promotionForm.$valid"></preview-promotion>
     </div>
 </div>
