@@ -24,11 +24,17 @@
                 <available-countries countries="promotion.appliesTo.countries"></available-countries>
                 <promotion-dates promotion="promotion"></promotion-dates>
                 <channel-codes codes="promotion.codes"></channel-codes>
-
                 <landing-page landing-page="promotion.landingPage" product="environment.product"></landing-page>
-                <section layout="row" layout-sm="column" layout-align="end center" layout-wrap>
-                    <md-button type="submit" class="md-raised md-primary" ng-disabled="promotionForm.$invalid">Save and Close</md-button>
+
+                <section layout="row" layout-align="end center" layout-wrap>
+                    <div layout="column" layout-align="center center">
+                        <md-button type="submit" class="md-raised md-primary">Save and Close</md-button>
+                        <div class="small-error" ng-show="promotionForm.$submitted && promotionForm.$invalid">
+                            This form has errors
+                        </div>
+                    </div>
                 </section>
+
                 <div class="server-error" ng-if="serverErrors.length">
                     Internal server error while saving promotion, the following fields are missing:
                     <ul><li ng-repeat="err in serverErrors">{{err}}</li></ul>
