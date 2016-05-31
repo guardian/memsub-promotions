@@ -37,17 +37,6 @@ export default class {
         }).then(response => response.data)
     }
 
-    invalidPromotion(errors) {
-        let allErrors = {};
-        Object.keys(errors).forEach(originalPath => {
-            let normalisedPath = originalPath.substring(4, originalPath.length);
-            let normalisedErrors = {};
-            errors[originalPath].forEach(e => normalisedErrors[e.msg[0]] = true);
-            allErrors[normalisedPath] = normalisedErrors;
-        });
-        return this.$q.reject(allErrors);
-    }
-
     validate(promotion) {
         return this.$http({
             method: 'POST',
@@ -58,8 +47,12 @@ export default class {
             if (data.status && data.status === 'ok') {
                 return this.$q.resolve(promotion);
             } else {
-                return this.invalidPromotion(data);
+                return this.$q.reject(Object.keys(data).map(f => 
+                    f + ": " + data[f].map(e => e.msg.join(" ")).join(" ")
+                ));
             }
+        }, e => {
+            return this.$q.reject([e.status + " " + e.statusText])
         })
     }
 }
