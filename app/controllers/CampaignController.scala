@@ -5,9 +5,10 @@ import com.gu.memsub.ProductFamily
 import com.gu.memsub.promo.{Campaign, CampaignCode}
 import play.api.libs.concurrent.Execution.Implicits._
 import com.gu.memsub.promo.Formatters.CampaignFormatters._
+import com.gu.memsub.promo.Formatters.Common._
 import com.gu.memsub.services.JsonDynamoService
 import play.api.libs.json.{JsError, Json}
-import play.api.mvc.{Action, Result}
+import play.api.mvc.Result
 
 import scala.concurrent.Future
 import play.api.mvc.Results._

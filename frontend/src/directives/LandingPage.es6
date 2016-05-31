@@ -5,9 +5,11 @@ import template from "text!templates/LandingPage.html"
 export default () => {
     return {
         scope: {
-            landingPage: '='
+            promotion: '='
         },
         restrict: 'E',
-        template: template
+        template: template,
+        controller: 'landingPageController',
+        controllerAs: 'ctrl'
     };
 }
