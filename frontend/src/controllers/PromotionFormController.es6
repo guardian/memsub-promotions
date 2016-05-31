@@ -75,7 +75,7 @@ export default class {
         this.$scope.serverErrors = [];
         this.service.validate(promotion)
             .then(valid => this.update(valid).then(() => this.$state.go('allPromotions.singleCampaign', {code: promotion.campaignCode})), 
-                  invalid => this.$scope.serverErrors = Object.keys(invalid))
+                  invalid => this.$scope.serverErrors = invalid)
             
     }
 }
