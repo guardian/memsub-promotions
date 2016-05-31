@@ -50,6 +50,7 @@ import AvailableCountriesController from "controllers/AvailableCountriesControll
 import GridImageSelectorController from "controllers/GridImageSelectorController"
 import EnvironmentController from "controllers/EnvironmentController"
 import PreviewPromotionController from "controllers/PreviewPromotionController"
+import LandingPageController from "controllers/LandingPageController"
 
 let module = angular.module("Promotions", ['ui.router', 'ngMessages', 'ngCookies', 'ngMaterial', 'angular-uuid']);
 
@@ -70,6 +71,7 @@ module.service('promotionService', PromotionService)
       .controller('availableCountriesController', AvailableCountriesController)
       .controller('previewPromotionController', PreviewPromotionController)
       .controller('gridImageSelectorController', GridImageSelectorController)
+      .controller('landingPageController', LandingPageController)
       .directive('promotionType', promotionType)
       .directive('landingPage', landingPage)
       .directive('environmentMenu', environmentMenu)
