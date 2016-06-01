@@ -1,0 +1,28 @@
+{
+  "defaultStacks": ["membership"],
+  "packages": {
+    "MembershipSub-Promotions-to-PromoCode-View-Lambda": {
+      "type":"aws-lambda",
+      "data":{
+        "bucket": "gu-promotions-tool-dist",
+        "functionNames": [
+          "MembershipSub-Promotions-to-PromoCode-View-"
+        ]
+      }
+    }
+  },
+  "recipes": {
+    "default" : {
+      "depends" : [
+        "lambda-upload",
+        "lambda-update"
+      ]
+    },
+    "lambda-upload":{
+      "actions":["MembershipSub-Promotions-to-PromoCode-View-Lambda.uploadLambda"]
+    },
+    "lambda-update":{
+      "actions":["MembershipSub-Promotions-to-PromoCode-View-Lambda.updateLambda"]
+    }
+  }
+}

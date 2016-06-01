@@ -9,3 +9,7 @@ target
 frontend/node_modules
 public/
 .DS_Store
+lambdas/artifacts.zip
+lambdas/packages/
+node_modules/
+project/project/
