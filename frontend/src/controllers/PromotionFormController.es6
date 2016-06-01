@@ -33,7 +33,9 @@ export default class {
     }
 
     createNewPromotion(campaignCode) {
-        this.$scope.promotion = Object.assign({}, emptyPromotion, {campaignCode: campaignCode, uuid: this.uuid.v4()});
+        this.$scope.promotion = Object.assign({}, emptyPromotion, 
+            {campaignCode: campaignCode, uuid: this.uuid.v4()},
+            {landingPage: {productFamily: this.environmentService.getProduct()}});
         return this.fillCampaignInfo(this.$scope.promotion)
     }
 
