@@ -33,11 +33,11 @@
       ],
       "ConstraintDescription": "must be a valid EC2 instance type."
     },
-    "MaxInstances" : {
+    "MaxInstances": {
       "Description": "Maximum number of instances. This should be (at least) double the desired capacity.",
       "Type": "Number"
     },
-    "MinInstances" : {
+    "MinInstances": {
       "Description": "Minimum number of instances",
       "Type": "Number"
     },
@@ -45,11 +45,11 @@
       "Description": "ID of the VPC onto which to launch the application",
       "Type": "AWS::EC2::VPC::Id"
     },
-    "PrivateVpcSubnets" : {
+    "PrivateVpcSubnets": {
       "Description": "Public subnets to use in VPC",
       "Type": "List<AWS::EC2::Subnet::Id>"
     },
-    "PublicVpcSubnets" : {
+    "PublicVpcSubnets": {
       "Description": "Public subnets to use for the ELB",
       "Type": "List<AWS::EC2::Subnet::Id>"
     },
@@ -72,6 +72,16 @@
     },
     "SslArn": {
       "Description": "SSL certificate ARN",
+      "Type": "String",
+      "Default": ""
+    },
+    "UATPromotionsTableStreamARN": {
+      "Description": "ARN of the MembershipSub-Promotions-UAT DynamoDB stream to trigger the lambda function which updates the MembershipSub-PromoCode-View-UAT table",
+      "Type": "String",
+      "Default": ""
+    },
+    "PRODPromotionsTableStreamARN": {
+      "Description": "ARN of the MembershipSub-Promotions-PROD DynamoDB stream to trigger the lambda function which updates the MembershipSub-PromoCode-View-PROD table",
       "Type": "String",
       "Default": ""
     },
@@ -100,14 +110,129 @@
       }
     }
   },
-
   "Resources": {
+    "MembershipSubPromotionsLambdaRole": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [ {
+            "Effect": "Allow",
+            "Principal": {
+              "Service": [ "lambda.amazonaws.com" ]
+            },
+            "Action": [ "sts:AssumeRole" ]
+          } ]
+        },
+        "Path": "/",
+        "Policies": [ {
+          "PolicyName": "MembershipSub-Promotions-to-PromoCode-View-Lambda-Policy",
+          "PolicyDocument": {
+            "Version": "2012-10-17",
+            "Statement": [
+              {
+                "Effect": "Allow",
+                "Action": [
+                  "lambda:InvokeFunction",
+                  "logs:CreateLogGroup",
+                  "logs:CreateLogStream",
+                  "logs:PutLogEvents"
+                ],
+                "Resource": "*"
+              },
+              {
+                "Effect": "Allow",
+                "Action": [
+                  "dynamodb:GetRecords",
+                  "dynamodb:GetShardIterator",
+                  "dynamodb:DescribeStream",
+                  "dynamodb:ListStreams"
+                ],
+                "Resource": "*"
+              },
+              {
+                "Effect": "Allow",
+                "Action": [
+                  "dynamodb:Scan"
+                ],
+                "Resource": {
+                  "Fn::FindInMap": ["StageVariables", {
+                    "Ref": "Stage"
+                  }, "DynamoDBTables"]
+                }
+              },
+              {
+                "Effect": "Allow",
+                "Action": [
+                  "dynamodb:BatchWriteItem",
+                  "dynamodb:Scan"
+                ],
+                "Resource": {
+                  "Fn::FindInMap": ["StageVariables", {
+                    "Ref": "Stage"
+                  }, "DynamoDBTableViews"]
+                }
+              }
+            ]
+          }
+        } ]
+      }
+    },
+    "PromoCodeViewLambdaFunctionUAT":{
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": "gu-promotions-tool-dist",
+          "S3Key": "membership/PROD/MembershipSub-Promotions-to-PromoCode-View-Lambda/MembershipSub-Promotions-to-PromoCode-View-Lambda.zip"
+        },
+        "Description": "An Amazon DynamoDB trigger that creates a view of data associated with a particular promo code for the data pipeline to collect.",
+        "FunctionName": "MembershipSub-Promotions-to-PromoCode-View-QA",
+        "Handler": "MembershipSub-Promotions-to-PromoCode-View-Lambda.handler",
+        "MemorySize": 128,
+        "Role": {"Fn::GetAtt": ["MembershipSubPromotionsLambdaRole","Arn"]},
+        "Runtime": "nodejs4.3"
+      }
+    },
+    "PromoCodeViewLambdaFunctionPROD":{
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": "gu-promotions-tool-dist",
+          "S3Key": "membership/PROD/MembershipSub-Promotions-to-PromoCode-View-Lambda/MembershipSub-Promotions-to-PromoCode-View-Lambda.zip"
+        },
+        "Description": "An Amazon DynamoDB trigger that creates a view of data associated with a particular promo code for the data pipeline to collect.",
+        "FunctionName": "MembershipSub-Promotions-to-PromoCode-View-PROD",
+        "Handler": "MembershipSub-Promotions-to-PromoCode-View-Lambda.handler",
+        "MemorySize": 128,
+        "Role": {"Fn::GetAtt": ["MembershipSubPromotionsLambdaRole","Arn"]},
+        "Runtime": "nodejs4.3"
+      }
+    },
+    "PromoCodeViewLambdaEventSourceUAT": {
+      "Type": "AWS::Lambda::EventSourceMapping",
+      "Properties": {
+        "BatchSize": 10,
+        "Enabled": true,
+        "EventSourceArn": {"Ref":"UATPromotionsTableStreamARN"},
+        "FunctionName": {"Ref": "PromoCodeViewLambdaFunctionUAT"},
+        "StartingPosition": "TRIM_HORIZON"
+      }
+    },
+    "PromoCodeViewLambdaEventSourcePROD": {
+      "Type": "AWS::Lambda::EventSourceMapping",
+      "Properties": {
+        "BatchSize": 10,
+        "Enabled": true,
+        "EventSourceArn": {"Ref":"PRODPromotionsTableStreamARN"},
+        "FunctionName": {"Ref": "PromoCodeViewLambdaFunctionPROD"},
+        "StartingPosition": "TRIM_HORIZON"
+      }
+    },
     "TouchPointDynamoViewPolicy": {
       "Type": "AWS::IAM::Policy",
       "Properties": {
         "PolicyName": "TouchPointDynamoViewPolicy",
         "PolicyDocument": {
-          "Version" : "2012-10-17",
+          "Version": "2012-10-17",
           "Statement": [
             {
               "Effect": "Allow",
@@ -206,8 +331,8 @@
     "LoadBalancer": {
       "Type": "AWS::ElasticLoadBalancing::LoadBalancer",
       "Properties": {
-        "LoadBalancerName" : {"Fn::Join" : ["-", [{"Ref": "App"}, { "Ref" : "Stage" } ]]},
-        "Scheme" : "internet-facing",
+        "LoadBalancerName": {"Fn::Join": ["-", [{"Ref": "App"}, { "Ref": "Stage" } ]]},
+        "Scheme": "internet-facing",
         "Listeners": [{
           "LoadBalancerPort": "443",
           "InstancePort": "9000",
@@ -227,8 +352,8 @@
           { "Ref": "LoadBalancerSecurityGroup" }
         ],
         "ConnectionDrainingPolicy": {
-          "Enabled" : "true",
-          "Timeout" : "60"
+          "Enabled": "true",
+          "Timeout": "60"
         }
       }
     },
@@ -300,12 +425,12 @@
                       "CONF_DIR=/membership/memsub-promotions-1.0-SNAPSHOT/conf",
 
                       "adduser --system --home /membership --disabled-password membership",
-                      {"Fn::Join":["", ["aws --region ", { "Ref": "AWS::Region" }, " s3 cp s3://gu-promotions-tool-dist/", { "Ref" : "Stack" }, "/", { "Ref" : "Stage" }, "/", { "Ref" : "App" }, "/app.zip /tmp"]]},
+                      {"Fn::Join":["", ["aws --region ", { "Ref": "AWS::Region" }, " s3 cp s3://gu-promotions-tool-dist/", { "Ref": "Stack" }, "/", { "Ref": "Stage" }, "/", { "Ref": "App" }, "/app.zip /tmp"]]},
                       "unzip -d /membership /tmp/app.zip",
 
                       "mkdir /etc/gu",
 
-                      {"Fn::Join":["", ["aws --region ", { "Ref": "AWS::Region" }, " s3 cp s3://gu-promotions-tool-private/", { "Ref" : "Stage" }, "/memsub-promotions-keys.conf /etc/gu"]]},
+                      {"Fn::Join":["", ["aws --region ", { "Ref": "AWS::Region" }, " s3 cp s3://gu-promotions-tool-private/", { "Ref": "Stage" }, "/memsub-promotions-keys.conf /etc/gu"]]},
                       "chown membership /etc/gu/memsub-promotions-keys.conf",
                       "chmod 0600 /etc/gu/memsub-promotions-keys.conf",
 
@@ -317,7 +442,7 @@
                           " $CONF_DIR/logger.conf"]]},
                       {"Fn::Join": [" ", ["python awslogs-agent-setup.py -nr", { "Ref": "AWS::Region" }, "-c $CONF_DIR/logger.conf" ]]},
 
-                      {"Fn::Join":["", ["sed 's/__STAGE/", { "Ref" : "Stage" } ,"/' $CONF_DIR/upstart.conf > /etc/init/memsub-promotions.conf"]]},
+                      {"Fn::Join":["", ["sed 's/__STAGE/", { "Ref": "Stage" } ,"/' $CONF_DIR/upstart.conf > /etc/init/memsub-promotions.conf"]]},
 
                       "chown -R membership /membership/",
 
