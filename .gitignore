@@ -9,6 +9,7 @@ target
 frontend/node_modules
 public/
 .DS_Store
+lambdas/MembershipSub-Promotions-to-PromoCode-View-Lambda.zip
 lambdas/artifacts.zip
 lambdas/packages/
 node_modules/
