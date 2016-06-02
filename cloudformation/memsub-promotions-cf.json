@@ -132,14 +132,20 @@
               {
                 "Effect": "Allow",
                 "Action": [
-                  "dynamodb:GetRecords",
-                  "dynamodb:GetShardIterator",
-                  "dynamodb:DescribeStream",
-                  "dynamodb:ListStreams",
                   "lambda:InvokeFunction",
                   "logs:CreateLogGroup",
                   "logs:CreateLogStream",
                   "logs:PutLogEvents"
+                ],
+                "Resource": "*"
+              },
+              {
+                "Effect": "Allow",
+                "Action": [
+                  "dynamodb:GetRecords",
+                  "dynamodb:GetShardIterator",
+                  "dynamodb:DescribeStream",
+                  "dynamodb:ListStreams"
                 ],
                 "Resource": "*"
               },
