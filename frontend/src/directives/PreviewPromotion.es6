@@ -17,6 +17,11 @@ export default () => {
                 ctrl.promotionUpdated(scope.promotion, scope.validity);
             });
             
+            scope.$watch('promotionString', function() {
+                let form = element[0].querySelector('form');
+                form.submit();
+            });
+            
             scope.$watch('promotion', function() {
                 ctrl.promotionUpdated(scope.promotion, scope.validity);
             }, true);

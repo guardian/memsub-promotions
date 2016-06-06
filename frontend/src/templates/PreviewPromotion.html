@@ -1,6 +1,9 @@
 <div layout="column" flex>
+
+    <form name="preview" action="{{src}}" target="previewFrame"><input type="hidden" name="promoJson" ng-value="promotionString"/></form>
+
     <div layout="column" layout-align="center center" flex class="preview-background">
-        <iframe flex ng-src="{{src}}" frameborder="0" ng-show="validity" ng-class="mode" class="preview-frame"></iframe>
+        <iframe name="previewFrame" flex frameborder="0" ng-show="validity" ng-class="mode" class="preview-frame"></iframe>
         <div layout-align="center center" layout="row" ng-show="!validity" class="preview-error" flex>
             <span>Preview not yet available</span>
         </div>

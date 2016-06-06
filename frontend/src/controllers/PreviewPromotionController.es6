@@ -7,6 +7,9 @@ export default class {
         this.$timeout = $timeout;
         $scope.mode = 'desktop';
         this.$scope = $scope;
+        
+        this.$scope.src = 'https://' + this.environmentService.getProductDomain() + '/q';
+        
     }
 
     promotionUpdated(promotion, isValid) {
@@ -17,8 +20,9 @@ export default class {
         if (this.currentTimeout) {
             this.$timeout.cancel(this.currentTimeout);
         }
+        
         this.currentTimeout = this.$timeout(() => {
-            this.$scope.src = 'https://' + this.environmentService.getProductDomain() + '/q?json=' + encodeURIComponent(JSON.stringify(promotion));
+            this.$scope.promotionString = JSON.stringify(promotion);
         }, 500)
     }
 }
