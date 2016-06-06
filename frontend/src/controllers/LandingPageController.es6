@@ -5,6 +5,7 @@ export default class {
         this.environmentService = environmentService;
         this.$scope = $scope;
         this.$scope.backup = this.blankBackup();
+        this.$scope[this.environmentService.getProduct()] = true;
     }
 
     blankBackup() {

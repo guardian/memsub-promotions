@@ -4,23 +4,26 @@ import template from "text!templates/GridImageSelector.html"
 export default () => {
     return {
         scope: {
-            'landingPage': '='
+            'image': '=',
+            'label': '@'
         },
         restrict: 'E',
         template: template,
         controller: 'gridImageSelectorController',
         controllerAs: 'ctrl',
         link: (scope, elem, attrs, ctrl) => {
-            
-            scope.$watch('landingPage.imageUrl', function(newValue) {
-                ctrl.imageUrlChanged(newValue);
+
+            let iframe = elem[0].querySelector('iframe');
+            scope.$watch('image', function(newValue) {
+                ctrl.imageChanged(newValue);
             });
             
             window.addEventListener('message', (event) => {
-                scope.$apply(function() {
-                    let assets = event.data.crop.data.assets;
-                    ctrl.imageSelected(assets, event.origin);
-                });
+                if(iframe.contentWindow == event.source) {
+                    scope.$apply(function() {
+                        ctrl.imageSelected(event.data.image.data, event.data.crop.data, event.origin);
+                    });
+                }
             }, false);
         }
     };

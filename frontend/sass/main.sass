@@ -70,12 +70,20 @@ md-icon > a
   background-size: cover
   margin-bottom: 20px
   text-align: center
+  overflow: hidden
   cursor: pointer
   height: 500px
   color: #777
 
-.preview-error
+  > img
+    min-width: 100%
+    display: block
+
+.preview-background
   background-color: #EEEEEE
+
+
+.preview-error
   text-align: center
   color: #777
 
@@ -105,3 +113,20 @@ md-icon > a
 // fix md-datepicker erroneously being invalid when untouched
 md-datepicker.ng-pristine .md-datepicker-invalid
   border-bottom-color: rgb(224, 224, 224)
+
+
+.preview-frame
+  transition: all 1s 0s
+  flex: none
+  &.desktop
+    height: 100%
+    width: 100%
+  &.mobile-portrait, &.mobile-landscape
+    box-shadow: 0 0 3px #aaa
+    border: 1px solid #aaa
+  &.mobile-portrait
+    height: 640px
+    width: 320px
+  &.mobile-landscape
+    height: 320px
+    width: 640px

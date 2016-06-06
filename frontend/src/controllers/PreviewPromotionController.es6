@@ -5,6 +5,7 @@ export default class {
         this.environmentService = environmentService;
         this.promotionService = promotionService;
         this.$timeout = $timeout;
+        $scope.mode = 'desktop';
         this.$scope = $scope;
     }
 

@@ -16,13 +16,15 @@
             <label>Roundel HTML</label><input name="roundel-html" ng-model="promotion.landingPage.roundelHtml" delete-empty>
         </md-input-container>
 
-        <grid-image-selector landing-page="promotion.landingPage"></grid-image-selector>
-
-        <h5>Subs stripe colour</h5>
-        <md-radio-group layout="row" ng-model="promotion.landingPage.sectionColour">
-            <md-radio-button value="blue" class="md-primary">Blue</md-radio-button>
-            <md-radio-button value="grey">Grey</md-radio-button>
-            <md-radio-button value="white">White</md-radio-button>
-        </md-radio-group>
+        <grid-image-selector image="promotion.landingPage.image" label="an image"></grid-image-selector>
+        <grid-image-selector image="promotion.landingPage.heroImage" label="a hero image" ng-if="membership"></grid-image-selector>
+        <div layout="column" ng-show="digitalpack">
+            <h5>Subs stripe colour</h5>
+            <md-radio-group layout="row" ng-model="promotion.landingPage.sectionColour">
+                <md-radio-button value="blue" class="md-primary">Blue</md-radio-button>
+                <md-radio-button value="grey">Grey</md-radio-button>
+                <md-radio-button value="white">White</md-radio-button>
+            </md-radio-group>
+        </div>
     </div>
 </ng-form>

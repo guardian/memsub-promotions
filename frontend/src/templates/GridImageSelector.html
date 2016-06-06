@@ -2,9 +2,7 @@
     <iframe ng-src="{{gridUrl}}" height="1200px" width="100%" style="border: none"></iframe>
 </modal>
 
-<div class="landing-page-image landing-page-image-placeholder"
-     ng-style="landingPage.imageUrl ? {'background-image': 'url(' + landingPage.imageUrl + ')'} : {}"
-     ng-click="show = true"
-     layout-align="center center" layout="column">
-    <span ng-show="!landingPage.imageUrl">Click to choose an image</span>
+<div class="landing-page-image landing-page-image-placeholder" ng-click="show = true" layout-align="center center" layout="column">
+    <span ng-show="!srcset">Click to choose {{label}}</span>
+    <img ng-show="srcset" ng-srcset="{{srcset}}" sizes="40vw"/>
 </div>

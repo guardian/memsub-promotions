@@ -10,26 +10,37 @@ export default class {
         this.$scope = $scope;
     }
 
-    imageUrlChanged(newUrl) {
+    generateSrcSet(availableImages) {
+        this.$scope.srcset = availableImages.map(img => img.path + " " + img.width + "w").join(", ")
+    }
+
+    imageChanged(newImage) {
         
-        if (!newUrl) {
+        if (!newImage || !newImage.availableImages.length) {
             return;
         }
 
-        let matched = newUrl.match(/\/([A-Za-z0-9]+)\/.*$/);
+        this.generateSrcSet(newImage.availableImages);
+        let matched = newImage.availableImages[0].match(/\/([A-Za-z0-9]+)\/.*$/);
 
         if (matched && typeof matched[1] != 'undefined') {
             this.$scope.gridUrl = this.gridOrigin+ '/images/' + matched[1];
         }
     }
 
-    imageSelected(images, origin) {
+    imageSelected(image, crop, origin) {
         if (origin != this.gridOrigin) {
             return;
         }
+        
+        this.$scope.image = {
+            metadata: image.metadata,
+            altText: image.metadata.description,
+            availableImages: crop.assets.map(asset => ({path: asset.secureUrl, width: asset.dimensions.width}))
+        };
 
-        images.sort((b, a) => (a.dimensions.width * a.dimensions.height) - (b.dimensions.width * b.dimensions.height));
-        this.$scope.landingPage.imageUrl = images[0].secureUrl;
+        let sorted = crop.assets.sort((b, a) => a.dimensions.width - b.dimensions.width);
+        this.$scope.url = sorted[0].secureUrl;
         this.$scope.show = false;
     }
 }
