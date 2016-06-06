@@ -21,7 +21,7 @@ export default class {
         }
 
         this.generateSrcSet(newImage.availableImages);
-        let matched = newImage.availableImages[0].match(/\/([A-Za-z0-9]+)\/.*$/);
+        let matched = newImage.availableImages[0].path.match(/\/([A-Za-z0-9]+)\/.*$/);
 
         if (matched && typeof matched[1] != 'undefined') {
             this.$scope.gridUrl = this.gridOrigin+ '/images/' + matched[1];
