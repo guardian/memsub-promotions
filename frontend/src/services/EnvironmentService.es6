@@ -4,7 +4,7 @@ const PRODUCT_DOMAINS = {
     'DEV': {
         'membership': 'mem.thegulocal.com',
         'digitalpack': 'sub.thegulocal.com',
-        'grid': 'media.test.dev-gutools.co.uk'
+        'grid': 'media.gutools.co.uk'
     },
     'PROD': {
         'membership': 'membership.theguardian.com',

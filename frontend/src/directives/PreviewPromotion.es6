@@ -1,9 +1,11 @@
+import template from "text!templates/PreviewPromotion.html"
+
 /* @ngInject */
 export default () => {
     return {
         restrict: 'E',
         controller: 'previewPromotionController',
-        template: '<iframe flex ng-src="{{src}}" frameborder="0" ng-show="validity"></iframe><div layout-align="center center" layout="row" ng-show="!validity" class="preview-error" flex><span>Preview not yet available</span></div>',
+        template: template,
         scope: {
             'promotion': '=',
             'validity': '<'

@@ -1,0 +1,15 @@
+<div layout="column" flex>
+    <div layout="column" layout-align="center center" flex class="preview-background">
+        <iframe flex ng-src="{{src}}" frameborder="0" ng-show="validity" ng-class="mode" class="preview-frame"></iframe>
+        <div layout-align="center center" layout="row" ng-show="!validity" class="preview-error" flex>
+            <span>Preview not yet available</span>
+        </div>
+    </div>
+    <div style="border-top: 1px solid #aaa">
+        <md-button ng-click="mode = 'mobile-portrait'">Mobile portrait</md-button>
+        <md-button ng-click="mode = 'mobile-landscape'">Mobile landscape</md-button>
+        <md-button ng-click="mode = 'desktop'">Desktop</md-button>
+    </div>
+
+
+</div>
