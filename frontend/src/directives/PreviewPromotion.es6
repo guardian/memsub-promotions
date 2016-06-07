@@ -12,14 +12,13 @@ export default () => {
         },
         link: function (scope, element, attr, ctrl) {
             
-            scope.src = '';
             scope.$watch('validity', function() {
                 ctrl.promotionUpdated(scope.promotion, scope.validity);
             });
             
-            scope.$watch('promotionString', function() {
-                let form = element[0].querySelector('form');
-                form.submit();
+            let form = element[0].querySelector('form');
+            scope.$watch('promotionString', function(newValue) {
+                if(newValue) form.submit();
             });
             
             scope.$watch('promotion', function() {

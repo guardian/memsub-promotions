@@ -1,6 +1,8 @@
 <div layout="column" flex>
 
-    <form name="preview" action="{{src}}" target="previewFrame"><input type="hidden" name="promoJson" ng-value="promotionString"/></form>
+    <form name="preview" action="{{src}}" target="previewFrame" method="POST">
+        <input type="hidden" name="promoJson" ng-value="promotionString"/>
+    </form>
 
     <div layout="column" layout-align="center center" flex class="preview-background">
         <iframe name="previewFrame" flex frameborder="0" ng-show="validity" ng-class="mode" class="preview-frame"></iframe>
