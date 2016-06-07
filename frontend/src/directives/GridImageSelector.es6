@@ -1,11 +1,12 @@
 import template from "text!templates/GridImageSelector.html"
 
 /* @ngInject */
-export default () => {
+export default ($timeout) => {
     return {
         scope: {
             'image': '=',
-            'label': '@'
+            'label': '@',
+            'change': '&'
         },
         restrict: 'E',
         template: template,
@@ -22,6 +23,9 @@ export default () => {
                 if(iframe.contentWindow == event.source) {
                     scope.$apply(function() {
                         ctrl.imageSelected(event.data.image.data, event.data.crop.data, event.origin);
+                        if (typeof scope.change === 'function') {
+                            $timeout(scope.change, 0);
+                        }
                     });
                 }
             }, false);

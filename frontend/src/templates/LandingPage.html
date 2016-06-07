@@ -6,8 +6,8 @@
     </md-checkbox>
 
     <div layout="column" ng-show="promotion.landingPage !== undefined">
-        <grid-image-selector image="promotion.landingPage.heroImage.image" label="a hero image" ng-if="membership"></grid-image-selector>
-        <div layout="column" ng-show="membership">
+        <grid-image-selector image="promotion.landingPage.heroImage.image" label="a hero image" ng-if="membership" change="ctrl.heroImageChange(promotion.landingpage.heroImage.alignment)"></grid-image-selector>
+        <div layout="column" ng-show="membership && promotion.landingPage.heroImage !== undefined">
             <h5>Hero image alignment</h5>
             <md-radio-group layout="row" ng-model="promotion.landingPage.heroImage.alignment">
                 <md-radio-button value="top" class="md-primary">Top</md-radio-button>
@@ -15,8 +15,11 @@
                 <md-radio-button value="bottom">Bottom</md-radio-button>
             </md-radio-group>
         </div>
-        <md-input-container>
+        <md-input-container ng-show="membership">
             <label>Title</label><input name="title" ng-model="promotion.landingPage.title" delete-empty>
+        </md-input-container>
+        <md-input-container>
+            <label>Subtitle</label><input name="subtitle" ng-model="promotion.landingPage.subtitle" delete-empty>
         </md-input-container>
         <md-input-container>
             <label>Description</label><input name="landing-description" ng-model="promotion.landingPage.description" delete-empty>
