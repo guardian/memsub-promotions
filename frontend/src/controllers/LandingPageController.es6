@@ -23,8 +23,8 @@ export default class {
     }
 
     heroImageChange(currentAlignment) {
-        if (currentAlignment === undefined && this.$scope.promotion !== undefined && this.$scope.promotion.landingPage !== undefined) {
-            this.$scope.promotion.landingPage.heroImage = Object.assign(this.$scope.promotion.landingPage.heroImage, {alignment: "centre"});
+        if (currentAlignment === undefined) {
+            this.$scope.promotion.landingPage.heroImage.alignment = "centre";
         }
     }
 }
