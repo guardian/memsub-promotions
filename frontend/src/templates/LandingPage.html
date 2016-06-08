@@ -15,17 +15,17 @@
                 <md-radio-button value="bottom">Bottom</md-radio-button>
             </md-radio-group>
         </div>
-        <md-input-container ng-show="membership">
-            <label>Title</label><input name="title" ng-model="promotion.landingPage.title" delete-empty>
-        </md-input-container>
         <md-input-container>
+            <label>Title</label><input name="title" ng-model="promotion.landingPage.title" delete-empty/>
+        </md-input-container>
+        <md-input-container ng-show="membership">
             <label>Subtitle</label><input name="subtitle" ng-model="promotion.landingPage.subtitle" delete-empty>
         </md-input-container>
         <md-input-container>
-            <label>Description</label><input name="landing-description" ng-model="promotion.landingPage.description" delete-empty>
+            <label>Description</label><textarea name="landing-description" ng-model="promotion.landingPage.description" delete-empty></textarea>
         </md-input-container>
         <md-input-container>
-            <label>Roundel HTML</label><input name="roundel-html" ng-model="promotion.landingPage.roundelHtml" delete-empty>
+            <label>Roundel</label><textarea name="roundel-html" ng-model="promotion.landingPage.roundelHtml" delete-empty></textarea>
         </md-input-container>
 
         <grid-image-selector image="promotion.landingPage.image" label="an image"></grid-image-selector>
