@@ -21,4 +21,10 @@ export default class {
             this.$scope.backup =  this.blankBackup();
         }
     }
+
+    heroImageChange(currentAlignment) {
+        if (currentAlignment === undefined) {
+            this.$scope.promotion.landingPage.heroImage.alignment = "centre";
+        }
+    }
 }
