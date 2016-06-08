@@ -6,7 +6,7 @@
             <md-subheader>
                 Campaigns <md-icon class="add-button" md-font-set="material-icons" ui-sref="editCampaign">add</md-icon>
             </md-subheader>
-            <md-list-item class="md-3-line md-clickable" ng-repeat="campaign in campaigns | orderBy:'code'" md-ink-ripple="#AAAAAA">
+            <md-list-item ui-sref-active="selected" class="md-3-line md-clickable" ng-repeat="campaign in campaigns | orderBy:'code'" md-ink-ripple="#AAAAAA">
                 <div class="md-list-item-text" layout="column">
                     <div ui-sref="allPromotions.singleCampaign({code: campaign.code})">
                         <h3>{{ campaign.name }}</h3>
