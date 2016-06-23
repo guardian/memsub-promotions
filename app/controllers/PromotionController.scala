@@ -22,7 +22,7 @@ import scala.util.Try
 class PromotionController(googleAuthAction: GoogleAuthenticatedAction, service: JsonDynamoService[AnyPromotion, Future]) {
 
   def all(campaignCode: Option[String]) = googleAuthAction.async {
-    campaignCode.map(CampaignCode).fold(service.all)(service.find).map(promos => Ok(Json.toJson(promos)))
+    campaignCode.map(CampaignCode).fold(service.all)(service.find).map(promos => Ok(Json.toJson(promos.sortBy(_.starts).reverse)))
   }
 
   def get(uuid: Option[String]) = googleAuthAction.async {
