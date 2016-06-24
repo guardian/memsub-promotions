@@ -19,7 +19,7 @@ class CampaignController(googleAuthAction: GoogleAuthenticatedAction, service: J
 
   def all(productFamily: Option[String]) = googleAuthAction.async {
     val campaigns = productFamily.flatMap(ProductFamily.fromId).fold(service.all)(service.find)
-    campaigns.map(c => Ok(Json.toJson(c)))
+    campaigns.map(campaigns => Ok(Json.toJson(campaigns.sortBy(_.name))))
   }
 
   def get(code: Option[String]) = googleAuthAction.async {
