@@ -20,6 +20,7 @@ class GoogleAuthAction(config: Config)(implicit ec: ExecutionContext) extends go
     "directteam@guardian.co.uk",
     "subscriptions.dev@guardian.co.uk",
     "memsubs.dev@guardian.co.uk",
+    "membership.wildebeest@guardian.co.uk",
     "identitydev@guardian.co.uk",
     "touchpoint@guardian.co.uk",
     "crm@guardian.co.uk",
