@@ -89,6 +89,10 @@
       "Description": "Application name",
       "Type": "String",
       "Default": "promotions-tool"
+    },
+    "VulnerabilityScanningSecurityGroup": {
+      "Description": "Security group that grants access to the account's Vulnerability Scanner",
+      "Type": "AWS::EC2::SecurityGroup::Id"
     }
   },
 
@@ -409,7 +413,8 @@
         "ImageId": {"Ref": "AmiId"},
         "SecurityGroups": [
           {"Ref": "InstanceSecurityGroup"},
-          {"Ref": "SshAccessSecurityGroup"}
+          {"Ref": "SshAccessSecurityGroup"},
+          {"Ref": "VulnerabilityScanningSecurityGroup"}
         ],
         "InstanceType": {"Ref": "InstanceType"},
         "AssociatePublicIpAddress": "True",
