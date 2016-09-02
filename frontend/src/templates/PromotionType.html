@@ -1,6 +1,6 @@
 <ng-form name="promoType" layout="column">
     <h5>Promotion type</h5>
-    <md-tabs md-dynamic-height md-selected="selectedTab" ng-init="ctrl.setupSelectedTab(promotion)">
+    <md-tabs md-dynamic-height md-selected="selectedTab">
 
         <!-- Incentives -->
         <md-tab label="Incentive" ng-click="ctrl.setPromotionType('incentive')">
@@ -24,7 +24,7 @@
             <md-content class="md-padding md-tab-content">
                 <md-input-container class="md-block" flex-gt-sm>
                     <label>Duration (days)</label>
-                    <input type="number" name="duration" ng-model="promotion.promotionType.duration" ng-required="promotion.promotionType.name == 'free_trial'">
+                    <input type="number" name="duration" ng-model="promotionType.duration" ng-required="promotionType.name == 'free_trial'">
                     <div ng-messages="promoType.duration.$error" role="alert">
                         <ng-message when="required">This field is required</ng-message>
                         <ng-message when="number">Please enter a number</ng-message>
@@ -38,11 +38,11 @@
             <md-content class="md-padding md-tab-content">
                 <md-input-container class="md-block" flex-gt-sm>
                     <label>Duration (months)</label>
-                    <input type="number" ng-model="promotion.promotionType.durationMonths" delete-empty>
+                    <input type="number" ng-model="promotionType.durationMonths" delete-empty>
                 </md-input-container>
                 <md-input-container class="md-block" flex-gt-sm>
                     <label>Amount (%)</label>
-                    <input type="number" ng-model="promotion.promotionType.amount" ng-required="promotion.promotionType.name == 'discount'">
+                    <input type="number" ng-model="promotionType.amount" ng-required="promotionType.name == 'discount'">
                 </md-input-container>
             </md-content>
         </md-tab>

@@ -4,7 +4,7 @@ import types from "text!templates/PromotionType.html"
 export default () => {
     return {
         scope: {
-            promotion: '=',
+            promotionType: '=',
             product: '='
         },
         restrict: 'E',
@@ -12,9 +12,9 @@ export default () => {
         controller: 'promotionTypeController',
         controllerAs: 'ctrl',
         link: (scope, elem, attrs, controller) => {
-            scope.$watch('promotion', (n) => {
+            scope.$watch('promotionType', (n) => {
                 if (n) {
-                    controller.updateSelectedTab(n.promotionType.name)
+                    controller.updateSelectedTab(n.name)
                 }
             })
         }
