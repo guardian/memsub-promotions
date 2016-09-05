@@ -19,7 +19,7 @@
                         <ng-message when="required">Please enter a description</ng-message>
                     </div>
                 </md-input-container>
-                <promotion-type promotion="promotion" product="environment.product"></promotion-type>
+                <multi-promotion-type promotion="promotion" product="environment.product"></multi-promotion-type>
                 <rate-plan-list product-rate-plan-ids="promotion.appliesTo.productRatePlanIds" product="environment.product"></rate-plan-list>
                 <available-countries countries="promotion.appliesTo.countries"></available-countries>
                 <promotion-dates promotion="promotion"></promotion-dates>

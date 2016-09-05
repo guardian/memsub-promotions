@@ -17,6 +17,7 @@ import campaignForm from "text!templates/CampaignForm.html"
 import environmentMenu from 'directives/EnvironmentMenu'
 import channelCodes from 'directives/ChannelCodes'
 import promotionType from 'directives/PromotionType'
+import multiPromotionType from 'directives/MultiPromotionType'
 import deleteEmpty from 'directives/DeleteEmpty'
 import promotionDates from 'directives/PromotionDates'
 import landingPage from 'directives/LandingPage'
@@ -45,6 +46,7 @@ import EditCampaignController from "controllers/EditCampaignController"
 import ChannelCodesController from "controllers/ChannelCodesController"
 import PromotionDatesController from "controllers/PromotionDatesController"
 import PromotionTypeController from "controllers/PromotionTypeController"
+import MultiPromotionTypeController from "controllers/MultiPromotionTypeController"
 import RatePlanListController from "controllers/RatePlanListController"
 import AvailableCountriesController from "controllers/AvailableCountriesController"
 import GridImageSelectorController from "controllers/GridImageSelectorController"
@@ -65,6 +67,7 @@ module.service('promotionService', PromotionService)
       .controller('editCampaignController', EditCampaignController)
       .controller('channelCodesController', ChannelCodesController)
       .controller('promotionTypeController', PromotionTypeController)
+      .controller('multiPromotionTypeController', MultiPromotionTypeController)
       .controller('promotionDatesController', PromotionDatesController)
       .controller('environmentController', EnvironmentController)
       .controller('ratePlanListController', RatePlanListController)
@@ -73,6 +76,7 @@ module.service('promotionService', PromotionService)
       .controller('gridImageSelectorController', GridImageSelectorController)
       .controller('landingPageController', LandingPageController)
       .directive('promotionType', promotionType)
+      .directive('multiPromotionType', multiPromotionType)
       .directive('landingPage', landingPage)
       .directive('environmentMenu', environmentMenu)
       .directive('channelCodes', channelCodes)
