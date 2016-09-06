@@ -5,8 +5,9 @@ import com.gu.memsub.promo.{Campaign, DynamoTables}
 import com.gu.memsub.promo.Promotion.AnyPromotion
 import play.api.BuiltInComponents
 import play.api.libs.concurrent.Execution.Implicits._
-import com.typesafe.config.ConfigFactory
+import com.typesafe.config.{Config, ConfigFactory}
 import com.softwaremill.macwire._
+import conf.{PaperPlans, PaperProducts}
 import controllers._
 import play.api.libs.ws.ahc.AhcWSComponents
 import play.api.routing.Router
@@ -17,6 +18,8 @@ class AppComponents(private val stage: Stage, c: BuiltInComponents with AhcWSCom
 
   import c._
   lazy val config = ConfigFactory.load()
+  lazy val paperPlans = wireWith[Config, Stage, PaperProducts](PaperProducts.fromConfig)
+
   lazy val promoService = com.gu.memsub.services.JsonDynamoService.forTable[AnyPromotion](DynamoTables.promotions(config, stage.name))
   lazy val campaignService = com.gu.memsub.services.JsonDynamoService.forTable[Campaign](DynamoTables.campaigns(config, stage.name))
 
