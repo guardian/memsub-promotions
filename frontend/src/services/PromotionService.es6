@@ -38,7 +38,7 @@ export default class {
     }
 
     validate(promotion) {
-        if (promotion.promotionType.a.name == promotion.promotionType.b.name) {
+        if (promotion.promotionType.a && promotion.promotionType.b && promotion.promotionType.a.name == promotion.promotionType.b.name) {
             return this.$q.reject(["Both promotions cannot be of the same type."])
         }
         return this.$http({
