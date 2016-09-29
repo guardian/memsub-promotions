@@ -5,7 +5,7 @@ export default class {
         this.gridOrigin = 'https://' + environmentService.getGridUrl();
         $scope.gridUrl = this.gridOrigin;
 
-        $scope.product = environmentService.getProduct();
+        $scope.campaignGroup = environmentService.getCampaignGroup();
         this.environmentService = environmentService;
         this.$scope = $scope;
     }

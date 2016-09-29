@@ -1,19 +1,27 @@
-const PRODUCT = 'product';
+const CAMPAIGN_GROUP = 'campaign_group';
+const DEFAULT_CAMPAIGN_GROUP = 'digitalpack';
 const STAGE = 'stage';
+const DEFAULT_STAGE = 'PROD';   // Must match the default router in AppLoader.scala
 const PRODUCT_DOMAINS = {
     'DEV': {
         'membership': 'mem.thegulocal.com',
         'digitalpack': 'sub.thegulocal.com',
+        'newspaper': 'sub.thegulocal.com',
+        'weekly': 'sub.thegulocal.com',
         'grid': 'media.gutools.co.uk'
     },
     'PROD': {
         'membership': 'membership.theguardian.com',
         'digitalpack': 'subscribe.theguardian.com',
+        'newspaper': 'subscribe.theguardian.com',
+        'weekly': 'subscribe.theguardian.com',
         'grid': 'media.gutools.co.uk'
     },
     'UAT': {
         'membership': 'membership.theguardian.com',
         'digitalpack': 'subscribe.theguardian.com',
+        'newspaper': 'subscribe.theguardian.com',
+        'weekly': 'subscribe.theguardian.com',
         'grid': 'media.gutools.co.uk'
     }
 };
@@ -34,18 +42,20 @@ export default class {
         this.$cookies.put(STAGE, newStage)
     }
 
-    setProduct(newProduct) {
-        this.$cookies.put(PRODUCT, newProduct)
+    setCampaignGroup(campaignGroup) {
+        this.$cookies.put(CAMPAIGN_GROUP, campaignGroup)
     }
     
-    getProduct() {
-        return getOrDefault(this.$cookies, PRODUCT, 'digitalpack')
+    getCampaignGroup() {
+        return getOrDefault(this.$cookies, CAMPAIGN_GROUP, DEFAULT_CAMPAIGN_GROUP)
     }
 
-    getProductPrefix() {
-        switch (this.getProduct()) {
+    getCampaignGroupPrefix() {
+        switch (this.getCampaignGroup()) {
             case 'membership': return 'M';
             case 'digitalpack': return 'D';
+            case 'newspaper': return 'N';
+            case 'weekly': return 'W';
         }
         return ''
     }
@@ -54,11 +64,11 @@ export default class {
         return PRODUCT_DOMAINS[this.getStage()]['grid'] || '';
     }
 
-    getProductDomain() {
-        return PRODUCT_DOMAINS[this.getStage()][this.getProduct()] || '';
+    getCampaignGroupDomain() {
+        return PRODUCT_DOMAINS[this.getStage()][this.getCampaignGroup()] || '';
     }
 
     getStage() {
-        return getOrDefault(this.$cookies, STAGE, 'PROD')
+        return getOrDefault(this.$cookies, STAGE, DEFAULT_STAGE)
     }
 }

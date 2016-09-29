@@ -6,8 +6,10 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "js": "./node_modules/webpack/bin/webpack.js -d --optimize-minimize --optimize-dedup --config Webpack.js --display-error-details --bail",
+    "js-dev": "./node_modules/webpack/bin/webpack.js --config Webpack.js --display-error-details --bail",
     "sass": "./node_modules/node-sass/bin/node-sass sass/main.sass ../public/stylesheets/main.css",
-    "compile": "npm run js && npm run sass"
+    "compile": "npm run js && npm run sass",
+    "dev": "npm run js-dev && npm run sass"
   },
   "devDependencies": {
     "angular": "^1.5.5",

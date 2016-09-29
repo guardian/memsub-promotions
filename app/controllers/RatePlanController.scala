@@ -1,8 +1,8 @@
 package controllers
 import actions.GoogleAuthAction.GoogleAuthenticatedAction
 import com.gu.config.{DigitalPackRatePlanIds, MembershipRatePlanIds}
+import com.gu.memsub.promo.CampaignGroup.{Membership, DigitalPack, Newspaper, GuardianWeekly}
 import com.gu.memsub.Subscription.ProductRatePlanId
-import com.gu.memsub.{Digipack, Membership}
 import conf.PaperProducts
 import play.api.libs.json._
 import play.api.mvc.Results._
@@ -28,23 +28,29 @@ class RatePlanController(
         membershipIds.patronMonthly -> "Patron monthly",
         membershipIds.patronYearly -> "Patron yearly"
       ).map(tupleToRatePlanMap)),
-      "digitalpack" -> Json.toJson(Seq(
+      DigitalPack.id -> Json.toJson(Seq(
         digipackIds.digitalPackMonthly -> "Digital pack monthly",
         digipackIds.digitalPackQuaterly -> "Digital pack quarterly",
-        digipackIds.digitalPackYearly -> "Digital pack yearly",
-        paperPlans.delivery.weekend -> "Paper delivery weekend",
-        paperPlans.delivery.weekendplus -> "Paper delivery weekend+",
-        paperPlans.delivery.sixday -> "Paper delivery sixday",
-        paperPlans.delivery.sixdayplus -> "Paper delivery sixday+",
-        paperPlans.delivery.everyday -> "Paper delivery everyday",
-        paperPlans.delivery.everydayplus -> "Paper delivery everyday+",
-        paperPlans.voucher.weekend -> "Paper voucher weekend",
-        paperPlans.voucher.weekendplus -> "Paper voucher weekend+",
-        paperPlans.voucher.sixday -> "Paper voucher sixday",
-        paperPlans.voucher.sixdayplus -> "Paper voucher sixday+",
-        paperPlans.voucher.everyday -> "Paper voucher everyday",
-        paperPlans.voucher.everydayplus -> "Paper voucher everyday+"
-      ).map(tupleToRatePlanMap))
+        digipackIds.digitalPackYearly -> "Digital pack yearly"
+      ).map(tupleToRatePlanMap)),
+      Newspaper.id -> Json.toJson(Seq(
+        paperPlans.delivery.sundayplus -> "Home Delivery Sunday+",
+        paperPlans.delivery.weekend -> "Home Delivery Weekend",
+        paperPlans.delivery.weekendplus -> "Home Delivery Weekend+",
+        paperPlans.delivery.sixday -> "Home Delivery Sixday",
+        paperPlans.delivery.sixdayplus -> "Home Delivery Sixday+",
+        paperPlans.delivery.everyday -> "Home Delivery Everyday",
+        paperPlans.delivery.everydayplus -> "Home Delivery Everyday+",
+        paperPlans.voucher.sundayplus -> "Voucher Sunday+",
+        paperPlans.voucher.weekend -> "Voucher Weekend",
+        paperPlans.voucher.weekendplus -> "Voucher Weekend+",
+        paperPlans.voucher.sixday -> "Voucher Sixday",
+        paperPlans.voucher.sixdayplus -> "Voucher Sixday+",
+        paperPlans.voucher.everyday -> "Voucher Everyday",
+        paperPlans.voucher.everydayplus -> "Voucher Everyday+"
+      ).map(tupleToRatePlanMap)),
+      // TODO - Guardian Weekly - Quarterly, Annual, International Quarterly, International Annual
+      GuardianWeekly.id -> Json.toJson(Seq().map(tupleToRatePlanMap))
     ))
   }
 }

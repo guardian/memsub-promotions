@@ -7,7 +7,7 @@
             <div class="md-list-item-text promotion-list-item" layout="column">
                 <h3 ui-sref="promotion({uuid: promotion.uuid})">{{ promotion.name }}</h3>
                 <h4 ui-sref="promotion({uuid: promotion.uuid})" class="promotion-code-list">
-                    <span ng-repeat="(channel, code) in promotion.codes">{{ code.join(", ") }}&nbsp;</span>
+                    <p ng-repeat="(channel, code) in promotion.codes">{{ code.join(", ") }}&nbsp;</p>
                 </h4>
                 <p ui-sref="promotion({uuid: promotion.uuid})">
                     <md-icon md-font-set="material-icons">date_range</md-icon>

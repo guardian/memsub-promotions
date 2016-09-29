@@ -19,12 +19,12 @@
                         <ng-message when="required">Please enter a description</ng-message>
                     </div>
                 </md-input-container>
-                <multi-promotion-type promotion="promotion" product="environment.product"></multi-promotion-type>
-                <rate-plan-list product-rate-plan-ids="promotion.appliesTo.productRatePlanIds" product="environment.product"></rate-plan-list>
+                <multi-promotion-type promotion="promotion" campaign-group="environment.campaignGroup"></multi-promotion-type>
+                <rate-plan-list product-rate-plan-ids="promotion.appliesTo.productRatePlanIds" campaign-group="environment.campaignGroup"></rate-plan-list>
                 <available-countries countries="promotion.appliesTo.countries"></available-countries>
                 <promotion-dates promotion="promotion"></promotion-dates>
                 <channel-codes codes="promotion.codes"></channel-codes>
-                <landing-page promotion="promotion" product="environment.product"></landing-page>
+                <landing-page promotion="promotion" campaign-group="environment.campaignGroup"></landing-page>
 
                 <section layout="row" layout-align="end center" layout-wrap>
                     <div layout="column" layout-align="center center">

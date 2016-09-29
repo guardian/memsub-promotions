@@ -4,11 +4,11 @@ export default class {
     constructor($scope, environmentService) {
         this.$scope = $scope;
         this.environmentService = environmentService;
-        this.$scope.productDomain = this.environmentService.getProductDomain();
+        this.$scope.campaignGroupDomain = this.environmentService.getCampaignGroupDomain();
     }
 
     generateSuggestedPromoCode() {
-        return this.environmentService.getProductPrefix() + new Date().getTime().toString(36).toUpperCase();
+        return this.environmentService.getCampaignGroupPrefix() + new Date().getTime().toString(36).toUpperCase();
     }
 
     addChannel(newChannelName) {

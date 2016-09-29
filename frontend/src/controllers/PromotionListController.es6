@@ -8,7 +8,7 @@ export default class {
         this.$scope = $scope;
         this.fetchPromotions($stateParams.code);
         this.$scope.code = $stateParams.code;
-        this.$scope.productDomain = this.environmentService.getProductDomain();
+        this.$scope.campaignGroupDomain = this.environmentService.getCampaignGroupDomain();
     }
 
     fetchPromotions(code) {

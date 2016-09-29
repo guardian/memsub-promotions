@@ -5,7 +5,7 @@ export default () => {
     return {
         scope: {
             promotion: '=',
-            product: '='
+            campaignGroup: '='
         },
         restrict: 'E',
         template: types,

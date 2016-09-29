@@ -15,7 +15,8 @@ export default class {
 
     fetchCampaign(code) {
         if (!code) {
-            this.$scope.campaign = { name: "", code: this.generateSuggestedCampaignCode(), productFamily: this.environmentService.getProduct()} ;
+            this.$scope.campaign = {
+                name: "", code: this.generateSuggestedCampaignCode(), group: this.environmentService.getCampaignGroup()} ;
             return;
         }
         this.campaignService.get(code).then(r => {

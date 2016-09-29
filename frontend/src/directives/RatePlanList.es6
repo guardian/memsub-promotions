@@ -5,7 +5,7 @@ export default () => {
     return {
         scope: {
             'productRatePlanIds': '=',
-            'product': '='
+            'campaignGroup': '='
         },
         restrict: 'E',
         template: template,

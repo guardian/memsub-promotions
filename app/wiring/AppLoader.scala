@@ -1,12 +1,10 @@
 package wiring
 
+import play.api.ApplicationLoader.Context
+import play.api.libs.ws.ahc.AhcWSComponents
 import play.api.mvc.Cookies
 import play.api.routing.Router
-import play.api.ApplicationLoader.Context
-import play.api.{ApplicationLoader, BuiltInComponentsFromContext, Logger}
-import play.api._
-import play.api.libs.ws.ahc.AhcWSComponents
-import play.api.libs.ws.ning.NingWSComponents
+import play.api.{ApplicationLoader, BuiltInComponentsFromContext, _}
 
 
 class AppLoader extends ApplicationLoader {
@@ -25,8 +23,10 @@ class AppLoader extends ApplicationLoader {
         "DEV" -> new AppComponents(AppComponents.DEV, this).router
       )
 
+      lazy val defaultRouter = map("PROD")
+
       lazy val router: Router = new MultiRouter((c: Cookies) =>
-        c.find(_.name == "stage").map(_.value.toUpperCase).flatMap(map.get).getOrElse(map("DEV")), map("DEV"))
+        c.find(_.name == "stage").map(_.value.toUpperCase).flatMap(map.get).getOrElse(defaultRouter), defaultRouter)
     }.application
   }
 }

@@ -1,25 +1,24 @@
 package controllers
 
 import actions.GoogleAuthAction.GoogleAuthenticatedAction
-import com.gu.memsub.ProductFamily
-import com.gu.memsub.promo.{Campaign, CampaignCode}
-import play.api.libs.concurrent.Execution.Implicits._
 import com.gu.memsub.promo.Formatters.CampaignFormatters._
-import com.gu.memsub.promo.Formatters.Common._
+import com.gu.memsub.promo.{Campaign, CampaignCode, CampaignGroup}
 import com.gu.memsub.services.JsonDynamoService
+import play.api.libs.concurrent.Execution.Implicits._
 import play.api.libs.json.{JsError, Json}
 import play.api.mvc.Result
-
-import scala.concurrent.Future
 import play.api.mvc.Results._
 import wiring.AppComponents.Stage
 
+import scala.concurrent.Future
+
 class CampaignController(googleAuthAction: GoogleAuthenticatedAction, service: JsonDynamoService[Campaign, Future], stage: Stage) {
 
-
-  def all(productFamily: Option[String]) = googleAuthAction.async {
-    val campaigns = productFamily.flatMap(ProductFamily.fromId).fold(service.all)(service.find)
-    campaigns.map(campaigns => Ok(Json.toJson(campaigns.sortBy(_.name))))
+  def all(group: Option[String]) = googleAuthAction.async {
+    service.all.map(campaigns => {
+      val filtered = group.flatMap(CampaignGroup.fromId).fold(campaigns)(group => campaigns.filter(_.group == group))
+      Ok(Json.toJson(filtered.sortBy(_.name)))
+    })
   }
 
   def get(code: Option[String]) = googleAuthAction.async {
