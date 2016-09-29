@@ -1,14 +1,14 @@
 <ng-form name="promoType" layout="column">
 
-    <promotion-type promotion-type="promotion.promotionType" product="environment.product" ng-if="!promotion.promotionType.a"></promotion-type>
+    <promotion-type promotion-type="promotion.promotionType" campaign-group="environment.campaignGroup" ng-if="!promotion.promotionType.a"></promotion-type>
 
 
     <div layout="row" layout-align="start">
         <md-button ng-if="!promotion.promotionType.a" ng-click="ctrl.makeMulti(promotion.promotionType)">Add additional type</md-button>
     </div>
 
-    <promotion-type promotion-type="promotion.promotionType.a" product="environment.product" ng-if="promotion.promotionType.a"></promotion-type>
-    <promotion-type promotion-type="promotion.promotionType.b" product="environment.product" ng-if="promotion.promotionType.b"></promotion-type>
+    <promotion-type promotion-type="promotion.promotionType.a" campaign-group="environment.campaignGroup" ng-if="promotion.promotionType.a"></promotion-type>
+    <promotion-type promotion-type="promotion.promotionType.b" campaign-group="environment.campaignGroup" ng-if="promotion.promotionType.b"></promotion-type>
 
 
 </ng-form>

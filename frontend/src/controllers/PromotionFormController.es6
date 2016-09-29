@@ -21,7 +21,7 @@ export default class {
         this.$q = $q;
 
         this.$scope.serverErrors = [];
-        this.$scope.productDomain = this.environmentService.getProductDomain();
+        this.$scope.campaignGroupDomain = this.environmentService.getCampaignGroupDomain();
 
         if ($stateParams.uuid) {
             this.fetchPromotion($stateParams.uuid);
@@ -35,7 +35,7 @@ export default class {
     createNewPromotion(campaignCode) {
         this.$scope.promotion = Object.assign({}, emptyPromotion, 
             {campaignCode: campaignCode, uuid: this.uuid.v4()},
-            {landingPage: {productFamily: this.environmentService.getProduct()}});
+            {landingPage: {type: this.environmentService.getCampaignGroup()}});
         return this.fillCampaignInfo(this.$scope.promotion)
     }
 

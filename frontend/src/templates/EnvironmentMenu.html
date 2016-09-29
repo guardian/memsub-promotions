@@ -4,34 +4,46 @@
     </md-button>
     <md-menu-content width="4">
         <md-menu-item>
-            <md-button ng-click="ctrl.setProductFamily('membership')">
-                <md-icon md-font-set="material-icons" md-menu-align-target>shopping_cart</md-icon>
+            <md-button ng-click="ctrl.setCampaignGroup('membership')">
+                <md-icon md-font-set="material-icons" md-menu-align-target>people</md-icon>
                 Membership
             </md-button>
         </md-menu-item>
         <md-menu-item>
-            <md-button ng-click="ctrl.setProductFamily('digitalpack')">
-                <md-icon md-font-set="material-icons" md-menu-align-target>shopping_cart</md-icon>
-                Subscriptions
+            <md-button ng-click="ctrl.setCampaignGroup('digitalpack')">
+                <md-icon md-font-set="material-icons" md-menu-align-target>tablet_mac</md-icon>
+                Digital Pack
+            </md-button>
+        </md-menu-item>
+        <md-menu-item>
+            <md-button ng-click="ctrl.setCampaignGroup('newspaper')">
+                <md-icon md-font-set="material-icons" md-menu-align-target>description</md-icon>
+                Newspaper
+            </md-button>
+        </md-menu-item>
+        <md-menu-item>
+            <md-button ng-click="ctrl.setCampaignGroup('weekly')">
+                <md-icon md-font-set="material-icons" md-menu-align-target>today</md-icon>
+                Guardian Weekly
             </md-button>
         </md-menu-item>
         <md-menu-divider></md-menu-divider>
         <md-menu-item>
-            <md-button ng-click="ctrl.setStage('DEV')">
-                <md-icon md-font-set="material-icons" md-menu-align-target>motorcycle</md-icon>
-                DEV
+            <md-button ng-click="ctrl.setStage('PROD')">
+                <md-icon md-font-set="material-icons" md-menu-align-target>check_circle</md-icon>
+                PROD
             </md-button>
         </md-menu-item>
         <md-menu-item>
             <md-button ng-click="ctrl.setStage('UAT')">
-                <md-icon md-font-set="material-icons" md-menu-align-target>supervisor_account</md-icon>
+                <md-icon md-font-set="material-icons" md-menu-align-target>bug_report</md-icon>
                 UAT
             </md-button>
         </md-menu-item>
         <md-menu-item>
-            <md-button ng-click="ctrl.setStage('PROD')">
-                <md-icon md-font-set="material-icons" md-menu-align-target>business</md-icon>
-                PROD
+            <md-button ng-click="ctrl.setStage('DEV')">
+                <md-icon md-font-set="material-icons" md-menu-align-target>build</md-icon>
+                DEV
             </md-button>
         </md-menu-item>
     </md-menu-content>

@@ -10,7 +10,7 @@ export default class {
         return this.$http({
             method: 'GET',
             url: '/campaigns',
-            params: {productFamily: this.env.getProduct()}
+            params: {'group': this.env.getCampaignGroup()}
         }).then(response => response.data)
     }
 
@@ -18,11 +18,17 @@ export default class {
         return this.$http({
             method: 'GET',
             url: '/campaign',
-            params: {code: code}
+            params: {'code': code}
         }).then(response => response.data)
     }
 
     save(campaign) {
+
+        // Backwards compatibility of legacy serialisations where group was identified by product_family.
+        // Deleting product_family tidies up old field upon saving
+        campaign.group = campaign.group || campaign.product_family;
+        delete campaign.product_family;
+
         return this.$http({
             method: 'POST',
             url: '/campaign',

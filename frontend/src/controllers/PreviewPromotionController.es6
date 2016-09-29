@@ -8,7 +8,7 @@ export default class {
         $scope.mode = 'desktop';
         this.$scope = $scope;
         
-        this.$scope.src = 'https://' + this.environmentService.getProductDomain() + '/q';
+        this.$scope.src = 'https://' + this.environmentService.getCampaignGroupDomain() + '/q';
         
     }
 

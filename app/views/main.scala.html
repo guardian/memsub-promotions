@@ -17,11 +17,11 @@
         <script src="@routes.Assets.versioned("javascripts/main.js")" type="text/javascript"></script>
     </head>
     <body ng-app="Promotions" layout="column">
-      <md-toolbar ng-class="environment.product">
+      <md-toolbar ng-class="[environment.campaignGroup, environment.stage.toLowerCase()]">
         <div class="md-toolbar-tools">
           <span environment-menu></span>
           <h2 class="md-clickable">
-            <span ui-sref="allPromotions.chooseCampaign">{{environment.product}} Promotions ({{environment.stage}})</span>
+            <span ui-sref="allPromotions.chooseCampaign">Guardian {{environment.campaignGroup}} Promotions ({{environment.stage}})</span>
           </h2>
           <span flex></span>
         </div>

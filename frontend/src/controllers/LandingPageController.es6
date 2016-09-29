@@ -5,11 +5,11 @@ export default class {
         this.environmentService = environmentService;
         this.$scope = $scope;
         this.$scope.backup = this.blankBackup();
-        this.$scope[this.environmentService.getProduct()] = true;
+        this.$scope[this.environmentService.getCampaignGroup()] = true;
     }
 
     blankBackup() {
-        return {productFamily: this.environmentService.getProduct()}
+        return { type: this.environmentService.getCampaignGroup() }
     }
 
     toggleBackup(promo, backup) {

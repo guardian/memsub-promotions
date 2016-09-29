@@ -18,7 +18,7 @@
                 </ng-form>
                 <div>
                     <md-input-container ng-repeat="code in channel.codes track by $index" class="code-container">
-                        <md-icon md-font-set="material-icons" md-menu-align-target><a target="_blank" href="https://{{ productDomain }}/p/{{ channel.codes[$index] }}">open_in_browser</a></md-icon>
+                        <md-icon md-font-set="material-icons" md-menu-align-target><a target="_blank" href="https://{{ campaignGroupDomain }}/p/{{ channel.codes[$index] }}">open_in_browser</a></md-icon>
                         <label for="code">Promo Code</label>
                         <input type="text" id="code" ng-model="channel.codes[$index]" ng-change="ctrl.codeUpdated(channels, channel.name, channel.codes[$index])">
                     </md-input-container>

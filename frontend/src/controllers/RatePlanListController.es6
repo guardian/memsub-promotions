@@ -16,7 +16,7 @@ export default class {
     }
 
     populateRatePlans(productRatePlanIds) {
-        this.$scope.ratePlanIds = this.arrayToMap(productRatePlanIds)
+        this.$scope.ratePlanIds = this.arrayToMap(productRatePlanIds);
     }
 
     applyRatePlans(ratePlanIds) {

@@ -1,12 +1,9 @@
-const PRODUCT = 'product';
-const STAGE = 'stage';
-
 export default class {
 
     /* @ngInject */
     constructor($state, $rootScope, $scope, environmentService) {
         this.$state = $state;
-        $rootScope.environment = {stage: environmentService.getStage(), product: environmentService.getProduct()};
+        $rootScope.environment = {stage: environmentService.getStage(), campaignGroup: environmentService.getCampaignGroup()};
         this.environmentService = environmentService;
         this.$scope = $scope;
     }
@@ -17,9 +14,9 @@ export default class {
         this.$state.go('allPromotions.chooseCampaign', {}, {reload: true});
     }
     
-    setProductFamily(pf) {
-        this.$scope.environment.product = pf;
-        this.environmentService.setProduct(pf);
+    setCampaignGroup(campaignGroup) {
+        this.environmentService.setCampaignGroup(campaignGroup);
+        this.$scope.environment.campaignGroup = campaignGroup;
         this.$state.go('allPromotions.chooseCampaign', {}, {reload: true});
     }
 }

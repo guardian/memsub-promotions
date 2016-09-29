@@ -7,7 +7,7 @@ export default () => {
         scope: {
             show: '=',
             title: '@title',
-            product: '='
+            campaignGroup: '='
         },
         restrict: 'E',
         template: template,

@@ -109,7 +109,7 @@ exports.handler = (event, context, callback) => {
         data.Items.forEach((campaign) =>
             campaignDetailsByCampaignCode[campaign.code] = {
                 campaign_name: campaign.name,
-                product_family: campaign.productFamily
+                product_family: campaign.group || campaign.productFamily // legacy
             }
         );
 
