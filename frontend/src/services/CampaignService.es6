@@ -24,8 +24,8 @@ export default class {
 
     save(campaign) {
 
-        // Backwards compatibility of legacy serialisations where group was identified by product_family.
-        // Deleting product_family tidies up old field upon saving
+        // Backwards compatibility of legacy serialisations where group was identified by productFamily.
+        // Deleting productFamily tidies up old field upon saving
         campaign.group = campaign.group || campaign.productFamily;
         delete campaign.productFamily;
 
