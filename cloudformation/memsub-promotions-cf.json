@@ -189,7 +189,7 @@
           "S3Key": "membership/PROD/MembershipSub-Promotions-to-PromoCode-View-Lambda/MembershipSub-Promotions-to-PromoCode-View-Lambda.zip"
         },
         "Description": "An Amazon DynamoDB trigger that creates a view of data associated with a particular promo code for the data pipeline to collect.",
-        "FunctionName": "MembershipSub-Promotions-to-PromoCode-View-QA",
+        "FunctionName": "MembershipSub-Promotions-to-PromoCode-View-TEST",
         "Handler": "MembershipSub-Promotions-to-PromoCode-View-Lambda.handler",
         "MemorySize": 128,
         "Role": {"Fn::GetAtt": ["MembershipSubPromotionsLambdaRole","Arn"]},
