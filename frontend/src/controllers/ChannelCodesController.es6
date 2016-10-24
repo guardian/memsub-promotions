@@ -4,6 +4,7 @@ export default class {
     constructor($scope, environmentService) {
         this.$scope = $scope;
         this.environmentService = environmentService;
+        this.$scope.campaignGroup = this.environmentService.getCampaignGroup();
         this.$scope.campaignGroupDomain = this.environmentService.getCampaignGroupDomain();
     }
 
