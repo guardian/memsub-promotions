@@ -19,16 +19,17 @@
                         <ng-message when="required">Please enter a description</ng-message>
                     </div>
                 </md-input-container>
-                <multi-promotion-type promotion="promotion" campaign-group="environment.campaignGroup"></multi-promotion-type>
-                <rate-plan-list product-rate-plan-ids="promotion.appliesTo.productRatePlanIds" campaign-group="environment.campaignGroup"></rate-plan-list>
+                <multi-promotion-type promotion="promotion" campaign-group="campaignGroup"></multi-promotion-type>
+                <rate-plan-list product-rate-plan-ids="promotion.appliesTo.productRatePlanIds" campaign-group="campaignGroup"></rate-plan-list>
                 <available-countries countries="promotion.appliesTo.countries"></available-countries>
                 <promotion-dates promotion="promotion"></promotion-dates>
                 <channel-codes codes="promotion.codes"></channel-codes>
-                <landing-page promotion="promotion" campaign-group="environment.campaignGroup"></landing-page>
+                <landing-page ng-if="campaignGroup === 'digitalpack'" promotion="promotion" campaign-group="campaignGroup"></landing-page>
 
                 <section layout="row" layout-align="end center" layout-wrap>
-                    <div layout="column" layout-align="center center">
-                        <md-button type="submit" class="md-raised md-primary">Save and Close</md-button>
+                    <div layout="row" layout-align="center center">
+                        <md-button type="submit" class="md-raised md-primary">Save</md-button>
+                        <md-button class="md-raised md-primary" ng-click="ctrl.close(promotion)">Save & Close</md-button>
                         <div class="small-error" ng-show="promotionForm.$submitted && promotionForm.$invalid">
                             This form has errors
                         </div>
@@ -43,5 +44,5 @@
             </div>
         </form>
     </div>
-    <preview-promotion flex layout="column" promotion="promotion" validity="promotionForm.$valid"></preview-promotion>
+    <preview-promotion ng-if="campaignGroup === 'digitalpack'" flex layout="column" promotion="promotion" validity="promotionForm.$valid"></preview-promotion>
 </div>

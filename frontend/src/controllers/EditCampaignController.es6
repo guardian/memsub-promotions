@@ -27,7 +27,7 @@ export default class {
 
     save(campaign) {
         this.campaignService.save(campaign).then(
-            this.$state.go('allPromotions.singleCampaign', {code: campaign.code})
+            this.$state.go('allPromotions.chooseCampaign', {}, {reload: true})
         );
     }
 }

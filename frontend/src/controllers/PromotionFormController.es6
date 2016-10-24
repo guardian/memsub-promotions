@@ -4,8 +4,7 @@ const emptyPromotion = {
     countries: []
   },
   codes: {},
-  promotionType: { name: "tracking" },
-  landingPage: {}
+  promotionType: { name: "tracking" }
 };
 
 export default class {
@@ -21,6 +20,7 @@ export default class {
         this.$q = $q;
 
         this.$scope.serverErrors = [];
+        this.$scope.campaignGroup = this.environmentService.getCampaignGroup();
         this.$scope.campaignGroupDomain = this.environmentService.getCampaignGroupDomain();
 
         if ($stateParams.uuid) {
@@ -33,9 +33,12 @@ export default class {
     }
 
     createNewPromotion(campaignCode) {
-        this.$scope.promotion = Object.assign({}, emptyPromotion, 
-            {campaignCode: campaignCode, uuid: this.uuid.v4()},
-            {landingPage: {type: this.environmentService.getCampaignGroup()}});
+        const campaignCodeStub = {campaignCode: campaignCode, uuid: this.uuid.v4()};
+        var landingPageStub = null;
+        if (this.$scope.campaignGroup === 'digitalpack') {
+            landingPageStub = {landingPage: {type: this.environmentService.getCampaignGroup()}}
+        }
+        this.$scope.promotion = Object.assign({}, emptyPromotion, campaignCodeStub, landingPageStub);
         return this.fillCampaignInfo(this.$scope.promotion)
     }
 
@@ -76,8 +79,20 @@ export default class {
     save(promotion) {
         this.$scope.serverErrors = [];
         this.service.validate(promotion)
-            .then(valid => this.update(valid).then(() => this.$state.go('allPromotions.singleCampaign', {code: promotion.campaignCode})), 
-                  invalid => this.$scope.serverErrors = invalid)
+            .then(
+                  valid => this.update(valid),
+                invalid => this.$scope.serverErrors = invalid
+            )
+
+    }
+
+    close(promotion) {
+        this.$scope.serverErrors = [];
+        this.service.validate(promotion)
+            .then(
+                    valid => this.update(valid).then(() => this.$state.go('allPromotions.singleCampaign', {code: promotion.campaignCode})),
+                  invalid => this.$scope.serverErrors = invalid
+            )
             
     }
 }
