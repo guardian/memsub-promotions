@@ -5,7 +5,15 @@
         This promotion has a landing page
     </md-checkbox>
 
-    <div layout="column" ng-show="promotion.landingPage !== undefined">
+    <div layout="column" ng-show="promotion.landingPage !== undefined" ng-if="newspaper">
+        <h5>Default product</h5>
+        <md-radio-group layout="row" ng-model="promotion.landingPage.defaultProduct">
+            <md-radio-button value="voucher" class="md-primary" ng-checked="true">Voucher</md-radio-button>
+            <md-radio-button value="delivery">Home Delivery</md-radio-button>
+        </md-radio-group>
+    </div>
+
+    <div layout="column" ng-show="promotion.landingPage !== undefined" ng-if="!newspaper">
         <grid-image-selector image="promotion.landingPage.heroImage.image" label="a hero image" ng-if="membership" change="ctrl.heroImageChange(promotion.landingpage.heroImage.alignment)"></grid-image-selector>
         <div layout="column" ng-show="membership && promotion.landingPage.heroImage !== undefined">
             <h5>Hero image alignment</h5>
