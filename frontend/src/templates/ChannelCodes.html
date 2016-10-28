@@ -19,8 +19,7 @@
                 <div>
                     <md-input-container ng-repeat="code in channel.codes track by $index" class="code-container">
                         <md-icon md-font-set="material-icons" md-menu-align-target>
-                            <a ng-if="campaignGroup === 'digitalpack'" target="_blank" href="https://{{ campaignGroupDomain }}/p/{{ channel.codes[$index] }}">open_in_browser</a>
-                            <a ng-if="campaignGroup === 'newspaper'" target="_blank" href="https://{{ campaignGroupDomain }}/checkout/voucher-sunday+?promoCode={{ channel.codes[$index] }}">open_in_browser</a>
+                            <a target="_blank" href="https://{{ campaignGroupDomain }}/p/{{ channel.codes[$index] }}/terms">open_in_new</a>
                         </md-icon>
                         <label for="code">Promo Code</label>
                         <input type="text" id="code" ng-model="channel.codes[$index]" ng-change="ctrl.codeUpdated(channels, channel.name, channel.codes[$index])">

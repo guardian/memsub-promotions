@@ -34,10 +34,7 @@ export default class {
 
     createNewPromotion(campaignCode) {
         const campaignCodeStub = {campaignCode: campaignCode, uuid: this.uuid.v4()};
-        var landingPageStub = null;
-        if (this.$scope.campaignGroup === 'digitalpack') {
-            landingPageStub = {landingPage: {type: this.environmentService.getCampaignGroup()}}
-        }
+        var landingPageStub = {landingPage: {type: this.environmentService.getCampaignGroup()}};
         this.$scope.promotion = Object.assign({}, emptyPromotion, campaignCodeStub, landingPageStub);
         return this.fillCampaignInfo(this.$scope.promotion)
     }
