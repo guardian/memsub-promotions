@@ -51,7 +51,7 @@ class RatePlanController(
         paperPlans.voucher.everyday -> "Voucher Everyday",
         paperPlans.voucher.everydayplus -> "Voucher Everyday+"
       ).map(tupleToRatePlanMap)),
-      // TODO - Guardian Weekly - Quarterly, Annual, International Quarterly, International Annual
+      // TODO - Guardian Weekly - One Year
       GuardianWeekly.id -> Json.toJson(Seq(
         weeklyPlans.zoneA.yearly -> "Weekly Zone A Yearly",
           weeklyPlans.zoneA.quarterly -> "Weekly Zone A Quarterly",
