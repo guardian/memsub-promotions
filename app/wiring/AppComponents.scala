@@ -7,7 +7,7 @@ import play.api.BuiltInComponents
 import play.api.libs.concurrent.Execution.Implicits._
 import com.typesafe.config.{Config, ConfigFactory}
 import com.softwaremill.macwire._
-import conf.{PaperPlans, PaperProducts}
+import conf.{PaperPlans, PaperProducts, WeeklyPlans}
 import controllers._
 import play.api.libs.ws.ahc.AhcWSComponents
 import play.api.routing.Router
@@ -25,6 +25,7 @@ class AppComponents(private val stage: Stage, c: BuiltInComponents with AhcWSCom
 
   lazy val membershipRatePlanIds = MembershipRatePlanIds.fromConfig(config.getConfig(AppComponents.ratePlanPath(stage) + ".membership"))
   lazy val digipackRatePlanIds = DigitalPackRatePlanIds.fromConfig(config.getConfig(AppComponents.ratePlanPath(stage) + ".digitalpack"))
+  lazy val weeklyRatePlanIds = WeeklyPlans.fromConfig(config, stage)
 
   lazy val googleAuthAction: GoogleAuthAction = wire[GoogleAuthAction]
   import googleAuthAction.GoogleAuthAction

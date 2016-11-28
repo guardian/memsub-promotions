@@ -1,9 +1,9 @@
 package controllers
 import actions.GoogleAuthAction.GoogleAuthenticatedAction
 import com.gu.config.{DigitalPackRatePlanIds, MembershipRatePlanIds}
-import com.gu.memsub.promo.CampaignGroup.{Membership, DigitalPack, Newspaper, GuardianWeekly}
+import com.gu.memsub.promo.CampaignGroup.{DigitalPack, GuardianWeekly, Membership, Newspaper}
 import com.gu.memsub.Subscription.ProductRatePlanId
-import conf.PaperProducts
+import conf.{PaperProducts, WeeklyPlans}
 import play.api.libs.json._
 import play.api.mvc.Results._
 
@@ -11,7 +11,9 @@ class RatePlanController(
   googleAuthAction: GoogleAuthenticatedAction,
   paperPlans: PaperProducts,
   membershipIds: MembershipRatePlanIds,
-  digipackIds: DigitalPackRatePlanIds) {
+  digipackIds: DigitalPackRatePlanIds,
+  weeklyPlans: WeeklyPlans
+                        ) {
 
   private def tupleToRatePlanMap(t: (ProductRatePlanId, String)) = {
     Map("ratePlanId" -> t._1.get, "ratePlanName" -> t._2)
@@ -50,7 +52,12 @@ class RatePlanController(
         paperPlans.voucher.everydayplus -> "Voucher Everyday+"
       ).map(tupleToRatePlanMap)),
       // TODO - Guardian Weekly - Quarterly, Annual, International Quarterly, International Annual
-      GuardianWeekly.id -> Json.toJson(Seq().map(tupleToRatePlanMap))
+      GuardianWeekly.id -> Json.toJson(Seq(
+        weeklyPlans.zoneA.yearly -> "Weekly Zone A Yearly",
+          weeklyPlans.zoneA.quarterly -> "Weekly Zone A Quarterly",
+        weeklyPlans.zoneB.yearly -> "Weekly Zone B Yearly",
+        weeklyPlans.zoneB.quarterly -> "Weekly Zone B Quarterly"
+      ).map(tupleToRatePlanMap))
     ))
   }
 }
