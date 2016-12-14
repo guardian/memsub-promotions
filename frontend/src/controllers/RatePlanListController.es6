@@ -23,4 +23,8 @@ export default class {
         this.$scope.productRatePlanIds = Object.keys(ratePlanIds).filter(id => ratePlanIds[id] == true)
     }
 
+    updateDiscount(discount){
+        this.$scope.discount = discount;
+    }
+
 }
