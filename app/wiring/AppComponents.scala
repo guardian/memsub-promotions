@@ -23,7 +23,7 @@ class AppComponents(private val stage: Stage, c: BuiltInComponents with AhcWSCom
   lazy val promoService = com.gu.memsub.services.JsonDynamoService.forTable[AnyPromotion](DynamoTables.promotions(config, stage.name))
   lazy val campaignService = com.gu.memsub.services.JsonDynamoService.forTable[Campaign](DynamoTables.campaigns(config, stage.name))
 
-  lazy val catalog = CatalogService.fromConf(config,stage.name)
+  lazy val catalog = CatalogService.fromConfig(config,stage.name)
 
   lazy val membershipRatePlanIds = MembershipRatePlanIds.fromConfig(config.getConfig(AppComponents.ratePlanPath(stage) + ".membership"))
   lazy val digipackRatePlanIds = DigitalPackRatePlanIds.fromConfig(config.getConfig(AppComponents.ratePlanPath(stage) + ".digitalpack"))
