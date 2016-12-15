@@ -1,8 +1,13 @@
 <div layout="column" ng-repeat="(planKey, plans) in ratePlans" ng-show="planKey == campaignGroup">
-    <h5>Rate plans</h5>
-    <div>
-        <md-checkbox ng-model="ratePlanIds[plan.ratePlanId]" aria-label="{{plan.ratePlanName}}" ng-repeat="plan in plans" ng-change="ctrl.applyRatePlans(ratePlanIds)">
-            {{plan.ratePlanName}}
-        </md-checkbox>
-    </div>
+  <h5>Rate plans</h5>
+  <div>
+    <md-checkbox ng-model="ratePlanIds[plan.ratePlanId]" aria-label="{{plan.ratePlanName}}" ng-repeat="plan in plans"
+                 ng-change="ctrl.applyRatePlans(ratePlanIds)">
+      {{plan.ratePlanName}}
+      <span ng-if="discount && plan.price">
+                <s>{{plan.price | currency:"£" }} </s> <md-icon md-font-set="material-icons">arrow_forward</md-icon>
+                <strong>{{plan.price - (plan.price*discount/100) | currency:"£" }} </strong>
+            </span>
+    </md-checkbox>
+  </div>
 </div>

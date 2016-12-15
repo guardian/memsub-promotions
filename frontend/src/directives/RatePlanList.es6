@@ -5,13 +5,17 @@ export default () => {
     return {
         scope: {
             'productRatePlanIds': '=',
-            'campaignGroup': '='
+            'campaignGroup': '=',
+            'discount': '='
         },
         restrict: 'E',
         template: template,
         controller: 'ratePlanListController',
         controllerAs: 'ctrl',
         link: (scope, elem, attrs, controller) => {
+            scope.$watch('discount', (n) => {
+                controller.updateDiscount(n);
+            });
             scope.$watch('productRatePlanIds', (n) => {
                 if (n) {
                     controller.populateRatePlans(n)

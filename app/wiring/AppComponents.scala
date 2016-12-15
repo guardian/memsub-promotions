@@ -7,7 +7,7 @@ import play.api.BuiltInComponents
 import play.api.libs.concurrent.Execution.Implicits._
 import com.typesafe.config.{Config, ConfigFactory}
 import com.softwaremill.macwire._
-import conf.{PaperPlans, PaperProducts, WeeklyPlans}
+import conf.{CatalogService, PaperPlans, PaperProducts, WeeklyPlans}
 import controllers._
 import play.api.libs.ws.ahc.AhcWSComponents
 import play.api.routing.Router
@@ -22,6 +22,8 @@ class AppComponents(private val stage: Stage, c: BuiltInComponents with AhcWSCom
 
   lazy val promoService = com.gu.memsub.services.JsonDynamoService.forTable[AnyPromotion](DynamoTables.promotions(config, stage.name))
   lazy val campaignService = com.gu.memsub.services.JsonDynamoService.forTable[Campaign](DynamoTables.campaigns(config, stage.name))
+
+  lazy val catalog = CatalogService.fromConfig(config,stage.name)
 
   lazy val membershipRatePlanIds = MembershipRatePlanIds.fromConfig(config.getConfig(AppComponents.ratePlanPath(stage) + ".membership"))
   lazy val digipackRatePlanIds = DigitalPackRatePlanIds.fromConfig(config.getConfig(AppComponents.ratePlanPath(stage) + ".digitalpack"))
@@ -38,6 +40,7 @@ class AppComponents(private val stage: Stage, c: BuiltInComponents with AhcWSCom
   lazy val planController = wire[RatePlanController]
   lazy val homeController = wire[StaticController]
   lazy val assetController = wire[Assets]
+
 
   val prefix: String = "/"
   lazy val router: Router = wire[Routes]
