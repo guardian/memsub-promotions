@@ -5,8 +5,8 @@
                  ng-change="ctrl.applyRatePlans(ratePlanIds)">
       {{plan.ratePlanName}}
       <span ng-if="discount && plan.price">
-                <s>£{{plan.price | number: 2 }} </s> <md-icon md-font-set="material-icons">arrow_forward</md-icon>
-                <strong>£{{plan.price - (plan.price*discount/100) | number:2 }} </strong>
+                <s>{{plan.price | currency:"£" }} </s> <md-icon md-font-set="material-icons">arrow_forward</md-icon>
+                <strong>{{plan.price - (plan.price*discount/100) | currency:"£" }} </strong>
             </span>
     </md-checkbox>
   </div>
