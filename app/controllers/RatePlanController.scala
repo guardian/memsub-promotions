@@ -22,10 +22,10 @@ class RatePlanController(
                         ) {
 
   case class RatePlan(ratePlanId: ProductRatePlanId, ratePlanName: String)
-case class EnhancedRatePlan(ratePlanId: ProductRatePlanId, ratePlanName: String, price: Option[Float])
+case class EnhancedRatePlan(ratePlanId: ProductRatePlanId, ratePlanName: String, price: Option[String])
   def enhance(ratePlan: RatePlan):EnhancedRatePlan={
     val plan = find(ratePlan.ratePlanId)
-    EnhancedRatePlan(ratePlan.ratePlanId,ratePlan.ratePlanName,plan.map(_.charges.gbpPrice.amount))
+    EnhancedRatePlan(ratePlan.ratePlanId,ratePlan.ratePlanName,plan.map(_.charges.gbpPrice.prettyAmount))
   }
 
   implicit val prpidWrite = new Writes[ProductRatePlanId] {
