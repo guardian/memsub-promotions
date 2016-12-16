@@ -22,10 +22,12 @@ class RatePlanController(
                         ) {
 
   case class RatePlan(ratePlanId: ProductRatePlanId, ratePlanName: String)
-case class EnhancedRatePlan(ratePlanId: ProductRatePlanId, ratePlanName: String, price: Option[String])
-  def enhance(ratePlan: RatePlan):EnhancedRatePlan={
+
+  case class EnhancedRatePlan(ratePlanId: ProductRatePlanId, ratePlanName: String, price: Option[String],description: Option[String])
+
+  def enhance(ratePlan: RatePlan): EnhancedRatePlan = {
     val plan = find(ratePlan.ratePlanId)
-    EnhancedRatePlan(ratePlan.ratePlanId,ratePlan.ratePlanName,plan.map(_.charges.gbpPrice.prettyAmount))
+    EnhancedRatePlan(ratePlan.ratePlanId, ratePlan.ratePlanName, plan.map(_.charges.gbpPrice.prettyAmount), plan.map(_.description))
   }
 
   implicit val prpidWrite = new Writes[ProductRatePlanId] {
@@ -36,9 +38,9 @@ case class EnhancedRatePlan(ratePlanId: ProductRatePlanId, ratePlanName: String,
   implicit val ratePlanWrite = Json.writes[RatePlan]
   implicit val eratePlanWrite = Json.writes[EnhancedRatePlan]
 
+  lazy val catalog = catalogService.unsafeCatalog
 
   def find(productRatePlanId: ProductRatePlanId) = {
-    lazy val catalog = catalogService.unsafeCatalog
     catalog.paid.find(_.id == productRatePlanId)
   }
 
@@ -78,8 +80,13 @@ case class EnhancedRatePlan(ratePlanId: ProductRatePlanId, ratePlanName: String,
       GuardianWeekly.id -> Json.toJson(Seq(
         RatePlan(weeklyPlans.zoneA.yearly, "Weekly Zone A Yearly"),
         RatePlan(weeklyPlans.zoneA.quarterly, "Weekly Zone A Quarterly"),
+        RatePlan(weeklyPlans.zoneA.oneYear, "Weekly Zone A One Year"),
         RatePlan(weeklyPlans.zoneB.yearly, "Weekly Zone B Yearly"),
-        RatePlan(weeklyPlans.zoneB.quarterly, "Weekly Zone B Quarterly")
+        RatePlan(weeklyPlans.zoneB.quarterly, "Weekly Zone B Quarterly"),
+        RatePlan(weeklyPlans.zoneB.oneYear, "Weekly Zone B One Year"),
+        RatePlan(weeklyPlans.zoneC.yearly, "Weekly Zone C Yearly"),
+        RatePlan(weeklyPlans.zoneC.quarterly, "Weekly Zone C Quarterly"),
+        RatePlan(weeklyPlans.zoneC.oneYear, "Weekly Zone C One Year")
       ).map(enhance))
     ))
   }
