@@ -16,6 +16,6 @@ export default class {
     }
     
     setPromotionType(newName) {
-        this.$scope.promotionType.name = newName
+        this.$scope.promotionType = {name: newName};
     }
 }

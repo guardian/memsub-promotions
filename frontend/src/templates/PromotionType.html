@@ -3,7 +3,7 @@
     <md-tabs md-dynamic-height md-selected="selectedTab">
 
         <!-- Incentives -->
-        <md-tab label="Incentive" ng-click="ctrl.setPromotionType('incentive')">
+        <md-tab label="Incentive" ng-click="ctrl.setPromotionType('incentive')" ng-disabled="coPromotionType === 'incentive'">
             <md-content class="md-padding md-tab-content">
                 <md-input-container class="md-block" flex-gt-sm>
                     <label>Redemption instructions</label>
@@ -24,7 +24,7 @@
         </md-tab>
 
         <!-- Free trials -->
-        <md-tab label="Free trial" ng-click="ctrl.setPromotionType('free_trial')">
+        <md-tab label="Free trial" ng-click="ctrl.setPromotionType('free_trial')" ng-disabled="coPromotionType === 'free_trial'">
             <md-content class="md-padding md-tab-content">
                 <md-input-container class="md-block" flex-gt-sm>
                     <label>Duration (days)</label>
@@ -38,7 +38,7 @@
         </md-tab>
 
         <!-- Percent discounts -->
-        <md-tab label="Discount" ng-click="ctrl.setPromotionType('percent_discount')">
+        <md-tab label="Discount" ng-click="ctrl.setPromotionType('percent_discount')"  ng-disabled="coPromotionType === 'percent_discount'">
             <md-content class="md-padding md-tab-content">
                 <md-input-container class="md-block" flex-gt-sm>
                     <label>Duration (months)</label>
@@ -52,7 +52,7 @@
         </md-tab>
 
         <!-- Tracking -->
-        <md-tab label="Tracking" ng-click="ctrl.setPromotionType('tracking')">
+        <md-tab label="Tracking" ng-click="ctrl.setPromotionType('tracking')" ng-disabled="coPromotionType">
             <md-content class="md-padding md-tab-content">
                 <p ng-show="campaignGroup == 'membership'">For Tracking promotions, the <b>Rate plans</b> below are only used to choose the landing page tier.</p>
             </md-content>
