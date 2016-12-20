@@ -37,7 +37,7 @@ class PromotionController(googleAuthAction: GoogleAuthenticatedAction, service: 
   }
 
   def all(campaignCode: Option[String]) = googleAuthAction.async {
-    campaignCode.map(CampaignCode).fold(service.all)(service.find).map(promos => Ok(Json.toJson(promos.sortBy(_.starts.getMillis).reverse)))
+    campaignCode.map(CampaignCode).fold(service.all)(service.find).map(promos => Ok(Json.toJson(promos.sortBy(_.name))))
   }
 
   def get(uuid: Option[String]) = googleAuthAction.async {
