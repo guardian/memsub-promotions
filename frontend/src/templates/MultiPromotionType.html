@@ -1,14 +1,17 @@
 <ng-form name="promoType" layout="column">
 
-    <promotion-type promotion-type="promotion.promotionType" campaign-group="environment.campaignGroup" ng-if="!promotion.promotionType.a"></promotion-type>
+    <promotion-type promotion-type="promotion.promotionType" co-promotion-type="" campaign-group="environment.campaignGroup" ng-if="!promotion.promotionType.a"></promotion-type>
 
 
     <div layout="row" layout-align="start">
-        <md-button ng-if="!promotion.promotionType.a" ng-click="ctrl.makeMulti(promotion.promotionType)">Add additional type</md-button>
+        <md-button ng-if="!promotion.promotionType.a" ng-click="ctrl.makeMulti(promotion.promotionType)">Add second benefit</md-button>
     </div>
 
-    <promotion-type promotion-type="promotion.promotionType.a" campaign-group="environment.campaignGroup" ng-if="promotion.promotionType.a"></promotion-type>
-    <promotion-type promotion-type="promotion.promotionType.b" campaign-group="environment.campaignGroup" ng-if="promotion.promotionType.b"></promotion-type>
+    <promotion-type promotion-type="promotion.promotionType.a" co-promotion-type="promotion.promotionType.b.name" campaign-group="environment.campaignGroup" ng-if="promotion.promotionType.a"></promotion-type>
+    <promotion-type promotion-type="promotion.promotionType.b" co-promotion-type="promotion.promotionType.a.name" campaign-group="environment.campaignGroup" ng-if="promotion.promotionType.b"> </promotion-type>
+    <div layout="row" layout-align="start">
+        <md-button ng-if="promotion.promotionType.b" ng-click="ctrl.makeSingular(promotion.promotionType)">Remove second benefit</md-button>
+    </div>
 
 
 </ng-form>

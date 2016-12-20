@@ -5,7 +5,8 @@ export default () => {
     return {
         scope: {
             promotionType: '=',
-            campaignGroup: '='
+            campaignGroup: '=',
+            coPromotionType: '='
         },
         restrict: 'E',
         template: types,

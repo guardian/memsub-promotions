@@ -13,7 +13,7 @@ export default () => {
         controller: 'ratePlanListController',
         controllerAs: 'ctrl',
         link: (scope, elem, attrs, controller) => {
-            scope.$watch('discount', (n) => {
+            scope.$watch('promotion', (n) => {
                 controller.updateDiscount(n);
             });
             scope.$watch('productRatePlanIds', (n) => {
