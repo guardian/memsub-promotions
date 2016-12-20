@@ -1,12 +1,13 @@
+import PromotionTypes from 'PromotionTypes'
 export default class {
-
-    /* @ngInject */
+      /* @ngInject */
     constructor($scope) {
+      console.log(PromotionTypes);
         this.types = [
-            'incentive',
-            'free_trial',
-            'percent_discount',
-            'tracking'
+            PromotionTypes.INCENTIVE,
+            PromotionTypes.TRIAL,
+            PromotionTypes.DISCOUNT,
+            PromotionTypes.TRACKING
         ];
         this.$scope = $scope;
     }
@@ -14,7 +15,7 @@ export default class {
     updateSelectedTab(promotionTypeName) {
         this.$scope.selectedTab = this.types.indexOf(promotionTypeName)
     }
-    
+
     setPromotionType(newName) {
         this.$scope.promotionType = {name: newName};
     }

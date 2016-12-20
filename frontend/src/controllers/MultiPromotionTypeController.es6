@@ -1,3 +1,5 @@
+import PromotionTypes from 'PromotionTypes'
+
 export default class {
 
     /* @ngInject */
@@ -6,8 +8,8 @@ export default class {
     }
 
     makeMulti(existingPromotionType) {
-        let newType = existingPromotionType.name !== 'incentive' ? 'incentive' : 'free_trial';
-        this.$scope.promotion.promotionType = {name: "double", a: existingPromotionType, b: {name: newType}};
+        let newType = existingPromotionType.name !==   PromotionTypes.INCENTIVE ?   PromotionTypes.INCENTIVE :   PromotionTypes.TRIAL;
+        this.$scope.promotion.promotionType = {name: PromotionTypes.DOUBLE, a: existingPromotionType, b: {name: newType}};
     }
 
     makeSingular(existingPromotionType) {
