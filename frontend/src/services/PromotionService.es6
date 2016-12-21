@@ -6,11 +6,23 @@ export default class {
         this.$q = $q;
     }
 
+    sortChannelKeysAndPromoCodes(promotion) {
+        const channelKeys = Array.sort(Object.keys(promotion.codes));
+        const codes = {};
+        channelKeys.forEach(channel => {
+            codes[channel] = Array.sort(promotion.codes[channel]); // Hack! Also sorts the object keys!
+        });
+        promotion.codes = codes;
+        return promotion;
+    }
+
     all() {
         return this.$http({
             method: 'GET',
             url: '/promotions'
-        }).then(response => response.data)
+        })
+        .then(response => response.data)
+        .then(promotions => promotions.map(this.sortChannelKeysAndPromoCodes));
     }
 
     get(uuid) {
@@ -18,7 +30,7 @@ export default class {
             method: 'GET',
             url: '/promotion',
             params: {uuid: uuid}
-        }).then(response => response.data)
+        }).then(response => this.sortChannelKeysAndPromoCodes(response.data))
     }
 
     byCampaign(campaignCode) {
@@ -26,14 +38,16 @@ export default class {
             method: 'GET',
             url: '/promotions',
             params: {campaignCode: campaignCode}
-        }).then(response => response.data)
+        })
+        .then(response => response.data)
+        .then(promotions => promotions.map(this.sortChannelKeysAndPromoCodes));
     }
 
     save(promotion) {
         return this.$http({
             method: 'POST',
             url: '/promotion',
-            data: promotion
+            data: this.sortChannelKeysAndPromoCodes(promotion)
         }).then(response => response.data)
     }
 
