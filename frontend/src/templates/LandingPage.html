@@ -6,6 +6,10 @@
     </md-checkbox>
 
     <div layout="column" ng-show="promotion.landingPage !== undefined" ng-if="newspaper">
+        <md-input-container>
+            <label>Description</label>
+            <textarea name="landing-description" ng-model="promotion.landingPage.description" delete-empty></textarea>
+        </md-input-container>
         <h5>Default product</h5>
         <md-radio-group layout="row" ng-model="promotion.landingPage.defaultProduct">
             <md-radio-button value="voucher" class="md-primary" ng-checked="true">Voucher</md-radio-button>
