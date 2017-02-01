@@ -5,6 +5,13 @@ export default class {
         this.$scope = $scope;
         this.ratePlans = ratePlanService.all();
         this.ratePlans.then(plans => $scope.ratePlans = plans);
+        $scope.discountedPrice = (plan)=> {
+            let factor = $scope.length / plan.period;
+            return plan.price * factor/Math.ceil(factor)
+        };
+        $scope.showDiscountWarning = (plan) => {
+           return (($scope.length % plan.period) !== 0)
+        }
     }
 
     arrayToMap(array) {
@@ -26,5 +33,14 @@ export default class {
     updateDiscount(discount){
         this.$scope.discount = discount;
     }
+
+    updateLength(length){
+        this.$scope.length = length;
+    }
+
+    test(){
+        return "help me im angular js"
+    }
+
 
 }

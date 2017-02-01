@@ -23,11 +23,11 @@ class RatePlanController(
 
   case class RatePlan(ratePlanId: ProductRatePlanId, ratePlanName: String)
 
-  case class EnhancedRatePlan(ratePlanId: ProductRatePlanId, ratePlanName: String, price: Option[String],description: Option[String])
+  case class EnhancedRatePlan(ratePlanId: ProductRatePlanId, ratePlanName: String, price: Option[String],description: Option[String],period:Option[Int])
 
   def enhance(ratePlan: RatePlan): EnhancedRatePlan = {
     val plan = find(ratePlan.ratePlanId)
-    EnhancedRatePlan(ratePlan.ratePlanId, ratePlan.ratePlanName, plan.map(_.charges.gbpPrice.prettyAmount), plan.map(_.description))
+    EnhancedRatePlan(ratePlan.ratePlanId, ratePlan.ratePlanName, plan.map(_.charges.gbpPrice.prettyAmount), plan.map(_.description), plan.map(_.charges.billingPeriod.monthsInPeriod))
   }
 
   implicit val prpidWrite = new Writes[ProductRatePlanId] {
@@ -35,6 +35,8 @@ class RatePlanController(
       JsString(productRatePlanId.get)
     }
   }
+
+
   implicit val ratePlanWrite = Json.writes[RatePlan]
   implicit val eratePlanWrite = Json.writes[EnhancedRatePlan]
 
