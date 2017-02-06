@@ -20,7 +20,7 @@
                     </div>
                 </md-input-container>
                 <multi-promotion-type promotion="promotion" campaign-group="campaignGroup"></multi-promotion-type>
-                <rate-plan-list product-rate-plan-ids="promotion.appliesTo.productRatePlanIds" campaign-group="campaignGroup" discount="promotion.promotionType.amount || promotion.promotionType.a.amount || promotion.promotionType.b.amount"></rate-plan-list>
+                <rate-plan-list product-rate-plan-ids="promotion.appliesTo.productRatePlanIds" campaign-group="campaignGroup" discount="promotion.promotionType.amount || promotion.promotionType.a.amount || promotion.promotionType.b.amount" length="promotion.promotionType.durationMonths || promotion.promotionType.a.durationMonths || promotion.promotionType.b.durationMonths"></rate-plan-list>
                 <available-countries countries="promotion.appliesTo.countries"></available-countries>
                 <promotion-dates promotion="promotion"></promotion-dates>
                 <channel-codes codes="promotion.codes"></channel-codes>
