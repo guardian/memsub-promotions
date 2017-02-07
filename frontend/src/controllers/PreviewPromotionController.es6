@@ -7,7 +7,6 @@ export default class {
         this.$timeout = $timeout;
         $scope.mode = 'desktop';
         this.$scope = $scope;
-        
         this.$scope.src = 'https://' + this.environmentService.getCampaignGroupDomain() + '/q';
         
     }

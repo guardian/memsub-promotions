@@ -1,5 +1,5 @@
 <div layout="row" layout-align=" stretch" flex ng-cloak>
-    <div layout-padding style="border-right: 1px solid #BBB; overflow: auto" layout-align="stretch" flex="50">
+    <div layout-padding style="border-right: 1px solid #BBB; overflow: auto" layout-align="stretch" flex="campaignGroup !== 'membership' && promotion.landingPage?50:100">
         <form name="promotionForm" novalidate ng-submit="promotionForm.$valid && ctrl.save(promotion)">
             <div layout="column">
                 <h3>Promotion Details</h3>
@@ -44,5 +44,5 @@
             </div>
         </form>
     </div>
-    <preview-promotion ng-if="campaignGroup === 'digitalpack'" flex layout="column" promotion="promotion" validity="promotionForm.$valid"></preview-promotion>
+    <preview-promotion ng-show="campaignGroup !== 'membership' && promotion.landingPage !== undefined" flex layout="column" promotion="promotion" validity="promotionForm.$valid"></preview-promotion>
 </div>
