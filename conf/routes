@@ -8,6 +8,8 @@ GET     /promotions                 controllers.PromotionController.all(campaign
 GET     /promotion                  controllers.PromotionController.get(uuid: Option[String])
 POST    /promotion                  controllers.PromotionController.upsert
 POST    /promotion/validate         controllers.PromotionController.validate
+GET     /check/:promoCodeStr        controllers.PromotionController.findCode(promoCodeStr: String)
+
 
 GET     /campaigns                  controllers.CampaignController.all(group: Option[String])
 GET     /campaign                   controllers.CampaignController.get(code: Option[String])

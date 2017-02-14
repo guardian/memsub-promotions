@@ -3,6 +3,7 @@ package controllers
 import java.util.{TimeZone, UUID}
 
 import actions.GoogleAuthAction._
+import com.gu.memsub.promo
 import com.gu.memsub.promo.Formatters.Common._
 import com.gu.memsub.promo.Formatters.PromotionFormatters._
 import com.gu.memsub.promo.Promotion.AnyPromotion
@@ -11,14 +12,17 @@ import com.gu.memsub.services.JsonDynamoService
 import org.joda.time.DateTimeZone
 import play.api.data.validation.ValidationError
 import play.api.libs.concurrent.Execution.Implicits._
-import play.api.libs.json.{JsError, JsPath, Json}
+import play.api.libs.json._
+import play.api.libs.json.Writes._
+import play.api.libs.json.Reads._
+import play.api.libs.functional.syntax._
 import play.api.mvc.Result
 import play.api.mvc.Results._
 
 import scala.concurrent.Future
 import scala.util.Try
 
-class PromotionController(googleAuthAction: GoogleAuthenticatedAction, service: JsonDynamoService[AnyPromotion, Future]) {
+class PromotionController(googleAuthAction: GoogleAuthenticatedAction, service: JsonDynamoService[AnyPromotion, Future], codeService: JsonDynamoService[PromoCode, Future]) {
 
   private val londonTimezone = DateTimeZone.forTimeZone(TimeZone.getTimeZone("Europe/London"))
 
@@ -65,4 +69,17 @@ class PromotionController(googleAuthAction: GoogleAuthenticatedAction, service: 
       Future(BadRequest("Could not parse campaign data"))
     }
   }
+
+  def findCode(promoCodeString: String) = googleAuthAction.async {request =>
+    val promoCode = PromoCode(promoCodeString)
+    implicit val promoCodeWrites = new OWrites[PromoCode]{
+      override def writes(promoCode : PromoCode): JsObject = Json.obj(("promo_code",promoCode.get))
+    }
+    implicit val promoCodsReads: Reads[PromoCode] = (JsPath \ "promo_code").read[String].map(p => PromoCode(p))
+
+    codeService.find[PromoCode](promoCode)(promoCodeWrites,promoCodsReads).map{codes =>
+      Ok(codes.mkString)
+    }
+  }
+
 }

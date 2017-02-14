@@ -1,7 +1,7 @@
 package wiring
 import actions.GoogleAuthAction
 import com.gu.config.{DigitalPackRatePlanIds, MembershipRatePlanIds}
-import com.gu.memsub.promo.{Campaign, DynamoTables}
+import com.gu.memsub.promo.{Campaign, DynamoTables, PromoCode}
 import com.gu.memsub.promo.Promotion.AnyPromotion
 import play.api.BuiltInComponents
 import play.api.libs.concurrent.Execution.Implicits._
@@ -21,6 +21,7 @@ class AppComponents(private val stage: Stage, c: BuiltInComponents with AhcWSCom
   lazy val paperPlans = wireWith[Config, Stage, PaperProducts](PaperProducts.fromConfig)
 
   lazy val promoService = com.gu.memsub.services.JsonDynamoService.forTable[AnyPromotion](DynamoTables.promotions(config, stage.name))
+  lazy val promoCodeService = com.gu.memsub.services.JsonDynamoService.forTable[PromoCode](s"touchpoint.backend.environments.${stage.name}.dynamodb.promoCodes")
   lazy val campaignService = com.gu.memsub.services.JsonDynamoService.forTable[Campaign](DynamoTables.campaigns(config, stage.name))
 
   lazy val catalog = CatalogService.fromConfig(config,stage.name)
