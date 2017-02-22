@@ -27,6 +27,14 @@
                 <md-radio-button value="bottom">Bottom</md-radio-button>
             </md-radio-group>
         </div>
+        <div layout="column" ng-show="weekly">
+            <h5>Title colour</h5>
+            <md-radio-group layout="row" ng-model="promotion.landingPage.sectionColour">
+                <md-radio-button value="blue" class="md-primary">Blue</md-radio-button>
+                <md-radio-button value="grey">Grey</md-radio-button>
+                <md-radio-button value="white">White</md-radio-button>
+            </md-radio-group>
+        </div>
         <md-input-container>
             <label>Title</label><input name="title" ng-model="promotion.landingPage.title" delete-empty/>
         </md-input-container>
@@ -50,5 +58,6 @@
                 <md-radio-button value="white">White</md-radio-button>
             </md-radio-group>
         </div>
+
     </div>
 </ng-form>

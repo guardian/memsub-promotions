@@ -79,7 +79,7 @@ class RatePlanController(
         RatePlan(paperPlans.voucher.everydayplus, "Voucher Everyday+")
       ).map(enhance)),
       // TODO - Guardian Weekly - One Year
-      GuardianWeekly.id -> Json.toJson(Seq(
+      GuardianWeekly.id -> Json.toJson((Seq(
         RatePlan(weeklyPlans.zoneA.yearly, "Weekly Zone A Yearly"),
         RatePlan(weeklyPlans.zoneA.quarterly, "Weekly Zone A Quarterly"),
         RatePlan(weeklyPlans.zoneA.oneYear, "Weekly Zone A One Year"),
@@ -89,7 +89,9 @@ class RatePlanController(
         RatePlan(weeklyPlans.zoneC.yearly, "Weekly Zone C Yearly"),
         RatePlan(weeklyPlans.zoneC.quarterly, "Weekly Zone C Quarterly"),
         RatePlan(weeklyPlans.zoneC.oneYear, "Weekly Zone C One Year")
-      ).map(enhance))
+      ) ++
+        weeklyPlans.zoneA.six.map(id =>  RatePlan(id, "Weekly Zone A Six")) ++
+        weeklyPlans.zoneC.six.map(id =>  RatePlan(id, "Weekly Zone C Six"))).map(enhance))
     ))
   }
 }
