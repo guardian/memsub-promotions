@@ -50,7 +50,9 @@
                 </md-input-container>
             </md-content>
         </md-tab>
-
+        <!-- Renewal -->
+        <md-tab label="Renewal" ng-click="ctrl.setPromotionType('retention')" ng-disabled="coPromotionType === 'retention'">
+        </md-tab>
         <!-- Tracking -->
         <md-tab label="Tracking" ng-click="ctrl.setPromotionType('tracking')" ng-disabled="coPromotionType">
             <md-content class="md-padding md-tab-content">

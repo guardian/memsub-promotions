@@ -6,6 +6,7 @@ export default class {
             'incentive',
             'free_trial',
             'percent_discount',
+            'retention',
             'tracking'
         ];
         this.$scope = $scope;
