@@ -12,7 +12,8 @@ export default class {
         channelKeys.forEach(channel => {
             codes[channel] = Array.sort(promotion.codes[channel]); // Hack! Also sorts the object keys!
         });
-        return Object.assign({},promotion,{codes:codes});
+        promotion.codes = codes;
+        return promotion;
     }
 
     all() {
