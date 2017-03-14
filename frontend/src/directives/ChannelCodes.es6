@@ -18,7 +18,7 @@ export default () => {
                 }
                 setTimeout(() => scope.updating = false, 0)
 
-            },true);
+            });
             scope.$watch('channels', (n) => {
                 if (!scope.updating && n) {
                     scope.updating = true;
