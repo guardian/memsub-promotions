@@ -25,7 +25,7 @@ export default () => {
                     controller.applyChannels(n);
                 }
                 setTimeout(() => scope.updating = false, 0)
-            });
+            },true);
         }
     };
 }
