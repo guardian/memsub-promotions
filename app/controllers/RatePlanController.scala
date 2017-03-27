@@ -58,11 +58,12 @@ class RatePlanController(
         RatePlan(membershipIds.patronYearly, "Patron yearly")
       ).map(enhance)),
       DigitalPack.id -> Json.toJson(Seq(
-        RatePlan(digipackIds.digitalPackMonthly, "Digital pack monthly"),
-        RatePlan(digipackIds.digitalPackQuaterly, "Digital pack quarterly"),
-        RatePlan(digipackIds.digitalPackYearly, "Digital pack yearly")
+        RatePlan(digipackIds.digitalPackMonthly, "Digital Pack monthly"),
+        RatePlan(digipackIds.digitalPackQuaterly, "Digital Pack quarterly"),
+        RatePlan(digipackIds.digitalPackYearly, "Digital Pack yearly")
       ).map(enhance)),
       Newspaper.id -> Json.toJson(Seq(
+        RatePlan(paperPlans.delivery.sunday, "Home Delivery Sunday"),
         RatePlan(paperPlans.delivery.sundayplus, "Home Delivery Sunday+"),
         RatePlan(paperPlans.delivery.weekend, "Home Delivery Weekend"),
         RatePlan(paperPlans.delivery.weekendplus, "Home Delivery Weekend+"),
@@ -70,6 +71,7 @@ class RatePlanController(
         RatePlan(paperPlans.delivery.sixdayplus, "Home Delivery Sixday+"),
         RatePlan(paperPlans.delivery.everyday, "Home Delivery Everyday"),
         RatePlan(paperPlans.delivery.everydayplus, "Home Delivery Everyday+"),
+        RatePlan(paperPlans.voucher.sunday, "Voucher Sunday"),
         RatePlan(paperPlans.voucher.sundayplus, "Voucher Sunday+"),
         RatePlan(paperPlans.voucher.weekend, "Voucher Weekend"),
         RatePlan(paperPlans.voucher.weekendplus, "Voucher Weekend+"),
@@ -78,7 +80,6 @@ class RatePlanController(
         RatePlan(paperPlans.voucher.everyday, "Voucher Everyday"),
         RatePlan(paperPlans.voucher.everydayplus, "Voucher Everyday+")
       ).map(enhance)),
-      // TODO - Guardian Weekly - One Year
       GuardianWeekly.id -> Json.toJson((Seq(
         RatePlan(weeklyPlans.zoneA.yearly, "Weekly Zone A Yearly"),
         RatePlan(weeklyPlans.zoneA.quarterly, "Weekly Zone A Quarterly"),
