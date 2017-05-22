@@ -4,9 +4,10 @@ version := "1.0-SNAPSHOT"
 
 lazy val root = (project in file(".")).enablePlugins(
   PlayScala,
-  BuildInfoPlugin
+  BuildInfoPlugin,
+  RiffRaffArtifact,
+  JDebPackaging
 ).settings(
-  magentaPackageName := "promotions-tool",
   buildInfoKeys := Seq[BuildInfoKey](
     name,
     BuildInfoKey.constant("gitCommitId", Option(System.getenv("BUILD_VCS_NUMBER")) getOrElse (try {
@@ -20,6 +21,25 @@ lazy val root = (project in file(".")).enablePlugins(
   buildInfoPackage := "app",
   buildInfoOptions += BuildInfoOption.ToMap
 )
+
+import com.typesafe.sbt.packager.archetypes.ServerLoader.Systemd
+serverLoading in Debian := Systemd
+debianPackageDependencies := Seq("openjdk-8-jre-headless")
+maintainer := "Membership Dev <membership.dev@theguardian.com>"
+packageSummary := "Subscription Frontend"
+packageDescription := """Subscription Frontend"""
+
+riffRaffPackageType := (packageBin in Debian).value
+
+javaOptions in Universal ++= Seq(
+      "-Dpidfile.path=/dev/null",
+      "-J-XX:MaxRAMFraction=2",
+      "-J-XX:InitialRAMFraction=2",
+      "-J-XX:MaxMetaspaceSize=500m",
+      "-J-XX:+PrintGCDetails",
+      "-J-XX:+PrintGCDateStamps",
+      s"-J-Xloggc:/var/log/${packageName.value}/gc.log"
+     )
 
 
 scalaVersion := "2.11.8"
@@ -49,5 +69,4 @@ resolvers ++= Seq(
 
 addCommandAlias("devrun", "run -Dconfig.resource=DEV.conf 9500")
 addCommandAlias("fast-test", "testOnly -- -l Acceptance")
-
-playArtifactDistSettings
+addCommandAlias("play-artifact", "riffRaffNotifyTeamcity")
