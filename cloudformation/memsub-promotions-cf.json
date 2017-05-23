@@ -123,8 +123,12 @@
       }
     }
   },
+  "Conditions" : {
+    "CreateProdResources" : {"Fn::Equals" : [{"Ref" : "Stage"}, "PROD"]}
+  },
   "Resources": {
     "MembershipSubPromotionsLambdaRole": {
+      "Condition": "CreateProdResources",
       "Type": "AWS::IAM::Role",
       "Properties": {
         "AssumeRolePolicyDocument": {
@@ -191,6 +195,7 @@
       }
     },
     "PromoCodeViewLambdaFunctionUAT":{
+      "Condition": "CreateProdResources",
       "Type": "AWS::Lambda::Function",
       "Properties": {
         "Code": {
@@ -206,6 +211,7 @@
       }
     },
     "PromoCodeViewLambdaFunctionPROD":{
+      "Condition": "CreateProdResources",
       "Type": "AWS::Lambda::Function",
       "Properties": {
         "Code": {
@@ -221,6 +227,7 @@
       }
     },
     "PromoCodeViewLambdaEventSourceUAT": {
+      "Condition": "CreateProdResources",
       "Type": "AWS::Lambda::EventSourceMapping",
       "Properties": {
         "BatchSize": 10,
@@ -231,6 +238,7 @@
       }
     },
     "PromoCodeViewLambdaEventSourcePROD": {
+      "Condition": "CreateProdResources",
       "Type": "AWS::Lambda::EventSourceMapping",
       "Properties": {
         "BatchSize": 10,
@@ -434,10 +442,8 @@
                   "\n",
                   [
                     "#!/bin/bash -ev",
-                    "aws s3 cp s3://membership-dist/membership/authorized_keys /home/ubuntu/aws_authorized_keys",
-                    "cat /home/ubuntu/aws_authorized_keys >> /home/ubuntu/.ssh/authorized_keys",
-                    "chown ubuntu:ubuntu \"/home/ubuntu/.ssh/authorized_keys\"",
-                    "chmod 400 \"/home/ubuntu/.ssh/authorized_keys\"",
+
+                    { "Fn::Join": [ "", ["/opt/features/ssh-keys/initialise-keys-and-cron-job.sh -l -b github-team-keys -t ", {"Ref":"GithubTeamName"}, "|| true"] ] },
 
                     "CONF_DIR=/etc/memsub-promotions",
 
