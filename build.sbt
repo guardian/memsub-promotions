@@ -26,8 +26,8 @@ import com.typesafe.sbt.packager.archetypes.ServerLoader.Systemd
 serverLoading in Debian := Systemd
 debianPackageDependencies := Seq("openjdk-8-jre-headless")
 maintainer := "Membership Dev <membership.dev@theguardian.com>"
-packageSummary := "Subscription Frontend"
-packageDescription := """Subscription Frontend"""
+packageSummary := "Memsub-promotions"
+packageDescription := """Memsub-promotions tool"""
 
 riffRaffPackageType := (packageBin in Debian).value
 
