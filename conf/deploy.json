@@ -1,6 +1,20 @@
 {
   "defaultStacks": ["membership"],
   "packages": {
+    "ami-update": {
+       "type": "ami-cloudformation-parameter",
+       "apps": [
+         "memsub-promotions"
+       ],
+       "data": {
+         "amiTags": {
+           "Recipe": "xenial-membership",
+           "AmigoStage": "PROD"
+         },
+        "amiParameter": "AmiId",
+        "cloudFormationStackByTags": true
+      }
+    },
     "promotions-tool": {
       "type":"autoscaling",
       "apps": [
@@ -20,7 +34,7 @@
       ]
     },
     "uploadArtifacts": {
-      "actionsBeforeApp": ["promotions-tool.uploadArtifacts"]
+      "actionsBeforeApp": ["ami-update.update","promotions-tool.uploadArtifacts"]
     },
     "deploy": {
       "actionsPerHost": [
