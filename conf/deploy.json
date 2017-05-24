@@ -15,11 +15,8 @@
         "cloudFormationStackByTags": true
       }
     },
-    "promotions-tool": {
+    "memsub-promotions": {
       "type":"autoscaling",
-      "apps": [
-        "promotions-tool"
-      ],
       "data": {
         "port": "9000",
         "bucket": "gu-promotions-tool-dist"
