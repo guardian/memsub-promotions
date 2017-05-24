@@ -428,15 +428,15 @@
 
                     { "Fn::Join": [ "", ["/opt/features/ssh-keys/initialise-keys-and-cron-job.sh -l -b github-team-keys -t ", {"Ref":"GithubTeamName"}, "|| true"] ] },
 
-                    "CONF_DIR=/etc/memsub-promotions",
+                    "CONF_DIR=/etc/promotions-tool",
 
-                    {"Fn::Join":["", ["aws --region ", { "Ref": "AWS::Region" }, " s3 cp s3://gu-promotions-tool-dist/", { "Ref": "Stack" }, "/", { "Ref": "Stage" }, "/", { "Ref": "App" }, "/", "memsub-promotions_1.0-SNAPSHOT_all.deb /tmp"]]},
-                    "dpkg -i /tmp/memsub-promotions_1.0-SNAPSHOT_all.deb",
+                    {"Fn::Join":["", ["aws --region ", { "Ref": "AWS::Region" }, " s3 cp s3://gu-promotions-tool-dist/", { "Ref": "Stack" }, "/", { "Ref": "Stage" }, "/", { "Ref": "App" }, "/", "promotions-tool_1.0-SNAPSHOT_all.deb /tmp"]]},
+                    "dpkg -i /tmp/promotions-tool_1.0-SNAPSHOT_all.deb",
 
                     "mkdir -p /etc/gu",
 
                     {"Fn::Join":["", ["aws --region ", { "Ref": "AWS::Region" }, " s3 cp s3://gu-promotions-tool-private/", { "Ref": "Stage" }, "/memsub-promotions-keys.conf /etc/gu"]]},
-                    "chown memsub-promotions /etc/gu/memsub-promotions-keys.conf",
+                    "chown promotions-tool /etc/gu/memsub-promotions-keys.conf",
                     "chmod 0600 /etc/gu/memsub-promotions-keys.conf",
 
                     "wget https://s3.amazonaws.com/aws-cloudwatch/downloads/latest/awslogs-agent-setup.py",

@@ -1,4 +1,4 @@
-name := """memsub-promotions"""
+name := """promotions-tool"""
 
 version := "1.0-SNAPSHOT"
 
