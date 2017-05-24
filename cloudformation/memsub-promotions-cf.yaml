@@ -1,0 +1,390 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: Membership/Subscription promotions tool
+Parameters:
+  Name:
+    Description: The name given to the autoscaling group
+    Type: String
+  Stage:
+    Description: Environment name
+    Type: String
+    AllowedValues:
+    - PROD
+  GithubTeamName:
+    Description: Github team name, used for giving SSH access to members of the team.
+    Type: String
+    Default: Membership-and-Subscriptions
+  TouchPointDynamoViewPromoRoleName:
+    Description: AWS Account ARN for the Touchpoint team
+    Type: String
+    MinLength: 5
+  InstanceType:
+    Description: EC2 instance type
+    Type: String
+    AllowedValues:
+    - t2.micro
+    - t2.small
+    - t2.medium
+    - m3.medium
+    - m3.large
+    ConstraintDescription: must be a valid EC2 instance type.
+  MaxInstances:
+    Description: Maximum number of instances. This should be (at least) double the
+      desired capacity.
+    Type: Number
+  MinInstances:
+    Description: Minimum number of instances
+    Type: Number
+  VpcId:
+    Description: ID of the VPC onto which to launch the application
+    Type: AWS::EC2::VPC::Id
+  PrivateVpcSubnets:
+    Description: Public subnets to use in VPC
+    Type: List<AWS::EC2::Subnet::Id>
+  PublicVpcSubnets:
+    Description: Public subnets to use for the ELB
+    Type: List<AWS::EC2::Subnet::Id>
+  AmiId:
+    Description: Custom AMI to use for instances
+    Type: String
+  AlarmEmailAddress:
+    Description: Contact email for alarms
+    Type: String
+  InternalCidrIp:
+    Description: Internal network CIDR IP
+    Type: String
+  Stack:
+    Description: Application stack
+    Type: String
+    Default: membership
+  SslArn:
+    Description: SSL certificate ARN
+    Type: String
+    Default: ''
+  UATPromotionsTableStreamARN:
+    Description: ARN of the MembershipSub-Promotions-UAT DynamoDB stream to trigger
+      the lambda function which updates the MembershipSub-PromoCode-View-UAT table
+    Type: String
+    Default: ''
+  PRODPromotionsTableStreamARN:
+    Description: ARN of the MembershipSub-Promotions-PROD DynamoDB stream to trigger
+      the lambda function which updates the MembershipSub-PromoCode-View-PROD table
+    Type: String
+    Default: ''
+  App:
+    Description: Application name
+    Type: String
+    Default: promotions-tool
+  VulnerabilityScanningSecurityGroup:
+    Description: Security group that grants access to the account's Vulnerability
+      Scanner
+    Type: AWS::EC2::SecurityGroup::Id
+Mappings:
+  StageVariables:
+    PROD:
+      DynamoDBTables:
+      - arn:aws:dynamodb:*:*:table/MembershipSub-Promotions-PROD
+      - arn:aws:dynamodb:*:*:table/MembershipSub-Promotions-UAT
+      - arn:aws:dynamodb:*:*:table/MembershipSub-Promotions-DEV
+      - arn:aws:dynamodb:*:*:table/MembershipSub-Campaigns-PROD
+      - arn:aws:dynamodb:*:*:table/MembershipSub-Campaigns-UAT
+      - arn:aws:dynamodb:*:*:table/MembershipSub-Campaigns-DEV
+      DynamoDBTableViews:
+      - arn:aws:dynamodb:*:*:table/MembershipSub-PromoCode-View-PROD
+      - arn:aws:dynamodb:*:*:table/MembershipSub-PromoCode-View-UAT
+Resources:
+  MembershipSubPromotionsLambdaRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+        - Effect: Allow
+          Principal:
+            Service:
+            - lambda.amazonaws.com
+          Action:
+          - sts:AssumeRole
+      Path: /
+      Policies:
+      - PolicyName: MembershipSub-Promotions-to-PromoCode-View-Lambda-Policy
+        PolicyDocument:
+          Version: '2012-10-17'
+          Statement:
+          - Effect: Allow
+            Action:
+            - lambda:InvokeFunction
+            - logs:CreateLogGroup
+            - logs:CreateLogStream
+            - logs:PutLogEvents
+            Resource: '*'
+          - Effect: Allow
+            Action:
+            - dynamodb:GetRecords
+            - dynamodb:GetShardIterator
+            - dynamodb:DescribeStream
+            - dynamodb:ListStreams
+            Resource: '*'
+          - Effect: Allow
+            Action:
+            - dynamodb:Scan
+            Resource: !FindInMap [StageVariables, !Ref 'Stage', DynamoDBTables]
+          - Effect: Allow
+            Action:
+            - dynamodb:BatchWriteItem
+            - dynamodb:Scan
+            Resource: !FindInMap [StageVariables, !Ref 'Stage', DynamoDBTableViews]
+  PromoCodeViewLambdaFunctionUAT:
+    Type: AWS::Lambda::Function
+    Properties:
+      Code:
+        S3Bucket: gu-promotions-tool-dist
+        S3Key: membership/PROD/MembershipSub-Promotions-to-PromoCode-View-Lambda/MembershipSub-Promotions-to-PromoCode-View-Lambda.zip
+      Description: An Amazon DynamoDB trigger that creates a view of data associated
+        with a particular promo code for the data pipeline to collect.
+      FunctionName: MembershipSub-Promotions-to-PromoCode-View-TEST
+      Handler: MembershipSub-Promotions-to-PromoCode-View-Lambda.handler
+      MemorySize: 128
+      Role: !GetAtt [MembershipSubPromotionsLambdaRole, Arn]
+      Runtime: nodejs4.3
+  PromoCodeViewLambdaFunctionPROD:
+    Type: AWS::Lambda::Function
+    Properties:
+      Code:
+        S3Bucket: gu-promotions-tool-dist
+        S3Key: membership/PROD/MembershipSub-Promotions-to-PromoCode-View-Lambda/MembershipSub-Promotions-to-PromoCode-View-Lambda.zip
+      Description: An Amazon DynamoDB trigger that creates a view of data associated
+        with a particular promo code for the data pipeline to collect.
+      FunctionName: MembershipSub-Promotions-to-PromoCode-View-PROD
+      Handler: MembershipSub-Promotions-to-PromoCode-View-Lambda.handler
+      MemorySize: 128
+      Role: !GetAtt [MembershipSubPromotionsLambdaRole, Arn]
+      Runtime: nodejs4.3
+  PromoCodeViewLambdaEventSourceUAT:
+    Type: AWS::Lambda::EventSourceMapping
+    Properties:
+      BatchSize: 10
+      Enabled: true
+      EventSourceArn: !Ref 'UATPromotionsTableStreamARN'
+      FunctionName: !Ref 'PromoCodeViewLambdaFunctionUAT'
+      StartingPosition: TRIM_HORIZON
+  PromoCodeViewLambdaEventSourcePROD:
+    Type: AWS::Lambda::EventSourceMapping
+    Properties:
+      BatchSize: 10
+      Enabled: true
+      EventSourceArn: !Ref 'PRODPromotionsTableStreamARN'
+      FunctionName: !Ref 'PromoCodeViewLambdaFunctionPROD'
+      StartingPosition: TRIM_HORIZON
+  TouchPointDynamoViewPolicy:
+    Type: AWS::IAM::Policy
+    Properties:
+      PolicyName: TouchPointDynamoViewPolicy
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+        - Effect: Allow
+          Action:
+          - dynamodb:DescribeTable
+          - dynamodb:GetItem
+          - dynamodb:BatchGetItem
+          - dynamodb:Scan
+          - dynamodb:Query
+          Resource: !FindInMap [StageVariables, !Ref 'Stage', DynamoDBTableViews]
+      Roles:
+      - !Ref 'TouchPointDynamoViewPromoRoleName'
+  ServerRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+        - Effect: Allow
+          Principal:
+            Service:
+            - ec2.amazonaws.com
+          Action:
+          - sts:AssumeRole
+      Path: /
+      Policies:
+      - PolicyName: root
+        PolicyDocument:
+          Statement:
+          - Effect: Allow
+            Action: s3:GetObject
+            Resource: arn:aws:s3:::gu-promotions-tool-*/*
+          - Effect: Allow
+            Action: ec2:DescribeTags
+            Resource: '*'
+          - Effect: Allow
+            Action:
+            - dynamodb:PutItem
+            - dynamodb:BatchWriteItem
+            - dynamodb:DescribeTable
+            - dynamodb:GetItem
+            - dynamodb:BatchGetItem
+            - dynamodb:UpdateItem
+            - dynamodb:DeleteItem
+            - dynamodb:Scan
+            - dynamodb:Query
+            Resource: !FindInMap [StageVariables, !Ref 'Stage', DynamoDBTables]
+          - Effect: Allow
+            Action: s3:GetObject
+            Resource: arn:aws:s3:::membership-private/*
+          - Effect: Allow
+            Action:
+            - cloudwatch:*
+            - logs:*
+            Resource: '*'
+  InstanceProfile:
+    Type: AWS::IAM::InstanceProfile
+    Properties:
+      Path: /
+      Roles:
+      - !Ref 'ServerRole'
+  LoadBalancer:
+    Type: AWS::ElasticLoadBalancing::LoadBalancer
+    Properties:
+      LoadBalancerName: !Join ['-', [!Ref 'App', !Ref 'Stage']]
+      Scheme: internet-facing
+      Listeners:
+      - LoadBalancerPort: '443'
+        InstancePort: '9000'
+        Protocol: HTTPS
+        SSLCertificateId: !Ref 'SslArn'
+      CrossZone: 'true'
+      HealthCheck:
+        Target: HTTP:9000/healthcheck
+        HealthyThreshold: '2'
+        UnhealthyThreshold: '10'
+        Interval: '30'
+        Timeout: '10'
+      Subnets: !Ref 'PublicVpcSubnets'
+      SecurityGroups:
+      - !Ref 'LoadBalancerSecurityGroup'
+      ConnectionDrainingPolicy:
+        Enabled: 'true'
+        Timeout: '60'
+  AutoscalingGroup:
+    Type: AWS::AutoScaling::AutoScalingGroup
+    Properties:
+      AvailabilityZones: !GetAZs ''
+      LaunchConfigurationName: !Ref 'LaunchConfig'
+      MinSize: !Ref 'MinInstances'
+      MaxSize: !Ref 'MaxInstances'
+      HealthCheckType: ELB
+      HealthCheckGracePeriod: 400
+      LoadBalancerNames:
+      - !Ref 'LoadBalancer'
+      Tags:
+      - Key: Stage
+        Value: !Ref 'Stage'
+        PropagateAtLaunch: 'true'
+      - Key: Name
+        Value: !Join [':', [!Ref 'Stage', !Ref 'App']]
+        PropagateAtLaunch: 'true'
+      - Key: Stack
+        Value: !Ref 'Stack'
+        PropagateAtLaunch: 'true'
+      - Key: App
+        Value: !Ref 'App'
+        PropagateAtLaunch: 'true'
+      - Key: Role
+        Value: !Ref 'App'
+        PropagateAtLaunch: 'true'
+      VPCZoneIdentifier: !Ref 'PrivateVpcSubnets'
+  LaunchConfig:
+    Type: AWS::AutoScaling::LaunchConfiguration
+    Properties:
+      ImageId: !Ref 'AmiId'
+      SecurityGroups:
+      - !Ref 'InstanceSecurityGroup'
+      - !Ref 'SshAccessSecurityGroup'
+      - !Ref 'VulnerabilityScanningSecurityGroup'
+      InstanceType: !Ref 'InstanceType'
+      AssociatePublicIpAddress: 'True'
+      IamInstanceProfile: !Ref 'InstanceProfile'
+      UserData:
+        "Fn::Base64":
+          !Sub
+            - |
+              #!/bin/bash -ev
+              /opt/features/ssh-keys/initialise-keys-and-cron-job.sh -l -b github-team-keys -t ${GithubTeamName}
+              CONF_DIR=/etc/promotions-tool
+              adduser --system --home /membership --disabled-password membership
+              aws --region ${AWS::Region} s3 cp s3://gu-promotions-tool-dist/${Stack}/${Stage}/${App}/promotions-tool_1.0-SNAPSHOT_all.deb /tmp
+              dpkg -i /tmp/promotions-tool_1.0-SNAPSHOT_all.deb
+              mkdir -p /etc/gu
+              aws --region ${AWS::Region} s3 cp s3://gu-promotions-tool-private/${Stage}/memsub-promotions-keys.conf /etc/gu
+              chown promotions-tool /etc/gu/memsub-promotions-keys.conf
+              chmod 0600 /etc/gu/memsub-promotions-keys.conf
+              wget https://s3.amazonaws.com/aws-cloudwatch/downloads/latest/awslogs-agent-setup.py
+
+              sed -i -e "s/__DATE/$(date +%F)/" -e 's/__STAGE/${Stage}/' $CONF_DIR/logger.conf
+              python awslogs-agent-setup.py -nr ${AWS::Region} -c $CONF_DIR/logger.conf
+
+              systemctl enable awslogs
+              systemctl start awslogs
+            - {}
+
+  SshAccessSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      VpcId: !Ref 'VpcId'
+      GroupDescription: Open up SSH access
+      SecurityGroupIngress:
+      - IpProtocol: tcp
+        FromPort: '22'
+        ToPort: '22'
+        CidrIp: !Ref 'InternalCidrIp'
+  LoadBalancerSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      VpcId: !Ref 'VpcId'
+      GroupDescription: Open up HTTP  access to load balancer
+      SecurityGroupIngress:
+      - IpProtocol: tcp
+        FromPort: '443'
+        ToPort: '443'
+        CidrIp: !Ref 'InternalCidrIp'
+      SecurityGroupEgress:
+      - IpProtocol: tcp
+        FromPort: '9000'
+        ToPort: '9000'
+        CidrIp: 0.0.0.0/0
+  InstanceSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      VpcId: !Ref 'VpcId'
+      GroupDescription: Open up HTTP access to load balancer
+      SecurityGroupIngress:
+      - IpProtocol: tcp
+        FromPort: '9000'
+        ToPort: '9000'
+        SourceSecurityGroupId: !Ref 'LoadBalancerSecurityGroup'
+  TopicSendEmail:
+    Type: AWS::SNS::Topic
+    Properties:
+      DisplayName: SendEmailToIdentityDev
+      Subscription:
+      - Endpoint: !Ref 'AlarmEmailAddress'
+        Protocol: email
+  alarmNoHealthyHosts:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      ActionsEnabled: 'true'
+      AlarmDescription: There are insufficient healthy hosts
+      ComparisonOperator: LessThanThreshold
+      EvaluationPeriods: '1'
+      MetricName: HealthyHostCount
+      Namespace: AWS/ELB
+      Period: '60'
+      Statistic: Average
+      Threshold: !Ref 'MinInstances'
+      AlarmActions:
+      - !Ref 'TopicSendEmail'
+      InsufficientDataActions:
+      - !Ref 'TopicSendEmail'
+      Dimensions:
+      - Name: LoadBalancerName
+        Value: !Ref 'LoadBalancer'
+Outputs:
+  LoadBalancer:
+    Value: !GetAtt [LoadBalancer, DNSName]
