@@ -14,4 +14,3 @@ deployments:
     dependencies: [ami]
     parameters:
       bucket: gu-promotions-tool-dist
-      port: 9000

@@ -9,6 +9,7 @@ Parameters:
     Type: String
     AllowedValues:
     - PROD
+    - CODE
   GithubTeamName:
     Description: Github team name, used for giving SSH access to members of the team.
     Type: String
@@ -91,8 +92,17 @@ Mappings:
       DynamoDBTableViews:
       - arn:aws:dynamodb:*:*:table/MembershipSub-PromoCode-View-PROD
       - arn:aws:dynamodb:*:*:table/MembershipSub-PromoCode-View-UAT
+    CODE:
+      DynamoDBTables:
+      - arn:aws:dynamodb:*:*:table/MembershipSub-Promotions-UAT
+      - arn:aws:dynamodb:*:*:table/MembershipSub-Campaigns-UAT
+      DynamoDBTableViews:
+      - arn:aws:dynamodb:*:*:table/MembershipSub-PromoCode-View-UAT
+Conditions:
+  CreateProdResources: !Equals [!Ref 'Stage', PROD]
 Resources:
   MembershipSubPromotionsLambdaRole:
+    Condition: CreateProdResources
     Type: AWS::IAM::Role
     Properties:
       AssumeRolePolicyDocument:
@@ -133,6 +143,7 @@ Resources:
             - dynamodb:Scan
             Resource: !FindInMap [StageVariables, !Ref 'Stage', DynamoDBTableViews]
   PromoCodeViewLambdaFunctionUAT:
+    Condition: CreateProdResources
     Type: AWS::Lambda::Function
     Properties:
       Code:
@@ -146,6 +157,7 @@ Resources:
       Role: !GetAtt [MembershipSubPromotionsLambdaRole, Arn]
       Runtime: nodejs4.3
   PromoCodeViewLambdaFunctionPROD:
+    Condition: CreateProdResources
     Type: AWS::Lambda::Function
     Properties:
       Code:
@@ -159,6 +171,7 @@ Resources:
       Role: !GetAtt [MembershipSubPromotionsLambdaRole, Arn]
       Runtime: nodejs4.3
   PromoCodeViewLambdaEventSourceUAT:
+    Condition: CreateProdResources
     Type: AWS::Lambda::EventSourceMapping
     Properties:
       BatchSize: 10
@@ -167,6 +180,7 @@ Resources:
       FunctionName: !Ref 'PromoCodeViewLambdaFunctionUAT'
       StartingPosition: TRIM_HORIZON
   PromoCodeViewLambdaEventSourcePROD:
+    Condition: CreateProdResources
     Type: AWS::Lambda::EventSourceMapping
     Properties:
       BatchSize: 10
