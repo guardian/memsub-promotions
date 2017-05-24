@@ -31,7 +31,7 @@
       ]
     },
     "uploadArtifacts": {
-      "actionsBeforeApp": ["ami-update.update","promotions-tool.uploadArtifacts"]
+      "actionsBeforeApp": ["ami-update.update","memsub-promotions.uploadArtifacts"]
     },
     "deploy": {
       "actionsPerHost": [
