@@ -35,7 +35,7 @@
     },
     "deploy": {
       "actionsPerHost": [
-        "promotions-tool.deploy"
+        "memsub-promotions.deploy"
       ]
     }
   }
