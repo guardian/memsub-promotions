@@ -430,8 +430,8 @@
 
                     "CONF_DIR=/etc/memsub-promotions",
 
-                    {"Fn::Join":["", ["aws --region ", { "Ref": "AWS::Region" }, " s3 cp s3://gu-promotions-tool-dist/", { "Ref": "Stack" }, "/", { "Ref": "Stage" }, "/", { "Ref": "App" }, "/", "memsub-promotions_1.0-SNAPSHOT_all.deb /tmp"]]},
-                    "dpkg -i /tmp/memsub-promotions_1.0-SNAPSHOT_all.deb",
+                    {"Fn::Join":["", ["aws --region ", { "Ref": "AWS::Region" }, " s3 cp s3://gu-promotions-tool-dist/", { "Ref": "Stack" }, "/", { "Ref": "Stage" }, "/", { "Ref": "App" }, "/", "promotions-tool_1.0-SNAPSHOT_all.deb /tmp"]]},
+                    "dpkg -i /tmp/promotions-tool_1.0-SNAPSHOT_all.deb",
 
                     "mkdir -p /etc/gu",
 

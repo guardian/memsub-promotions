@@ -1,22 +1,27 @@
 {
-  "defaultStacks": ["membership"],
+  "defaultStacks": [
+    "membership"
+  ],
   "packages": {
     "ami-update": {
-       "type": "ami-cloudformation-parameter",
-       "apps": [
-         "memsub-promotions"
-       ],
-       "data": {
-         "amiTags": {
-           "Recipe": "xenial-membership",
-           "AmigoStage": "PROD"
-         },
+      "type": "ami-cloudformation-parameter",
+      "apps": [
+        "promotions-tool"
+      ],
+      "data": {
+        "amiTags": {
+          "Recipe": "xenial-membership",
+          "AmigoStage": "PROD"
+        },
         "amiParameter": "AmiId",
         "cloudFormationStackByTags": true
       }
     },
-    "memsub-promotions": {
-      "type":"autoscaling",
+    "promotions-tool": {
+      "type": "autoscaling",
+      "apps": [
+        "promotions-tool"
+      ],
       "data": {
         "port": "9000",
         "bucket": "gu-promotions-tool-dist"
@@ -24,18 +29,21 @@
     }
   },
   "recipes": {
-    "default" : {
-      "depends" : [
+    "default": {
+      "depends": [
         "uploadArtifacts",
         "deploy"
       ]
     },
     "uploadArtifacts": {
-      "actionsBeforeApp": ["ami-update.update","memsub-promotions.uploadArtifacts"]
+      "actionsBeforeApp": [
+        "ami-update.update",
+        "promotions-tool.uploadArtifacts"
+      ]
     },
     "deploy": {
       "actionsPerHost": [
-        "memsub-promotions.deploy"
+        "promotions-tool.deploy"
       ]
     }
   }
