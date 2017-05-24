@@ -9,7 +9,7 @@
     "Stage": {
       "Description": "Environment name",
       "Type": "String",
-      "AllowedValues": [ "PROD", "CODE" ]
+      "AllowedValues": [ "PROD" ]
     },
     "GithubTeamName": {
       "Description": "Github team name, used for giving SSH access to members of the team.",
@@ -111,24 +111,11 @@
           "arn:aws:dynamodb:*:*:table/MembershipSub-PromoCode-View-PROD",
           "arn:aws:dynamodb:*:*:table/MembershipSub-PromoCode-View-UAT"
         ]
-      },
-      "CODE": {
-        "DynamoDBTables": [
-          "arn:aws:dynamodb:*:*:table/MembershipSub-Promotions-UAT",
-          "arn:aws:dynamodb:*:*:table/MembershipSub-Campaigns-UAT"
-        ],
-        "DynamoDBTableViews": [
-          "arn:aws:dynamodb:*:*:table/MembershipSub-PromoCode-View-UAT"
-        ]
       }
     }
   },
-  "Conditions" : {
-    "CreateProdResources" : {"Fn::Equals" : [{"Ref" : "Stage"}, "PROD"]}
-  },
   "Resources": {
     "MembershipSubPromotionsLambdaRole": {
-      "Condition": "CreateProdResources",
       "Type": "AWS::IAM::Role",
       "Properties": {
         "AssumeRolePolicyDocument": {
@@ -195,7 +182,6 @@
       }
     },
     "PromoCodeViewLambdaFunctionUAT":{
-      "Condition": "CreateProdResources",
       "Type": "AWS::Lambda::Function",
       "Properties": {
         "Code": {
@@ -211,7 +197,6 @@
       }
     },
     "PromoCodeViewLambdaFunctionPROD":{
-      "Condition": "CreateProdResources",
       "Type": "AWS::Lambda::Function",
       "Properties": {
         "Code": {
@@ -227,7 +212,6 @@
       }
     },
     "PromoCodeViewLambdaEventSourceUAT": {
-      "Condition": "CreateProdResources",
       "Type": "AWS::Lambda::EventSourceMapping",
       "Properties": {
         "BatchSize": 10,
@@ -238,7 +222,6 @@
       }
     },
     "PromoCodeViewLambdaEventSourcePROD": {
-      "Condition": "CreateProdResources",
       "Type": "AWS::Lambda::EventSourceMapping",
       "Properties": {
         "BatchSize": 10,
