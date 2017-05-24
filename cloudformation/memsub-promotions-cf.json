@@ -428,7 +428,7 @@
 
                     { "Fn::Join": [ "", ["/opt/features/ssh-keys/initialise-keys-and-cron-job.sh -l -b github-team-keys -t ", {"Ref":"GithubTeamName"}, "|| true"] ] },
 
-                    "CONF_DIR=/etc/memsub-promotions",
+                    "CONF_DIR=/etc/promotions-tool",
 
                     {"Fn::Join":["", ["aws --region ", { "Ref": "AWS::Region" }, " s3 cp s3://gu-promotions-tool-dist/", { "Ref": "Stack" }, "/", { "Ref": "Stage" }, "/", { "Ref": "App" }, "/", "promotions-tool_1.0-SNAPSHOT_all.deb /tmp"]]},
                     "dpkg -i /tmp/promotions-tool_1.0-SNAPSHOT_all.deb",
