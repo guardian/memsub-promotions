@@ -94,9 +94,14 @@ Mappings:
       - arn:aws:dynamodb:*:*:table/MembershipSub-PromoCode-View-UAT
     CODE:
       DynamoDBTables:
+      - arn:aws:dynamodb:*:*:table/MembershipSub-Promotions-PROD
       - arn:aws:dynamodb:*:*:table/MembershipSub-Promotions-UAT
+      - arn:aws:dynamodb:*:*:table/MembershipSub-Promotions-DEV
+      - arn:aws:dynamodb:*:*:table/MembershipSub-Campaigns-PROD
       - arn:aws:dynamodb:*:*:table/MembershipSub-Campaigns-UAT
+      - arn:aws:dynamodb:*:*:table/MembershipSub-Campaigns-DEV
       DynamoDBTableViews:
+      - arn:aws:dynamodb:*:*:table/MembershipSub-PromoCode-View-PROD
       - arn:aws:dynamodb:*:*:table/MembershipSub-PromoCode-View-UAT
 Conditions:
   CreateProdResources: !Equals [!Ref 'Stage', PROD]
