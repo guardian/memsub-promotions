@@ -320,9 +320,8 @@ Resources:
           !Sub
             - |
               #!/bin/bash -ev
-              /opt/features/ssh-keys/initialise-keys-and-cron-job.sh -l -b github-team-keys -t ${GithubTeamName}
+              /opt/features/ssh-keys/initialise-keys-and-cron-job.sh -l -b github-team-keys -t ${GithubTeamName} || true
               CONF_DIR=/etc/promotions-tool
-              adduser --system --home /membership --disabled-password membership
               aws --region ${AWS::Region} s3 cp s3://gu-promotions-tool-dist/${Stack}/${Stage}/${App}/promotions-tool_1.0-SNAPSHOT_all.deb /tmp
               dpkg -i /tmp/promotions-tool_1.0-SNAPSHOT_all.deb
               mkdir -p /etc/gu
