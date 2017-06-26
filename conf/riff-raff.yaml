@@ -1,0 +1,16 @@
+stacks: [membership]
+regions: [eu-west-1]
+deployments:
+  ami:
+    type: ami-cloudformation-parameter
+    app: promotions-tool
+    parameters:
+      amiTags:
+        Recipe: xenial-membership
+        AmigoStage: PROD
+      amiParameter: AmiId
+  promotions-tool:
+    type: autoscaling
+    dependencies: [ami]
+    parameters:
+      bucket: gu-promotions-tool-dist
