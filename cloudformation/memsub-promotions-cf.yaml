@@ -159,7 +159,7 @@ Resources:
     Properties:
       Code:
         S3Bucket: gu-promotions-tool-dist
-        S3Key: membership/PROD/MembershipSub-Promotions-to-PromoCode-View-Lambda/MembershipSub-Promotions-to-PromoCode-View-Lambda.zip
+        S3Key: membership/PROD/MembershipSub-Promotions-PromoCode-View/MembershipSub-Promotions-PromoCode-View.zip
       Description: An Amazon DynamoDB trigger that creates a view of data associated
         with a particular promo code for the data pipeline to collect.
       FunctionName: MembershipSub-Promotions-to-PromoCode-View-TEST
@@ -173,7 +173,7 @@ Resources:
     Properties:
       Code:
         S3Bucket: gu-promotions-tool-dist
-        S3Key: membership/PROD/MembershipSub-Promotions-to-PromoCode-View-Lambda/MembershipSub-Promotions-to-PromoCode-View-Lambda.zip
+        S3Key: membership/PROD/MembershipSub-Promotions-PromoCode-View/MembershipSub-Promotions-PromoCode-View.zip
       Description: An Amazon DynamoDB trigger that creates a view of data associated
         with a particular promo code for the data pipeline to collect.
       FunctionName: MembershipSub-Promotions-to-PromoCode-View-PROD
@@ -216,6 +216,19 @@ Resources:
           Resource: !FindInMap [StageVariables, !Ref 'Stage', DynamoDBTableViews]
       Roles:
       - !Ref 'TouchPointDynamoViewPromoRoleName'
+  PromoCodeViewDataLakeLambdaFunctionPROD:
+    Condition: CreateProdResources
+    Type: AWS::Lambda::Function
+    Properties:
+      Code:
+        S3Bucket: gu-promotions-tool-dist
+        S3Key: membership/PROD/MembershipSub-Promotions-PromoCode-View/MembershipSub-Promotions-PromoCode-View.zip
+      Description: A Lambda function to backup the PromoCode-View Dynamo table to the Data Lake
+      FunctionName: MembershipSub-PromoCode-View-Dynamo-to-Data-Lake-PROD
+      Handler: MembershipSub-PromoCode-View-Dynamo-to-Data-Lake.handler
+      MemorySize: 128
+      Role: !GetAtt [MembershipSubPromotionsLambdaRole, Arn]
+      Runtime: nodejs4.3
   ServerRole:
     Type: AWS::IAM::Role
     Properties:

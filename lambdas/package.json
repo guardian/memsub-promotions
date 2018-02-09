@@ -1,8 +1,7 @@
 {
-  "name": "MembershipSub-Promotions-to-PromoCode-View-Lambda",
+  "name": "MembershipSub-Promotions-PromoCode-View",
   "version": "0.0.1",
   "description": "A lambda to create a view of the Promotions and Campaigns table keyed by the promo code.",
-  "main": "MembershipSub-Promotions-to-PromoCode-View-Lambda.js",
   "isAwsLambda": true,
   "cloudformation": false,
   "projectName": "MemSub::Membership Admin::Promotions Tool Lambda",
