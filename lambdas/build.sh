@@ -1,6 +1,34 @@
-#!/usr/bin/env bash
-zip MembershipSub-Promotions-to-PromoCode-View-Lambda.zip MembershipSub-Promotions-to-PromoCode-View-Lambda.js
-mkdir -p packages/MembershipSub-Promotions-to-PromoCode-View-Lambda
-cp MembershipSub-Promotions-to-PromoCode-View-Lambda.zip packages/MembershipSub-Promotions-to-PromoCode-View-Lambda
-zip -r MembershipSub-Promotions-to-PromoCode-View-Lambda.zip.zip packages riff-raff.yaml
-echo "##teamcity[publishArtifacts '$(pwd)/MembershipSub-Promotions-to-PromoCode-View-Lambda.zip']"
+#!/bin/bash
+
+#Installing node 6.10
+NODE_VERSION="6.10"
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"  # This loads nvm
+nvm install ${NODE_VERSION}
+nvm use ${NODE_VERSION}
+
+# Installing yarn
+YARN_VERSION="1.3.2"
+YARN_LOCATION="tools/${YARN_VERSION}"
+
+if [ ! -d "$YARN_LOCATION" ]; then
+	mkdir -p ${YARN_LOCATION}
+	cd ${YARN_LOCATION}/
+	wget -qO- https://github.com/yarnpkg/yarn/releases/download/v${YARN_VERSION}/yarn-v${YARN_VERSION}.tar.gz | tar zvx
+	cd ../..
+fi
+PATH="$PATH:${YARN_LOCATION}/dist/bin/"
+
+# Installing packages via yarn
+
+echo "INSTALLING PRODUCTION DEPENDENCIES"
+yarn dist
+
+echo "INSTALLING BUILD DEPENDENCIES"
+yarn install
+
+echo "TRANSPILING"
+yarn compile
+
+echo "BUNDLING AND UPLOADING TO RIFFRAFF"
+yarn riffraff

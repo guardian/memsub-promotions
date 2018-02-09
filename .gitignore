@@ -9,7 +9,8 @@ target
 frontend/node_modules
 public/
 .DS_Store
-lambdas/MembershipSub-Promotions-to-PromoCode-View-Lambda.zip
-lambdas/packages/
-node_modules/
+lambdas/dist
+lambdas/node_modules
+lambdas/target
+lambdas/tools
 project/project/
