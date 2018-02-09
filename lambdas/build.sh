@@ -15,9 +15,9 @@ if [ ! -d "$YARN_LOCATION" ]; then
 	mkdir -p ${YARN_LOCATION}
 	cd ${YARN_LOCATION}/
 	wget -qO- https://github.com/yarnpkg/yarn/releases/download/v${YARN_VERSION}/yarn-v${YARN_VERSION}.tar.gz | tar zvx
-	cd ..
+	cd ../..
 fi
-PATH="$PATH:${YARN_LOCATION}/dist/bin/"
+export PATH="$PATH:${YARN_LOCATION}/dist/bin/"
 
 # Installing packages via yarn
 
