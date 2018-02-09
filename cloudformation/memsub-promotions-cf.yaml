@@ -166,7 +166,8 @@ Resources:
       Handler: MembershipSub-Promotions-to-PromoCode-View-Lambda.handler
       MemorySize: 128
       Role: !GetAtt [MembershipSubPromotionsLambdaRole, Arn]
-      Runtime: nodejs4.3
+      Runtime: nodejs6.10
+      Timeout: 10
   PromoCodeViewLambdaFunctionPROD:
     Condition: CreateProdResources
     Type: AWS::Lambda::Function
@@ -180,7 +181,8 @@ Resources:
       Handler: MembershipSub-Promotions-to-PromoCode-View-Lambda.handler
       MemorySize: 128
       Role: !GetAtt [MembershipSubPromotionsLambdaRole, Arn]
-      Runtime: nodejs4.3
+      Runtime: nodejs6.10
+      Timeout: 10
   PromoCodeViewLambdaEventSourceUAT:
     Condition: CreateProdResources
     Type: AWS::Lambda::EventSourceMapping
@@ -228,7 +230,8 @@ Resources:
       Handler: MembershipSub-PromoCode-View-Dynamo-to-Data-Lake.handler
       MemorySize: 128
       Role: !GetAtt [MembershipSubPromotionsLambdaRole, Arn]
-      Runtime: nodejs4.3
+      Runtime: nodejs6.10
+      Timeout: 10
   ServerRole:
     Type: AWS::IAM::Role
     Properties:
