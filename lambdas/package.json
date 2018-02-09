@@ -1,0 +1,25 @@
+{
+  "name": "MembershipSub-Promotions-to-PromoCode-View-Lambda",
+  "version": "0.0.1",
+  "description": "A lambda to create a view of the Promotions and Campaigns table keyed by the promo code.",
+  "main": "MembershipSub-Promotions-to-PromoCode-View-Lambda.js",
+  "isAwsLambda": true,
+  "cloudformation": false,
+  "projectName": "MemSub::Membership Admin::Promotions Tool Lambda",
+  "riffraffFile": "riff-raff.yaml",
+  "buildDir": "dist",
+  "devDependencies": {
+    "babel-cli": "^6.24.1",
+    "babel-core": "^6.24.1",
+    "babel-preset-env": "^1.4.0",
+    "node-riffraff-artefact": "^2.0.1"
+  },
+  "scripts": {
+    "riffraff-artefact": "./node_modules/.bin/riffraff-artefact",
+    "dist" : "yarn install --production --modules-folder dist/node_modules",
+    "compile": "babel src -d dist",
+    "riffraff": "VERBOSE=true ARTEFACT_PATH=$PWD yarn riffraff-artefact",
+    "clean":"rm -rf dist && rm -rf target"
+  },
+  "dependencies": {}
+}

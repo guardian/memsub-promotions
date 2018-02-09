@@ -1,0 +1,13 @@
+stacks:
+- membership
+regions:
+- eu-west-1
+deployments:
+  MembershipSub-Promotions-to-PromoCode-View-Lambda:
+    type: aws-lambda
+    parameters:
+      fileName: MembershipSub-Promotions-to-PromoCode-View-Lambda.zip
+      prefixStack: false
+      bucket: gu-promotions-tool-dist
+      functionNames:
+      - MembershipSub-Promotions-to-PromoCode-View-
