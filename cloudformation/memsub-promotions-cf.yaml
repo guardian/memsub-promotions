@@ -145,6 +145,7 @@ Resources:
           - Effect: Allow
             Action:
             - dynamodb:BatchWriteItem
+            - dynamodb:PutItem
             - dynamodb:Scan
             Resource: !FindInMap [StageVariables, !Ref 'Stage', DynamoDBTableViews]
           - Effect: Allow
