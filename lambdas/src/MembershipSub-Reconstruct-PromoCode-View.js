@@ -1,5 +1,10 @@
 'use strict';
 
+/*
+    This file can be uploaded to a Lambda function and used to do a full refresh of the MembershipSub-PromoCode-View-[STAGE] database.
+    You just have to run the index.handler function inside a Lambda whose name ends with -PROD or -UAT depending on what stage's MembershipSub-PromoCode-View- table you want to update.
+*/
+
 const fs = require('fs');
 const AWS = require('aws-sdk');
 
@@ -113,6 +118,12 @@ exports.local = (event, context, callback) => {
 };
 
 exports.handler = (event, context, callback) => {
+    /*
+        dynamodb-doc is not used here because the builders to collate campaigns and generate put requests
+        may need to work off  S3 DynamoDB local backup JSON files (above), which will contain the .S .L .N .M... type prefixes.
+        Using the local test  also helps with testing the builders so that you don't have to run the Lambda 100s of times.
+    */
+
     const ddb = new AWS.DynamoDB();
 
     const source = /PROD$/.test(context.functionName) ? 'PROD' : 'UAT';
@@ -120,15 +131,16 @@ exports.handler = (event, context, callback) => {
     const campaignsP = ddb.scan({ TableName: `MembershipSub-Campaigns-${source}`}).promise();
     const promotionsP = ddb.scan({ TableName: `MembershipSub-Promotions-${source}`}).promise();
 
-    campaignsP.then(campaigns => {
-        return promotionsP.then(promotions => {
+    Promise.all([campaignsP, promotionsP])
+        .then(results => {
+            const campaigns = results[0];
+            const promotions = results[1];
             console.log(`Got ${campaigns.Items.length} campaigns and ${promotions.Items.length} promotions from raw data sources`);
-            const putRequests = generatePutRequests(collateCampaigns(campaigns.Items), promotions.Items, `MembershipSub-PromoCode-View-TEST`);
+            const putRequests = generatePutRequests(collateCampaigns(campaigns.Items), promotions.Items, `MembershipSub-PromoCode-View-${source}`);
             const validatedPutRequests = putRequests.filter(putRequest => !!(putRequest && putRequest.Item));
             console.log(`Created ${putRequests.length} PutRequets. ${validatedPutRequests.length} are valid`);
             return validatedPutRequests;
         })
-    })
         .then(rapidWritePutRequestsIntoTable)
         .then(callback)
         .catch(callback);
