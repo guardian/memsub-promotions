@@ -1,19 +1,21 @@
 'use strict';
 
-var AWS = require('aws-sdk'),
-    DOC = require('dynamodb-doc');
-var docClient = new DOC.DynamoDB();
-var TOUCHPOINT_BACKEND = 'UAT';
-var campaignDetailsByCampaignCode = {};
-var putRequestsByPromoCode = {};
-var promoCodesToUpdate = [];
+const AWS = require('aws-sdk');
+const DOC = require('dynamodb-doc');
+
+const ddb = new AWS.DynamoDB();
+const docClient = new DOC.DynamoDB(ddb);
+const campaignDetailsByCampaignCode = {};
+const putRequestsByPromoCode = {};
+
+let promoCodesToUpdate = [];
 
 function handleEventRecords(eventRecords) {
     if (!(eventRecords && eventRecords.length > 0)) { return; }
 
     eventRecords.forEach((record) => {
         if (!record.dynamodb) { return; }
-        var newImage = record.dynamodb.NewImage;
+        let newImage = record.dynamodb.NewImage;
 
         Object.keys(newImage.codes.M)
         .forEach((channelName) => {
@@ -27,14 +29,23 @@ function handleEventRecords(eventRecords) {
 function generatePutRequestFromDynamoPromoCodeObject(promoCodeObj, newImage, channelName) {
     if (!(promoCodeObj && newImage.campaignCode && newImage.name)) { return; }
 
-    var promoCode = promoCodeObj.S;
+    const promoCode = promoCodeObj.S;
     if (!promoCode) { return; }
-    var campaignCode = newImage.campaignCode.S;
-    var promotionName = newImage.name.S;
+    const campaignCode = newImage.campaignCode.S;
+    const promotionName = newImage.name.S;
     if (!promotionName) { return; }
     if (!campaignCode) { return; }
-    var campaignData = campaignDetailsByCampaignCode[campaignCode];
+    const campaignData = campaignDetailsByCampaignCode[campaignCode];
     if (!campaignData) { return; }
+    const promotionType = newImage.promotionType;
+    if (!(promotionType && promotionType.M && promotionType.M.name)) { return; }
+    const promotionTypeName = promotionType.M.name.S;
+    let discountPercent = 0;
+    let discountDurationMonths = 0;
+    if (promotionTypeName === 'percent_discount') {
+        discountPercent = parseInt(promotionType.M.amount.N, 10);
+        discountDurationMonths = parseInt(promotionType.M.durationMonths.N, 10);
+    }
 
     putRequestsByPromoCode[promoCode] = {
         PutRequest: {
@@ -44,40 +55,44 @@ function generatePutRequestFromDynamoPromoCodeObject(promoCodeObj, newImage, cha
                 campaign_code: campaignCode,
                 promotion_name: promotionName,
                 campaign_name: campaignData.campaign_name,
-                product_family: campaignData.product_family
+                product_family: campaignData.product_family,
+                promotion_type: promotionTypeName,
+                discount_percent: discountPercent,
+                discount_months: discountDurationMonths
             }
         }
     };
 }
 
-function chunkedUpdateOfPromoCodes(callback) {
-    var i, j, temparray, chunk = 25;
+function chunkedUpdateOfPromoCodes(callback, TOUCHPOINT_BACKEND) {
+    let i, j, temparray = [];
+    const chunk = 25;
 
     promoCodesToUpdate = Object.keys(putRequestsByPromoCode);
 
     for (i = 0, j = promoCodesToUpdate.length; i < j; i += chunk) {
         temparray = promoCodesToUpdate.slice(i, i + chunk);
         if (!temparray || temparray.length === 0) continue;
-        batchWriteRequestsForCodes(temparray, callback);
+        batchWriteRequestsForCodes(temparray, callback, TOUCHPOINT_BACKEND);
     }
 }
 
-function batchWriteRequestsForCodes(promoCodes, callback) {
-    var putRequestsAsArray = [];
+function batchWriteRequestsForCodes(promoCodes, callback, TOUCHPOINT_BACKEND) {
+    const putRequestsAsArray = [];
 
     promoCodes.forEach((key) => putRequestsAsArray.push(putRequestsByPromoCode[key]));
 
-    console.log(`Putting records into table: MembershipSub-PromoCode-View-${TOUCHPOINT_BACKEND} = `, JSON.stringify(putRequestsAsArray, true));
+    console.log(`Putting records into table: MembershipSub-PromoCode-View-${TOUCHPOINT_BACKEND} = `, JSON.stringify(putRequestsAsArray));
 
-    var RequestItemsObj = {};
+    const RequestItemsObj = {};
     RequestItemsObj['MembershipSub-PromoCode-View-' + TOUCHPOINT_BACKEND] = putRequestsAsArray;
 
     docClient.batchWriteItem({
         RequestItems: RequestItemsObj
     })
     .promise()
-    .then((data) => {
-            promoCodes.forEach((key) => delete putRequestsByPromoCode[key]);
+    .then(_ => {
+        promoCodes.forEach((key) => delete putRequestsByPromoCode[key]);
         console.log(`Updated ${putRequestsAsArray.length} of ${promoCodesToUpdate.length} promo code views.`);
         attemptToComplete(callback);
     })
@@ -91,14 +106,11 @@ function attemptToComplete(callback) {
     if (Object.keys(putRequestsByPromoCode).length > 0) { return; }
 
     callback(null, `Updated all ${promoCodesToUpdate.length} promo code views.`);
-
-    // Not needed in node 4.3 EV
-    // context.done('success', promoCodesToUpdate.length);
 }
 
 exports.handler = (event, context, callback) => {
 
-    TOUCHPOINT_BACKEND = /PROD$/.test(context.functionName) ? 'PROD' : 'UAT';
+    const TOUCHPOINT_BACKEND = /PROD$/.test(context.functionName) ? 'PROD' : 'UAT';
 
     docClient.scan({
         TableName: 'MembershipSub-Campaigns-' + TOUCHPOINT_BACKEND
@@ -115,7 +127,7 @@ exports.handler = (event, context, callback) => {
 
         handleEventRecords(event.Records);
 
-        chunkedUpdateOfPromoCodes(callback);
+        chunkedUpdateOfPromoCodes(callback, TOUCHPOINT_BACKEND);
 
         attemptToComplete(callback);
     })
