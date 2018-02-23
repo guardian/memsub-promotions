@@ -25,8 +25,6 @@ Parameters:
     - t2.micro
     - t2.small
     - t2.medium
-    - m3.medium
-    - m3.large
     ConstraintDescription: must be a valid EC2 instance type.
   MaxInstances:
     Description: Maximum number of instances. This should be (at least) double the
@@ -275,6 +273,8 @@ Resources:
             - cloudwatch:*
             - logs:*
             Resource: '*'
+      ManagedPolicyArns:
+      - 'arn:aws:iam::aws:policy/service-role/AmazonEC2RoleforSSM'
   InstanceProfile:
     Type: AWS::IAM::InstanceProfile
     Properties:
@@ -348,12 +348,11 @@ Resources:
           !Sub
             - |
               #!/bin/bash -ev
-              /opt/features/ssh-keys/initialise-keys-and-cron-job.sh -l -b github-team-keys -t ${GithubTeamName} || true
               CONF_DIR=/etc/promotions-tool
-              aws --region ${AWS::Region} s3 cp s3://gu-promotions-tool-dist/${Stack}/${Stage}/${App}/promotions-tool_1.0-SNAPSHOT_all.deb /tmp
+              aws s3 cp s3://gu-promotions-tool-dist/${Stack}/${Stage}/${App}/promotions-tool_1.0-SNAPSHOT_all.deb /tmp
               dpkg -i /tmp/promotions-tool_1.0-SNAPSHOT_all.deb
               mkdir -p /etc/gu
-              aws --region ${AWS::Region} s3 cp s3://gu-promotions-tool-private/${Stage}/memsub-promotions-keys.conf /etc/gu
+              aws s3 cp s3://gu-promotions-tool-private/${Stage}/memsub-promotions-keys.conf /etc/gu
               chown promotions-tool /etc/gu/memsub-promotions-keys.conf
               chmod 0600 /etc/gu/memsub-promotions-keys.conf
               wget https://s3.amazonaws.com/aws-cloudwatch/downloads/latest/awslogs-agent-setup.py
@@ -400,6 +399,11 @@ Resources:
         FromPort: '9000'
         ToPort: '9000'
         SourceSecurityGroupId: !Ref 'LoadBalancerSecurityGroup'
+      SecurityGroupEgress:
+      - IpProtocol: tcp
+        FromPort: '443'
+        ToPort: '443'
+        CidrIp: 0.0.0.0/0
   TopicSendEmail:
     Type: AWS::SNS::Topic
     Properties:
