@@ -9,6 +9,8 @@ case class PaperProducts(
 )
 
 case class PaperPlans(
+  saturday: ProductRatePlanId,
+  saturdayplus: ProductRatePlanId,
   sunday: ProductRatePlanId,
   sundayplus: ProductRatePlanId,
   weekend: ProductRatePlanId,
@@ -22,6 +24,8 @@ case class PaperPlans(
 object PaperProducts {
 
   def plansFor(config: Config, product: String) = PaperPlans(
+    saturday = ProductRatePlanId(config.getString(s"$product.saturday")),
+    saturdayplus = ProductRatePlanId(config.getString(s"$product.saturdayplus")),
     sunday = ProductRatePlanId(config.getString(s"$product.sunday")),
     sundayplus = ProductRatePlanId(config.getString(s"$product.sundayplus")),
     weekend = ProductRatePlanId(config.getString(s"$product.weekend")),
