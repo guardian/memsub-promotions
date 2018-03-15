@@ -49,6 +49,10 @@ md-tabs {
   cursor: pointer;
 }
 
+.md-menu-content {
+  max-height: none;
+}
+
 md-toolbar {
   cursor: pointer;
   transition: background-color 0.5s;
