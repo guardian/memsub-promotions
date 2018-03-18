@@ -1,0 +1,253 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: Membership/Subscription promotions tool lambda functions
+Parameters:
+  DEVPromotionsTableStreamARN:
+    Description: ARN of the MembershipSub-Promotions-DEV DynamoDB stream to trigger
+      the lambda function which updates the MembershipSub-PromoCode-View-DEV table
+    Type: String
+    Default: ''
+  UATPromotionsTableStreamARN:
+    Description: ARN of the MembershipSub-Promotions-UAT DynamoDB stream to trigger
+      the lambda function which updates the MembershipSub-PromoCode-View-UAT table
+    Type: String
+    Default: ''
+  PRODPromotionsTableStreamARN:
+    Description: ARN of the MembershipSub-Promotions-PROD DynamoDB stream to trigger
+      the lambda function which updates the MembershipSub-PromoCode-View-PROD table
+    Type: String
+    Default: ''
+Resources:
+  MembershipSubPromotionsToolRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+        - Effect: Allow
+          Principal:
+            Service:
+            - lambda.amazonaws.com
+          Action:
+          - sts:AssumeRole
+      Path: /
+      Policies:
+      - PolicyName: MembershipSub-Promotions-Tool-Policy
+        PolicyDocument:
+          Version: '2012-10-17'
+          Statement:
+          - Effect: Allow
+            Action:
+            - lambda:InvokeFunction
+            - logs:CreateLogGroup
+            - logs:CreateLogStream
+            - logs:PutLogEvents
+            Resource: '*'
+          - Effect: Allow
+            Action:
+            - dynamodb:GetRecords
+            - dynamodb:GetShardIterator
+            - dynamodb:DescribeStream
+            - dynamodb:ListStreams
+            - dynamodb:Scan
+            Resource:
+            - arn:aws:dynamodb:*:*:table/MembershipSub-Promotions-*
+            - arn:aws:dynamodb:*:*:table/MembershipSub-Campaigns-*
+          - Effect: Allow
+            Action:
+            - dynamodb:BatchWriteItem
+            - dynamodb:PutItem
+            Resource:
+            - arn:aws:dynamodb:*:*:table/MembershipSub-PromoCode-View-PROD
+            - arn:aws:dynamodb:*:*:table/MembershipSub-PromoCode-View-UAT
+            - arn:aws:dynamodb:*:*:table/MembershipSub-PromoCode-View-DEV
+  MembershipSubPromotionsDataRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+        - Effect: Allow
+          Principal:
+            Service:
+            - lambda.amazonaws.com
+          Action:
+          - sts:AssumeRole
+      Path: /
+      Policies:
+      - PolicyName: MembershipSub-Promotions-Data-Policy
+        PolicyDocument:
+          Version: '2012-10-17'
+          Statement:
+          - Effect: Allow
+            Action:
+            - lambda:InvokeFunction
+            - logs:CreateLogGroup
+            - logs:CreateLogStream
+            - logs:PutLogEvents
+            Resource: '*'
+          - Effect: Allow
+            Action:
+            - dynamodb:GetRecords
+            - dynamodb:Scan
+            Resource:
+            - arn:aws:dynamodb:*:*:table/MembershipSub-PromoCode-View-PROD
+            - arn:aws:dynamodb:*:*:table/MembershipSub-PromoCode-View-UAT
+            - arn:aws:dynamodb:*:*:table/MembershipSub-PromoCode-View-DEV
+          - Effect: Allow
+            Action:
+            - s3:PutObject
+            - s3:PutObjectAcl
+            Resource:
+            - arn:aws:s3:::ophan-raw-membership-promo-code-view/*
+  PromoCodeViewLambdaFunctionDEV:
+    Type: AWS::Lambda::Function
+    Properties:
+      Code:
+        S3Bucket: gu-promotions-tool-dist
+        S3Key: membership/PROD/MembershipSub-Promotions-PromoCode-View/MembershipSub-Promotions-PromoCode-View.zip
+      Description: An Amazon DynamoDB trigger that creates a view of data associated
+        with a particular promo code for the data pipeline to collect.
+      FunctionName: MembershipSub-Promotions-to-PromoCode-View-DEV
+      Handler: MembershipSub-Promotions-to-PromoCode-View-Lambda.handler
+      MemorySize: 128
+      Role: !GetAtt [MembershipSubPromotionsToolRole, Arn]
+      Runtime: nodejs6.10
+      Timeout: 10
+  PromoCodeViewLambdaFunctionUAT:
+    Type: AWS::Lambda::Function
+    Properties:
+      Code:
+        S3Bucket: gu-promotions-tool-dist
+        S3Key: membership/PROD/MembershipSub-Promotions-PromoCode-View/MembershipSub-Promotions-PromoCode-View.zip
+      Description: An Amazon DynamoDB trigger that creates a view of data associated
+        with a particular promo code for the data pipeline to collect.
+      FunctionName: MembershipSub-Promotions-to-PromoCode-View-UAT
+      Handler: MembershipSub-Promotions-to-PromoCode-View-Lambda.handler
+      MemorySize: 128
+      Role: !GetAtt [MembershipSubPromotionsToolRole, Arn]
+      Runtime: nodejs6.10
+      Timeout: 10
+  PromoCodeViewLambdaFunctionPROD:
+    Type: AWS::Lambda::Function
+    Properties:
+      Code:
+        S3Bucket: gu-promotions-tool-dist
+        S3Key: membership/PROD/MembershipSub-Promotions-PromoCode-View/MembershipSub-Promotions-PromoCode-View.zip
+      Description: An Amazon DynamoDB trigger that creates a view of data associated
+        with a particular promo code for the data pipeline to collect.
+      FunctionName: MembershipSub-Promotions-to-PromoCode-View-PROD
+      Handler: MembershipSub-Promotions-to-PromoCode-View-Lambda.handler
+      MemorySize: 128
+      Role: !GetAtt [MembershipSubPromotionsToolRole, Arn]
+      Runtime: nodejs6.10
+      Timeout: 10
+  PromoCodeViewLambdaEventSourceDEV:
+    Type: AWS::Lambda::EventSourceMapping
+    Properties:
+      BatchSize: 1
+      Enabled: true
+      EventSourceArn: !Ref 'DEVPromotionsTableStreamARN'
+      FunctionName: !Ref 'PromoCodeViewLambdaFunctionDEV'
+      StartingPosition: TRIM_HORIZON
+  PromoCodeViewLambdaEventSourceUAT:
+    Type: AWS::Lambda::EventSourceMapping
+    Properties:
+      BatchSize: 1
+      Enabled: true
+      EventSourceArn: !Ref 'UATPromotionsTableStreamARN'
+      FunctionName: !Ref 'PromoCodeViewLambdaFunctionUAT'
+      StartingPosition: TRIM_HORIZON
+  PromoCodeViewLambdaEventSourcePROD:
+    Type: AWS::Lambda::EventSourceMapping
+    Properties:
+      BatchSize: 1
+      Enabled: true
+      EventSourceArn: !Ref 'PRODPromotionsTableStreamARN'
+      FunctionName: !Ref 'PromoCodeViewLambdaFunctionPROD'
+      StartingPosition: TRIM_HORIZON
+
+  PromoCodeViewDataLakeLambdaFunctionPROD:
+    Type: AWS::Lambda::Function
+    Properties:
+      Code:
+        S3Bucket: gu-promotions-tool-dist
+        S3Key: membership/PROD/MembershipSub-Promotions-PromoCode-View/MembershipSub-Promotions-PromoCode-View.zip
+      Description: A Lambda function to backup the PromoCode-View Dynamo table to the Data Lake
+      FunctionName: MembershipSub-PromoCode-View-Dynamo-to-Data-Lake-PROD
+      Handler: MembershipSub-PromoCode-View-Dynamo-to-Data-Lake.handler
+      MemorySize: 128
+      Role: !GetAtt [MembershipSubPromotionsDataRole, Arn]
+      Runtime: nodejs6.10
+      Timeout: 10
+
+  SalesforceLambdaKMSKey:
+    Type: AWS::KMS::Key
+    Properties:
+      Description: !Sub Used by the MembershipSub-Promotions Salesforce Lambda to encrypt and decrypt any environment variables
+      KeyPolicy:
+        Version: '2012-10-17'
+        Id: !Sub MembershipSub-Promotions-Salesforce-Lambda-kms-key-policy
+        Statement:
+        - Sid: Enable IAM User Permissions
+          Effect: Allow
+          Principal:
+            AWS: !Sub arn:aws:iam::${AWS::AccountId}:root
+          Action: kms:*
+          Resource: "*"
+        - Sid: Allow use of the key
+          Effect: Allow
+          Principal:
+            AWS: !GetAtt [MembershipSubPromotionsDataRole, Arn]
+          Action:
+          - kms:Encrypt
+          - kms:Decrypt
+          - kms:ReEncrypt*
+          - kms:GenerateDataKey*
+          - kms:DescribeKey
+          Resource: "*"
+  SalesforceLambdaKMSKeyAlias:
+    Type: AWS::KMS::Alias
+    Properties:
+      AliasName: !Sub alias/MembershipSub-Promotions-Salesforce-Lambda-kms-key
+      TargetKeyId: !Ref 'SalesforceLambdaKMSKey'
+
+  PromoCodeViewSalesforceLambdaFunctionDEV:
+    Type: AWS::Lambda::Function
+    Properties:
+      Code:
+        S3Bucket: gu-promotions-tool-dist
+        S3Key: membership/PROD/MembershipSub-Promotions-PromoCode-View/MembershipSub-Promotions-PromoCode-View.zip
+      Description: A Lambda function to replicate the MembershipSub-PromoCode-View-DEV Dynamo table to Salesforce
+      FunctionName: MembershipSub-Promotions-to-Salesforce-DEV
+      Handler: MembershipSub-Promotions-to-PromoCode-View-Lambda.handler
+      MemorySize: 128
+      Role: !GetAtt [MembershipSubPromotionsDataRole, Arn]
+      Runtime: nodejs6.10
+      Timeout: 10
+      KmsKeyArn: !GetAtt SalesforceLambdaKMSKey.Arn
+  PromoCodeViewSalesforceLambdaFunctionUAT:
+    Type: AWS::Lambda::Function
+    Properties:
+      Code:
+        S3Bucket: gu-promotions-tool-dist
+        S3Key: membership/PROD/MembershipSub-Promotions-PromoCode-View/MembershipSub-Promotions-PromoCode-View.zip
+      Description: A Lambda function to replicate the MembershipSub-PromoCode-View-UAT Dynamo table to Salesforce
+      FunctionName: MembershipSub-Promotions-to-Salesforce-UAT
+      Handler: MembershipSub-Promotions-to-PromoCode-View-Lambda.handler
+      MemorySize: 128
+      Role: !GetAtt [MembershipSubPromotionsDataRole, Arn]
+      Runtime: nodejs6.10
+      Timeout: 10
+      KmsKeyArn: !GetAtt SalesforceLambdaKMSKey.Arn
+  PromoCodeViewSalesforceLambdaFunctionPROD:
+    Type: AWS::Lambda::Function
+    Properties:
+      Code:
+        S3Bucket: gu-promotions-tool-dist
+        S3Key: membership/PROD/MembershipSub-Promotions-PromoCode-View/MembershipSub-Promotions-PromoCode-View.zip
+      Description: A Lambda function to replicate the MembershipSub-PromoCode-View-PROD Dynamo table to Salesforce
+      FunctionName: MembershipSub-Promotions-to-Salesforce-PROD
+      Handler: MembershipSub-PromoCode-View-Dynamo-to-Salesforce.handler
+      MemorySize: 128
+      Role: !GetAtt [MembershipSubPromotionsDataRole, Arn]
+      Runtime: nodejs6.10
+      Timeout: 10
+      KmsKeyArn: !GetAtt SalesforceLambdaKMSKey.Arn
