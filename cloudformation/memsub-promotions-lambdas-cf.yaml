@@ -36,11 +36,11 @@ Resources:
           Statement:
           - Effect: Allow
             Action:
-            - lambda:InvokeFunction
             - logs:CreateLogGroup
             - logs:CreateLogStream
             - logs:PutLogEvents
-            Resource: '*'
+            Resource:
+            - arn:aws:logs:*:*:log-group:/aws/lambda/MembershipSub-Promotions-to-PromoCode-View-*
           - Effect: Allow
             Action:
             - dynamodb:GetRecords
@@ -78,11 +78,12 @@ Resources:
           Statement:
           - Effect: Allow
             Action:
-            - lambda:InvokeFunction
             - logs:CreateLogGroup
             - logs:CreateLogStream
             - logs:PutLogEvents
-            Resource: '*'
+            Resource:
+            - arn:aws:logs:*:*:log-group:/aws/lambda/MembershipSub-PromoCode-View-Dynamo-to-Data-Lake-*
+            - arn:aws:logs:*:*:log-group:/aws/lambda/MembershipSub-PromoCode-View-Dynamo-to-Salesforce-*
           - Effect: Allow
             Action:
             - dynamodb:GetRecords
@@ -216,8 +217,8 @@ Resources:
         S3Bucket: gu-promotions-tool-dist
         S3Key: membership/PROD/MembershipSub-Promotions-PromoCode-View/MembershipSub-Promotions-PromoCode-View.zip
       Description: A Lambda function to replicate the MembershipSub-PromoCode-View-DEV Dynamo table to Salesforce
-      FunctionName: MembershipSub-Promotions-to-Salesforce-DEV
-      Handler: MembershipSub-Promotions-to-PromoCode-View-Lambda.handler
+      FunctionName: MembershipSub-PromoCode-View-Dynamo-to-Salesforce-DEV
+      Handler: MembershipSub-PromoCode-View-Dynamo-to-Salesforce.handler
       MemorySize: 128
       Role: !GetAtt [MembershipSubPromotionsDataRole, Arn]
       Runtime: nodejs6.10
@@ -230,8 +231,8 @@ Resources:
         S3Bucket: gu-promotions-tool-dist
         S3Key: membership/PROD/MembershipSub-Promotions-PromoCode-View/MembershipSub-Promotions-PromoCode-View.zip
       Description: A Lambda function to replicate the MembershipSub-PromoCode-View-UAT Dynamo table to Salesforce
-      FunctionName: MembershipSub-Promotions-to-Salesforce-UAT
-      Handler: MembershipSub-Promotions-to-PromoCode-View-Lambda.handler
+      FunctionName: MembershipSub-PromoCode-View-Dynamo-to-Salesforce-UAT
+      Handler: MembershipSub-PromoCode-View-Dynamo-to-Salesforce.handler
       MemorySize: 128
       Role: !GetAtt [MembershipSubPromotionsDataRole, Arn]
       Runtime: nodejs6.10
@@ -244,7 +245,7 @@ Resources:
         S3Bucket: gu-promotions-tool-dist
         S3Key: membership/PROD/MembershipSub-Promotions-PromoCode-View/MembershipSub-Promotions-PromoCode-View.zip
       Description: A Lambda function to replicate the MembershipSub-PromoCode-View-PROD Dynamo table to Salesforce
-      FunctionName: MembershipSub-Promotions-to-Salesforce-PROD
+      FunctionName: MembershipSub-PromoCode-View-Dynamo-to-Salesforce-PROD
       Handler: MembershipSub-PromoCode-View-Dynamo-to-Salesforce.handler
       MemorySize: 128
       Role: !GetAtt [MembershipSubPromotionsDataRole, Arn]
