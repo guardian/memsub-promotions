@@ -15,8 +15,9 @@ function enquote(anArray) {
 }
 
 function generateCSVPromise(data) {
-    const fieldsToExport = ['Name','Promotion_Name__c','Campaign_Name__c','Channel_Name__c','Product_Family__c','Promotion_Type__c','Discount_Percent__c','Discount_Months__c'];
-    const CSVData = [enquote(fieldsToExport)].concat(data.Items.map(record => enquote(fieldsToExport.map(field => record[field]))));
+    const sfFieldNames = ['Name', 'Promotion_Name__c', 'Campaign_Name__c', 'Channel_Name__c', 'Product_Family__c', 'Promotion_Type__c', 'Discount_Percent__c', 'Discount_Months__c'];
+    const fieldsToExport = ['promo_code', 'promotion_name', 'campaign_name', 'channel_name', 'product_family', 'promotion_type', 'discount_percent', 'discount_months'];
+    const CSVData = [enquote(sfFieldNames)].concat(data.Items.map(record => enquote(fieldsToExport.map(field => record[field]))));
     return Promise.resolve(CSVData.join('\n'));
 }
 
