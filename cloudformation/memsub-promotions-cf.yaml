@@ -36,8 +36,8 @@ Parameters:
   AmiId:
     Description: Custom AMI to use for instances
     Type: String
-  AlarmEmailAddress:
-    Description: Contact email for alarms
+  AlarmTopicARN:
+    Description: ARN of the SNS topic which the no healthy hosts CloudWatch alarm should report to
     Type: String
   InternalCidrIp:
     Description: Internal network CIDR IP
@@ -49,7 +49,6 @@ Parameters:
   SslArn:
     Description: SSL certificate ARN
     Type: String
-    Default: ''
   App:
     Description: Application name
     Type: String
@@ -237,13 +236,6 @@ Resources:
         FromPort: '443'
         ToPort: '443'
         CidrIp: 0.0.0.0/0
-  TopicSendEmail:
-    Type: AWS::SNS::Topic
-    Properties:
-      DisplayName: SendEmailToReaderRevenueDev
-      Subscription:
-      - Endpoint: !Ref 'AlarmEmailAddress'
-        Protocol: email
   alarmNoHealthyHosts:
     Type: AWS::CloudWatch::Alarm
     Properties:
@@ -257,9 +249,9 @@ Resources:
       Statistic: Average
       Threshold: !Ref 'MinInstances'
       AlarmActions:
-      - !Ref 'TopicSendEmail'
+      - !Ref 'AlarmTopicARN'
       InsufficientDataActions:
-      - !Ref 'TopicSendEmail'
+      - !Ref 'AlarmTopicARN'
       Dimensions:
       - Name: LoadBalancerName
         Value: !Ref 'LoadBalancer'
