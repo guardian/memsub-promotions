@@ -25,8 +25,15 @@ function getLoginDataFromEnvironment() {
     const loginData = { 'grant_type': 'password' }
     return decryptEnvironmentVariable('client_id')(loginData)
         .then(decryptEnvironmentVariable('client_secret'))
-        .then(decryptEnvironmentVariable('username'))
+        .then(plaintextEnvironmentVariable('username'))
         .then(decryptEnvironmentVariable('password'));
+}
+
+function plaintextEnvironmentVariable(fieldName) {
+    return function (collection) {
+        collection[fieldName] = process.env[fieldName];
+        return Promise.resolve(collection);
+    };
 }
 
 function decryptEnvironmentVariable(fieldName) {
