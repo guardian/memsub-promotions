@@ -171,7 +171,6 @@ Resources:
       ImageId: !Ref 'AmiId'
       SecurityGroups:
       - !Ref 'InstanceSecurityGroup'
-      - !Ref 'SshAccessSecurityGroup'
       - !Ref 'VulnerabilityScanningSecurityGroup'
       InstanceType: !Ref 'InstanceType'
       AssociatePublicIpAddress: 'True'
@@ -196,21 +195,11 @@ Resources:
               systemctl enable awslogs
               systemctl start awslogs
             - {}
-  SshAccessSecurityGroup:
-    Type: AWS::EC2::SecurityGroup
-    Properties:
-      VpcId: !Ref 'VpcId'
-      GroupDescription: Open up SSH access
-      SecurityGroupIngress:
-      - IpProtocol: tcp
-        FromPort: '22'
-        ToPort: '22'
-        CidrIp: !Ref 'InternalCidrIp'
   LoadBalancerSecurityGroup:
     Type: AWS::EC2::SecurityGroup
     Properties:
       VpcId: !Ref 'VpcId'
-      GroupDescription: Open up HTTP  access to load balancer
+      GroupDescription: Open up HTTPS access to load balancer
       SecurityGroupIngress:
       - IpProtocol: tcp
         FromPort: '443'
@@ -225,8 +214,12 @@ Resources:
     Type: AWS::EC2::SecurityGroup
     Properties:
       VpcId: !Ref 'VpcId'
-      GroupDescription: Open up HTTP access to load balancer
+      GroupDescription: Open up HTTP access to load balancer, SSH to office
       SecurityGroupIngress:
+      - IpProtocol: tcp
+        FromPort: '22'
+        ToPort: '22'
+        CidrIp: !Ref 'InternalCidrIp'
       - IpProtocol: tcp
         FromPort: '9000'
         ToPort: '9000'
