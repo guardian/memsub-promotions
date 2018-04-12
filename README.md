@@ -46,7 +46,7 @@ of the `memsub-promotions` project:
 
 1. Download our private keys from the gu-promotions-tool-private S3 bucket. If you have the AWS CLI set up you can run:
    ```
-   aws s3 cp s3://gu-promotions-tool-private/DEV/memsub-promotions-keys.conf /etc/gu  --profile membership
+   aws s3 cp s3://gu-reader-revenue-private/membership/promotions-tool/DEV/memsub-promotions-keys.conf /etc/gu  --profile membership
    ```
 
 1. Install and compile the frontend resources
