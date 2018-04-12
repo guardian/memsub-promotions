@@ -76,7 +76,7 @@ Resources:
           Statement:
           - Effect: Allow
             Action: s3:GetObject
-            Resource: !Sub 'arn:aws:s3:::gu-promotions-tool-private/${Stage}/*'
+            Resource: !Sub arn:aws:s3:::gu-reader-revenue-private/${Stack}/${App}/${Stage}/*
           - Effect: Allow
             Action: s3:GetObject
             Resource: 'arn:aws:s3:::gu-promotions-tool-dist/*'
@@ -107,7 +107,7 @@ Resources:
             - logs:*
             Resource: '*'
       ManagedPolicyArns:
-      - 'arn:aws:iam::aws:policy/service-role/AmazonEC2RoleforSSM'
+      - !Sub arn:aws:iam::${AWS::AccountId}:policy/guardian-ec2-role-for-ssm
   InstanceProfile:
     Type: AWS::IAM::InstanceProfile
     Properties:
@@ -184,7 +184,7 @@ Resources:
               aws s3 cp s3://gu-promotions-tool-dist/${Stack}/${Stage}/${App}/promotions-tool_1.0-SNAPSHOT_all.deb /tmp
               dpkg -i /tmp/promotions-tool_1.0-SNAPSHOT_all.deb
               mkdir -p /etc/gu
-              aws s3 cp s3://gu-promotions-tool-private/${Stage}/memsub-promotions-keys.conf /etc/gu
+              aws s3 cp s3://gu-reader-revenue-private/${Stack}/${App}/${Stage}/memsub-promotions-keys.conf /etc/gu
               chown promotions-tool /etc/gu/memsub-promotions-keys.conf
               chmod 0600 /etc/gu/memsub-promotions-keys.conf
               wget https://s3.amazonaws.com/aws-cloudwatch/downloads/latest/awslogs-agent-setup.py
