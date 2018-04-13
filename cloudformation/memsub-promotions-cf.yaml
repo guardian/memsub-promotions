@@ -88,7 +88,9 @@ Resources:
       - PolicyName: root
         PolicyDocument:
           Statement:
-          - Effect: Deny # Explicitly deny access to all S3 resources except for those defined in ReadableS3Resources
+          # Explicitly deny access to all S3 resources except for those defined in ReadableS3Resources
+          # https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_evaluation-logic.html#policy-eval-denyallow
+          - Effect: Deny
             Action: s3:*
             NotResource: !FindInMap [StageMap, !Ref Stage, ReadableS3Resources]
           - Effect: Allow
