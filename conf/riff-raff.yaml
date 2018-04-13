@@ -9,6 +9,7 @@ deployments:
         Recipe: xenial-membership
         AmigoStage: PROD
       amiParameter: AmiId
+      amiEncrypted: true
   promotions-tool:
     type: autoscaling
     dependencies: [ami]
