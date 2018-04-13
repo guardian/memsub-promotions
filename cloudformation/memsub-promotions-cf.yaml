@@ -57,6 +57,12 @@ Parameters:
     Description: Security group that grants access to the account's Vulnerability
       Scanner
     Type: AWS::EC2::SecurityGroup::Id
+  ReadableS3Resources:
+    Description: List of S3 resources that this app should be allowed to read
+    Type: CommaDelimitedList
+    AllowedValues:
+    - arn:aws:s3:::gu-reader-revenue-private/membership/promotions-tool/PROD/*,arn:aws:s3:::gu-promotions-tool-dist/*,arn:aws:s3:::membership-private/membership_directory_cert.p12
+    - arn:aws:s3:::gu-reader-revenue-private/membership/promotions-tool/CODE/*,arn:aws:s3:::gu-promotions-tool-dist/*,arn:aws:s3:::membership-private/membership_directory_cert.p12
 Resources:
   ServerRole:
     Type: AWS::IAM::Role
@@ -74,15 +80,12 @@ Resources:
       - PolicyName: root
         PolicyDocument:
           Statement:
+          - Effect: Deny # Explicitly deny access to all S3 resources except for those defined in ReadableS3Resources
+            Action: s3:*
+            NotResource: !Ref ReadableS3Resources
           - Effect: Allow
             Action: s3:GetObject
-            Resource: !Sub arn:aws:s3:::gu-reader-revenue-private/${Stack}/${App}/${Stage}/*
-          - Effect: Allow
-            Action: s3:GetObject
-            Resource: 'arn:aws:s3:::gu-promotions-tool-dist/*'
-          - Effect: Allow
-            Action: s3:GetObject
-            Resource: 'arn:aws:s3:::membership-private/membership_directory_cert.p12'
+            Resource: !Ref ReadableS3Resources
           - Effect: Allow
             Action: ec2:DescribeTags
             Resource: '*'
