@@ -51,12 +51,13 @@ libraryDependencies ++= Seq(
   ws,
   "org.scalaz" %% "scalaz-core" % "7.1.3",
   "com.gu" %% "membership-common" % "0.379",
-  "com.gu" %% "memsub-common-play-auth" % "0.9",
+  "com.gu" %% "memsub-common-play-auth" % "0.7",
   "com.softwaremill.macwire" %% "macros" % "2.2.2" % "provided",
   "com.softwaremill.macwire" %% "util" % "2.2.2",
   "com.softwaremill.macwire" %% "proxy" % "2.2.2",
   "com.fasterxml.jackson.core" % "jackson-databind" % "2.8.11.1",
   "io.netty" % "netty" % "3.10.3.Final",
+  "ch.qos.logback" % "logback-core" % "1.2.0",
   "org.scalatestplus.play" %% "scalatestplus-play" % "1.5.1" % Test
 )
 
