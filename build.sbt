@@ -57,7 +57,7 @@ libraryDependencies ++= Seq(
   "com.softwaremill.macwire" %% "proxy" % "2.2.2",
   "com.fasterxml.jackson.core" % "jackson-databind" % "2.8.11.1",
   "io.netty" % "netty" % "3.10.3.Final",
-  "ch.qos.logback" % "logback-core" % "1.2.0",
+  "ch.qos.logback" % "logback-classic" % "1.2.0",
   "org.scalatestplus.play" %% "scalatestplus-play" % "1.5.1" % Test
 )
 
