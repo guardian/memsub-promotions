@@ -31,7 +31,14 @@ class GoogleAuthAction(config: Config)(implicit ec: ExecutionContext, materializ
 
   override implicit def wsClient: WSClient = AhcWSClient()
 
+  /**
+    * The target that should be redirected to if login fails
+    */
   override val failureRedirectTarget: Call = Call("", "")
+
+  /**
+    * The target that should be redirected to if no redirect URL is provided (generally `home`)
+    */
   override val defaultRedirectTarget: Call = Call("", "")
 }
 
