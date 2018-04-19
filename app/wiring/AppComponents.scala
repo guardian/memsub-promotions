@@ -9,16 +9,23 @@ import com.typesafe.config.{Config, ConfigFactory}
 import com.softwaremill.macwire._
 import conf.{CatalogService, PaperPlans, PaperProducts, WeeklyPlans}
 import controllers._
+import play.api.libs.ws.WSClient
 import play.api.libs.ws.ahc.AhcWSComponents
 import play.api.routing.Router
 import wiring.AppComponents.Stage
 import router.Routes
+import play.api.libs.ws.ahc.AhcWSClient
+import scala.concurrent.ExecutionContext
+
 
 class AppComponents(private val stage: Stage, c: BuiltInComponents with AhcWSComponents) {
 
   import c._
   lazy val config = ConfigFactory.load()
   lazy val paperPlans = wireWith[Config, Stage, PaperProducts](PaperProducts.fromConfig)
+
+  //implicit val context: ExecutionContext = c.actorSystem.dispatcher
+  implicit val ws: WSClient = AhcWSClient()
 
   lazy val promoService = com.gu.memsub.services.JsonDynamoService.forTable[AnyPromotion](DynamoTables.promotions(config, stage.name))
   lazy val campaignService = com.gu.memsub.services.JsonDynamoService.forTable[Campaign](DynamoTables.campaigns(config, stage.name))

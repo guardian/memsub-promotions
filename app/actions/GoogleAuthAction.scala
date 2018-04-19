@@ -5,12 +5,13 @@ import com.gu.googleauth
 import com.gu.memsub.auth.common.MemSub.Google._
 import com.typesafe.config.Config
 import controllers.routes
-import play.api.mvc.ActionBuilder
+import play.api.libs.ws.WSClient
+import play.api.mvc.{ActionBuilder, Call}
 import play.api.mvc.Security.AuthenticatedRequest
-
+import play.api.libs.ws.ahc.AhcWSClient
 import scala.concurrent.ExecutionContext
 
-class GoogleAuthAction(config: Config)(implicit ec: ExecutionContext) extends googleauth.Actions with googleauth.Filters {
+class GoogleAuthAction(config: Config)(implicit ec: ExecutionContext, materializer: akka.stream.Materializer) extends googleauth.Actions with googleauth.Filters {
 
   val authConfig = googleAuthConfigFor(config)
   val loginTarget = routes.AuthController.loginAction()
@@ -27,6 +28,11 @@ class GoogleAuthAction(config: Config)(implicit ec: ExecutionContext) extends go
     "membership.testusers@guardian.co.uk",
     "acquisition@guardian.co.uk"
   ))
+
+  override implicit def wsClient: WSClient = AhcWSClient()
+
+  override val failureRedirectTarget: Call = Call("", "")
+  override val defaultRedirectTarget: Call = Call("", "")
 }
 
 object GoogleAuthAction {

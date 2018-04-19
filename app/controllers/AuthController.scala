@@ -4,13 +4,13 @@ import com.gu.memsub.auth.common.MemSub.Google._
 import com.typesafe.config.Config
 import play.api.Application
 import play.api.libs.json.Json
-import play.api.libs.ws.WSAPI
+import play.api.libs.ws.{WSAPI, WSClient}
 import play.api.mvc._
 
 import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
-class AuthController(config: Config, ws: WSAPI) extends Controller {
+class AuthController(config: Config, wsa: WSAPI)(implicit context: ExecutionContext, ws: WSClient) extends Controller {
 
   val googleAuthConfig = googleAuthConfigFor(config)
   val ANTI_FORGERY_KEY = "antiForgeryToken"
@@ -20,7 +20,7 @@ class AuthController(config: Config, ws: WSAPI) extends Controller {
     */
   def loginAction = Action.async { implicit request =>
     val antiForgeryToken = GoogleAuth.generateAntiForgeryToken()
-    GoogleAuth.redirectToGoogle(googleAuthConfig, antiForgeryToken, ws)
+    GoogleAuth.redirectToGoogle(googleAuthConfig, antiForgeryToken)
       .map(_.withSession(request.session + (ANTI_FORGERY_KEY -> antiForgeryToken)))
   }
 
@@ -35,7 +35,7 @@ class AuthController(config: Config, ws: WSAPI) extends Controller {
       case None =>
         Future.successful(Unauthorized("No anti forgery token"))
       case Some(token) =>
-        GoogleAuth.validatedUserIdentity(googleAuthConfig, token, ws).map { identity =>
+        GoogleAuth.validatedUserIdentity(googleAuthConfig, token).map { identity =>
           val redirect = Redirect(routes.StaticController.index())
           redirect.withSession { session + (UserIdentity.KEY -> Json.toJson(identity).toString) - ANTI_FORGERY_KEY }
         } recover { case e => Unauthorized(e.toString) }
