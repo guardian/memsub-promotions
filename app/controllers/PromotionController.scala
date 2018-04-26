@@ -9,12 +9,10 @@ import com.gu.memsub.promo.Promotion.AnyPromotion
 import com.gu.memsub.promo._
 import com.gu.memsub.services.JsonDynamoService
 import org.joda.time.DateTimeZone
-import play.api.data.validation.ValidationError
 import play.api.libs.concurrent.Execution.Implicits._
-import play.api.libs.json.{JsError, JsPath, Json}
+import play.api.libs.json.{JsError, JsPath, Json, JsonValidationError}
 import play.api.mvc.Result
 import play.api.mvc.Results._
-
 import scala.concurrent.Future
 import scala.util.Try
 
@@ -48,7 +46,7 @@ class PromotionController(googleAuthAction: GoogleAuthenticatedAction, service: 
 
   def validate = googleAuthAction { request =>
     (for {
-      jsonToTest <- request.body.asJson.toRight[Seq[(JsPath, Seq[ValidationError])]](Seq.empty).right
+      jsonToTest <- request.body.asJson.toRight[Seq[(JsPath, Seq[JsonValidationError])]](Seq.empty).right
       promo <- Json.fromJson[AnyPromotion](jsonToTest).asEither.right
     } yield promo).fold(e => Ok(JsError.toJson(e)), p => Ok(Json.obj("status" -> "ok")))
   }

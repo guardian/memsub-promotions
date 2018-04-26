@@ -49,9 +49,9 @@ libraryDependencies ++= Seq(
   jdbc,
   cache,
   ws,
-  "org.scalaz" %% "scalaz-core" % "7.1.3",
-  "com.gu" %% "membership-common" % "0.379",
-  "com.gu" %% "memsub-common-play-auth" % "0.7",
+  "org.scalaz" %% "scalaz-core" % "7.2.7",
+  "com.gu" %% "membership-common" % "0.515",
+  "com.gu" %% "memsub-common-play-auth" % "1.2",
   "com.softwaremill.macwire" %% "macros" % "2.2.2" % "provided",
   "com.softwaremill.macwire" %% "util" % "2.2.2",
   "com.softwaremill.macwire" %% "proxy" % "2.2.2",
@@ -59,9 +59,6 @@ libraryDependencies ++= Seq(
   "ch.qos.logback" % "logback-classic" % "1.2.3",
   "org.scalatestplus.play" %% "scalatestplus-play" % "1.5.1" % Test
 )
-
-// membership-common has macros compiled against play-json 2.4.6...
-dependencyOverrides += "com.typesafe.play" %% "play-json" % "2.4.6"
 
 resolvers ++= Seq(
   "Guardian Github Releases" at "https://guardian.github.io/maven/repo-releases",
