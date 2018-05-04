@@ -23,15 +23,7 @@ class GoogleAuthAction(config: Config, ws: WSClient)(implicit ec: ExecutionConte
   lazy val groupChecker = googleGroupCheckerFor(config)
 
   val GoogleAuthAction: ActionBuilder[GoogleAuthRequest] = AuthAction andThen requireGroup[GoogleAuthRequest](Set(
-    "directteam@guardian.co.uk",
-    "subscriptions.dev@guardian.co.uk",
-    "memsubs.dev@guardian.co.uk",
-    "membership.wildebeest@guardian.co.uk",
-    "identitydev@guardian.co.uk",
-    "touchpoint@guardian.co.uk",
-    "crm@guardian.co.uk",
-    "membership.testusers@guardian.co.uk",
-    "acquisition@guardian.co.uk"
+    "subscriptions-promotion-tool@guardian.co.uk"  // Managed by Reader Revenue Dev Managers.
   ))
 }
 
