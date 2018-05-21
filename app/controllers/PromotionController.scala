@@ -9,14 +9,13 @@ import com.gu.memsub.promo.Promotion.AnyPromotion
 import com.gu.memsub.promo._
 import com.gu.memsub.services.JsonDynamoService
 import org.joda.time.DateTimeZone
-import play.api.libs.concurrent.Execution.Implicits._
 import play.api.libs.json.{JsError, JsPath, Json, JsonValidationError}
 import play.api.mvc.Result
 import play.api.mvc.Results._
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 import scala.util.Try
 
-class PromotionController(googleAuthAction: GoogleAuthenticatedAction, service: JsonDynamoService[AnyPromotion, Future]) {
+class PromotionController(googleAuthAction: GoogleAuthenticatedAction, service: JsonDynamoService[AnyPromotion, Future], implicit val ec: ExecutionContext) {
 
   private val londonTimezone = DateTimeZone.forTimeZone(TimeZone.getTimeZone("Europe/London"))
 

@@ -4,15 +4,14 @@ import actions.GoogleAuthAction.GoogleAuthenticatedAction
 import com.gu.memsub.promo.Formatters.CampaignFormatters._
 import com.gu.memsub.promo.{Campaign, CampaignCode, CampaignGroup}
 import com.gu.memsub.services.JsonDynamoService
-import play.api.libs.concurrent.Execution.Implicits._
 import play.api.libs.json.{JsError, Json}
 import play.api.mvc.Result
 import play.api.mvc.Results._
 import wiring.AppComponents.Stage
 
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
-class CampaignController(googleAuthAction: GoogleAuthenticatedAction, service: JsonDynamoService[Campaign, Future], stage: Stage) {
+class CampaignController(googleAuthAction: GoogleAuthenticatedAction, service: JsonDynamoService[Campaign, Future], stage: Stage, implicit val ec: ExecutionContext) {
 
   def all(group: Option[String]) = googleAuthAction.async {
     service.all.map(campaigns => {
