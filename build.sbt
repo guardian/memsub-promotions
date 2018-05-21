@@ -22,25 +22,29 @@ lazy val root = (project in file(".")).enablePlugins(
   buildInfoOptions += BuildInfoOption.ToMap
 )
 
-import com.typesafe.sbt.packager.archetypes.ServerLoader.Systemd
-serverLoading in Debian := Systemd
+enablePlugins(SystemdPlugin)
+
 debianPackageDependencies := Seq("openjdk-8-jre-headless")
-maintainer := "Membership Dev <membership.dev@theguardian.com>"
+
 packageSummary := "Memsub-promotions"
 packageDescription := """Memsub-promotions tool"""
+maintainer := "Membership Dev <membership.dev@theguardian.com>"
+
 
 riffRaffPackageType := (packageBin in Debian).value
+riffRaffPackageName := "frontend"
+riffRaffUploadArtifactBucket := Option("riffraff-artifact")
+riffRaffUploadManifestBucket := Option("riffraff-builds")
 
 javaOptions in Universal ++= Seq(
-      "-Dpidfile.path=/dev/null",
-      "-J-XX:MaxRAMFraction=2",
-      "-J-XX:InitialRAMFraction=2",
-      "-J-XX:MaxMetaspaceSize=500m",
-      "-J-XX:+PrintGCDetails",
-      "-J-XX:+PrintGCDateStamps",
-      s"-J-Xloggc:/var/log/${packageName.value}/gc.log"
-     )
-
+  "-Dpidfile.path=/dev/null",
+  "-J-XX:MaxRAMFraction=2",
+  "-J-XX:InitialRAMFraction=2",
+  "-J-XX:MaxMetaspaceSize=500m",
+  "-J-XX:+PrintGCDetails",
+  "-J-XX:+PrintGCDateStamps",
+  s"-J-Xloggc:/var/log/${packageName.value}/gc.log"
+)
 
 scalaVersion := "2.11.8"
 scalacOptions ++= Seq("-feature")
@@ -51,7 +55,7 @@ libraryDependencies ++= Seq(
   ws,
   "org.scalaz" %% "scalaz-core" % "7.2.7",
   "com.gu" %% "membership-common" % "0.517",
-  "com.gu" %% "memsub-common-play-auth" % "1.2",
+  "com.gu" %% "play-googleauth" % "0.7.5",
   "com.softwaremill.macwire" %% "macros" % "2.2.2" % "provided",
   "com.softwaremill.macwire" %% "util" % "2.2.2",
   "com.softwaremill.macwire" %% "proxy" % "2.2.2",
