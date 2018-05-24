@@ -1,22 +1,27 @@
 package wiring
-import actions.GoogleAuthAction
 import com.gu.config.{DigitalPackRatePlanIds, MembershipRatePlanIds}
+import com.gu.googleauth.AuthAction
+import com.gu.memsub.auth.common.MemSub.Google.googleAuthConfigFor
 import com.gu.memsub.promo.{Campaign, DynamoTables}
 import com.gu.memsub.promo.Promotion.AnyPromotion
 import play.api.BuiltInComponents
-import play.api.libs.concurrent.Execution.Implicits._
 import com.typesafe.config.{Config, ConfigFactory}
 import com.softwaremill.macwire._
 import conf.{CatalogService, PaperPlans, PaperProducts, WeeklyPlans}
 import controllers._
 import play.api.libs.ws.ahc.AhcWSComponents
+import play.api.mvc.{AnyContent, ControllerComponents}
 import play.api.routing.Router
 import wiring.AppComponents.Stage
 import router.Routes
 
-class AppComponents(private val stage: Stage, c: BuiltInComponents with AhcWSComponents) {
+import scala.concurrent.ExecutionContext
+
+class AppComponents(private val stage: Stage, c: BuiltInComponents with AhcWSComponents, controllerComponents: ControllerComponents, assetsComponents: AssetsComponents) {
 
   import c._
+  import assetsComponents.assetsMetadata
+
   lazy val config = ConfigFactory.load()
   lazy val paperPlans = wireWith[Config, Stage, PaperProducts](PaperProducts.fromConfig)
 
@@ -29,8 +34,9 @@ class AppComponents(private val stage: Stage, c: BuiltInComponents with AhcWSCom
   lazy val digipackRatePlanIds = DigitalPackRatePlanIds.fromConfig(config.getConfig(AppComponents.ratePlanPath(stage) + ".digitalpack"))
   lazy val weeklyRatePlanIds = WeeklyPlans.fromConfig(config, stage)
 
-  lazy val googleAuthAction: GoogleAuthAction = wire[GoogleAuthAction]
-  import googleAuthAction.GoogleAuthAction
+  private val googleAuthConfig = googleAuthConfigFor(config, httpConfiguration)
+
+  val authAction = new AuthAction[AnyContent](googleAuthConfig, routes.AuthController.loginAction(), controllerComponents.parsers.default)
 
   lazy val authController = wire[AuthController]
   lazy val healthController = wire[HealthCheckController]

@@ -1,25 +1,28 @@
 package controllers
-import com.gu.googleauth.{GoogleAuth, UserIdentity}
+import actions.GoogleAuthAction.GoogleAuthRequest
+import com.gu.googleauth
+import com.gu.googleauth.GoogleGroupChecker
 import com.gu.memsub.auth.common.MemSub.Google._
 import com.typesafe.config.Config
-import play.api.libs.json.Json
+import play.api.http.HttpConfiguration
 import play.api.libs.ws.WSClient
 import play.api.mvc._
+
 import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
 
-class AuthController(config: Config, implicit val ws: WSClient) extends Controller {
+class AuthController(val wsClient: WSClient, components: ControllerComponents, config: Config, httpConfiguration: HttpConfiguration, val ws: WSClient)
+  extends AbstractController(components) with googleauth.LoginSupport with googleauth.Filters {
 
-  val googleAuthConfig = googleAuthConfigFor(config)
+  override val authConfig = googleAuthConfigFor(config, httpConfiguration)
+  override lazy val groupChecker = googleGroupCheckerFor(config)
+
   val ANTI_FORGERY_KEY = "antiForgeryToken"
 
   /**
     * Redirect to Google with anti forgery token (that we keep in session storage - note that flashing is NOT secure)
     */
-  def loginAction = Action.async { implicit request =>
-    val antiForgeryToken = GoogleAuth.generateAntiForgeryToken()
-    GoogleAuth.redirectToGoogle(googleAuthConfig, antiForgeryToken)
-      .map(_.withSession(request.session + (ANTI_FORGERY_KEY -> antiForgeryToken)))
+  def loginAction: Action[AnyContent] = Action.async { implicit request =>
+    startGoogleLogin()
   }
 
   /**
@@ -27,16 +30,16 @@ class AuthController(config: Config, implicit val ws: WSClient) extends Controll
     * We must ensure we have the anti forgery token from the loginAction call and pass this into a verification call which
     * will return a Future[UserIdentity] if the authentication is successful. If unsuccessful then the Future will fail.
     */
-  def oauth2Callback = Action.async { implicit request =>
-    val session = request.session
-    session.get(ANTI_FORGERY_KEY) match {
-      case None =>
-        Future.successful(Unauthorized("No anti forgery token"))
-      case Some(token) =>
-        GoogleAuth.validatedUserIdentity(googleAuthConfig, token).map { identity =>
-          val redirect = Redirect(routes.StaticController.index())
-          redirect.withSession { session + (UserIdentity.KEY -> Json.toJson(identity).toString) - ANTI_FORGERY_KEY }
-        } recover { case e => Unauthorized(e.toString) }
-    }
+
+  def oauth2Callback: Action[AnyContent] = Action.async { implicit request =>
+    processOauth2Callback()
   }
+
+  val authAction = new googleauth.AuthAction[AnyContent](authConfig, routes.AuthController.loginAction(), controllerComponents.parsers.default) andThen requireGroup[GoogleAuthRequest](Set(
+    "subscriptions-promotion-tool@guardian.co.uk"  // Managed by Reader Revenue Dev Managers.
+  ))
+
+  override val failureRedirectTarget: Call = routes.AuthController.loginAction()
+  override val defaultRedirectTarget: Call = routes.StaticController.index()
+
 }
