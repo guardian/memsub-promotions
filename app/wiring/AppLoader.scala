@@ -7,6 +7,8 @@ import play.api.routing.Router
 import play.api.{ApplicationLoader, BuiltInComponentsFromContext, _}
 import _root_.controllers.AssetsComponents
 import play.filters.HttpFiltersComponents
+import play.filters.csrf.CSRFFilter
+import play.filters.hosts.AllowedHostsFilter
 
 class AppLoader extends ApplicationLoader {
 
@@ -18,6 +20,11 @@ class AppLoader extends ApplicationLoader {
 
 
     new BuiltInComponentsFromContext(context) with AhcWSComponents with AssetsComponents with HttpFiltersComponents {
+
+      override def httpFilters: Seq[EssentialFilter] =
+        super.httpFilters.filterNot { filter =>
+          filter.getClass == classOf[AllowedHostsFilter] || filter.getClass == classOf[CSRFFilter]
+        }
 
       lazy val applicationComponentsMap: Map[String, Router] = Map[String, Router](
         "PROD" -> new AppComponents(AppComponents.PROD, this, controllerComponents, this).router,
