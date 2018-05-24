@@ -36,7 +36,7 @@ maintainer := "Membership Dev <membership.dev@theguardian.com>"
 
 
 riffRaffPackageType := (packageBin in Debian).value
-riffRaffPackageName := "frontend"
+riffRaffPackageName := "promotions-tool"
 riffRaffUploadArtifactBucket := Option("riffraff-artifact")
 riffRaffUploadManifestBucket := Option("riffraff-builds")
 
