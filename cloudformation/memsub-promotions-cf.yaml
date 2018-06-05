@@ -53,10 +53,6 @@ Parameters:
     Description: Application name
     Type: String
     Default: promotions-tool
-  VulnerabilityScanningSecurityGroup:
-    Description: Security group that grants access to the account's Vulnerability
-      Scanner
-    Type: AWS::EC2::SecurityGroup::Id
 
 Mappings:
     StageMap:
@@ -189,7 +185,6 @@ Resources:
       ImageId: !Ref 'AmiId'
       SecurityGroups:
       - !Ref 'InstanceSecurityGroup'
-      - !Ref 'VulnerabilityScanningSecurityGroup'
       InstanceType: !Ref 'InstanceType'
       AssociatePublicIpAddress: 'True'
       IamInstanceProfile: !Ref 'InstanceProfile'
