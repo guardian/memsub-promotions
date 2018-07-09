@@ -59,7 +59,7 @@ libraryDependencies ++= Seq(
   ws,
   "org.scalaz" %% "scalaz-core" % "7.2.7",
   "com.gu" %% "membership-common" % "0.519",
-  "com.gu" %% "play-googleauth" % "0.7.5",
+  "com.gu" %% "play-googleauth" % "0.7.6",
   "com.softwaremill.macwire" %% "macros" % "2.2.2" % "provided",
   "com.softwaremill.macwire" %% "util" % "2.2.2",
   "com.softwaremill.macwire" %% "proxy" % "2.2.2",
