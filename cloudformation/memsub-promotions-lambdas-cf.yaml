@@ -95,7 +95,7 @@ Resources:
             - dynamodb:ListBackups
             - dynamodb:DescribeBackup
             Resource:
-            - *
+            - '*'
   MembershipSubPromoCodeViewETLRole:
     Type: AWS::IAM::Role
     Properties:
@@ -295,13 +295,13 @@ Resources:
       Code:
         S3Bucket: gu-promotions-tool-dist
         S3Key: membership/PROD/MembershipSub-Promotions-PromoCode-View/MembershipSub-Promotions-PromoCode-View.zip
-      Description: A Lambda function to schedule the backup of the Campaigns and Promotions table
+      Description: A Lambda function to trigger the backup of the Campaigns and Promotions table and delete any old backups (retention days is defined in the code)
       FunctionName: MembershipSub-Promotions-Scheduled-Dynamo-Backup-PROD
       Handler: MembershipSub-Promotions-Scheduled-Dynamo-Backup.handler
       MemorySize: 128
       Role: !GetAtt [MembershipSubPromotionsDataBackupLambdaRole, Arn]
-      Runtime: nodejs6.10
-      Timeout: 10
+      Runtime: nodejs8.10
+      Timeout: 30
       KmsKeyArn: !GetAtt SalesforceLambdaKMSKey.Arn
   BackupSchedule:
     Type: AWS::Events::Rule

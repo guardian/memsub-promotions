@@ -50,13 +50,13 @@ function deleteBackupsOlderThanXDays(TableName, retentionDays) {
 exports.handler = (event, context, callback) => {
 
     const TOUCHPOINT_BACKEND = /PROD$/.test(context.functionName) ? 'PROD' : 'UAT';
-    const retentionDays = 14; // a number < 1 will delete everything except the backup `createTodaysBackup` just created
+    const RETENTION_DAYS = 14; // a number < 1 will delete everything except the backup `createTodaysBackup` just created
 
     const tablesToBackup = [
         `MembershipSub-Campaigns-${TOUCHPOINT_BACKEND}`,
         `MembershipSub-Promotions-${TOUCHPOINT_BACKEND}`
     ];
-    Promise.all(tablesToBackup.map(tableName => createTodaysBackup(tableName).then(deleteBackupsOlderThanXDays(tableName, retentionDays))))
+    Promise.all(tablesToBackup.map(tableName => createTodaysBackup(tableName).then(deleteBackupsOlderThanXDays(tableName, RETENTION_DAYS))))
         .then((results) => {
             callback(null, `Backup report: ${results.join('; ')}`)
         })
