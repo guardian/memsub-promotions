@@ -306,11 +306,11 @@ Resources:
   BackupSchedule:
     Type: AWS::Events::Rule
     Properties:
-      ScheduleExpression: cron(0 12 * * ? *)
-      State: String
+      ScheduleExpression: cron(30 11 * * ? *)
+      State: ENABLED
       Targets:
-        Id: ScheduledBackupLambdaPRODScheduler
-        Arn: !GetAtt [ScheduledBackupLambdaPROD, Arn]
+        - Id: ScheduledBackupLambdaPRODScheduler
+          Arn: !GetAtt [ScheduledBackupLambdaPROD, Arn]
   InvokeLambdaPermission:
     Type: AWS::Lambda::Permission
     Properties:
