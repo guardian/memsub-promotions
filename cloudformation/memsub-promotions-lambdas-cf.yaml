@@ -92,6 +92,7 @@ Resources:
             - arn:aws:dynamodb:*:*:table/MembershipSub-Campaigns-*
           - Effect: Allow
             Action:
+            - dynamodb:CreateBackup
             - dynamodb:ListBackups
             - dynamodb:DescribeBackup
             Resource:
