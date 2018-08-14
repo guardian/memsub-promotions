@@ -307,7 +307,7 @@ Resources:
   BackupSchedule:
     Type: AWS::Events::Rule
     Properties:
-      ScheduleExpression: cron(30 11 * * ? *)
+      ScheduleExpression: cron(20 12 * * ? *)
       State: ENABLED
       Targets:
         - Id: ScheduledBackupLambdaPRODScheduler
