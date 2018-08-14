@@ -17,7 +17,7 @@ Parameters:
     Type: String
     Default: ''
 Resources:
-  MembershipSubPromotionsToolRole:
+  MembershipSubPromoCodeViewLambdaRole:
     Type: AWS::IAM::Role
     Properties:
       AssumeRolePolicyDocument:
@@ -30,7 +30,7 @@ Resources:
           - sts:AssumeRole
       Path: /
       Policies:
-      - PolicyName: MembershipSub-Promotions-Tool-Policy
+      - PolicyName: MembershipSub-Promo-Code-View-Lambda-Policy
         PolicyDocument:
           Version: '2012-10-17'
           Statement:
@@ -59,7 +59,45 @@ Resources:
             - arn:aws:dynamodb:*:*:table/MembershipSub-PromoCode-View-PROD
             - arn:aws:dynamodb:*:*:table/MembershipSub-PromoCode-View-UAT
             - arn:aws:dynamodb:*:*:table/MembershipSub-PromoCode-View-DEV
-  MembershipSubPromotionsDataRole:
+  MembershipSubPromotionsDataBackupLambdaRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+        - Effect: Allow
+          Principal:
+            Service:
+            - lambda.amazonaws.com
+          Action:
+          - sts:AssumeRole
+      Path: /
+      Policies:
+      - PolicyName: MembershipSub-Promotions-Data-Backup-Lambda-Policy
+        PolicyDocument:
+          Version: '2012-10-17'
+          Statement:
+          - Effect: Allow
+            Action:
+            - logs:CreateLogGroup
+            - logs:CreateLogStream
+            - logs:PutLogEvents
+            Resource:
+            - arn:aws:logs:*:*:log-group:/aws/lambda/MembershipSub-Promotions-Scheduled-Dynamo-Backup-*
+          - Effect: Allow
+            Action:
+            - dynamodb:GetRecords
+            - dynamodb:Scan
+            Resource:
+            - arn:aws:dynamodb:*:*:table/MembershipSub-Promotions-*
+            - arn:aws:dynamodb:*:*:table/MembershipSub-Campaigns-*
+          - Effect: Allow
+            Action:
+            - dynamodb:CreateBackup
+            - dynamodb:ListBackups
+            - dynamodb:DescribeBackup
+            Resource:
+            - '*'
+  MembershipSubPromoCodeViewETLRole:
     Type: AWS::IAM::Role
     Properties:
       AssumeRolePolicyDocument:
@@ -109,7 +147,7 @@ Resources:
       FunctionName: MembershipSub-Promotions-to-PromoCode-View-DEV
       Handler: MembershipSub-Promotions-to-PromoCode-View-Lambda.handler
       MemorySize: 128
-      Role: !GetAtt [MembershipSubPromotionsToolRole, Arn]
+      Role: !GetAtt [MembershipSubPromoCodeViewLambdaRole, Arn]
       Runtime: nodejs6.10
       Timeout: 10
   PromoCodeViewLambdaFunctionUAT:
@@ -123,7 +161,7 @@ Resources:
       FunctionName: MembershipSub-Promotions-to-PromoCode-View-UAT
       Handler: MembershipSub-Promotions-to-PromoCode-View-Lambda.handler
       MemorySize: 128
-      Role: !GetAtt [MembershipSubPromotionsToolRole, Arn]
+      Role: !GetAtt [MembershipSubPromoCodeViewLambdaRole, Arn]
       Runtime: nodejs6.10
       Timeout: 10
   PromoCodeViewLambdaFunctionPROD:
@@ -137,7 +175,7 @@ Resources:
       FunctionName: MembershipSub-Promotions-to-PromoCode-View-PROD
       Handler: MembershipSub-Promotions-to-PromoCode-View-Lambda.handler
       MemorySize: 128
-      Role: !GetAtt [MembershipSubPromotionsToolRole, Arn]
+      Role: !GetAtt [MembershipSubPromoCodeViewLambdaRole, Arn]
       Runtime: nodejs6.10
       Timeout: 10
   PromoCodeViewLambdaEventSourceDEV:
@@ -175,7 +213,7 @@ Resources:
       FunctionName: MembershipSub-PromoCode-View-Dynamo-to-Data-Lake-PROD
       Handler: MembershipSub-PromoCode-View-Dynamo-to-Data-Lake.handler
       MemorySize: 128
-      Role: !GetAtt [MembershipSubPromotionsDataRole, Arn]
+      Role: !GetAtt [MembershipSubPromoCodeViewETLRole, Arn]
       Runtime: nodejs6.10
       Timeout: 10
 
@@ -196,7 +234,7 @@ Resources:
         - Sid: Allow use of the key
           Effect: Allow
           Principal:
-            AWS: !GetAtt [MembershipSubPromotionsDataRole, Arn]
+            AWS: !GetAtt [MembershipSubPromoCodeViewETLRole, Arn]
           Action:
           - kms:Encrypt
           - kms:Decrypt
@@ -220,7 +258,7 @@ Resources:
       FunctionName: MembershipSub-PromoCode-View-Dynamo-to-Salesforce-DEV
       Handler: MembershipSub-PromoCode-View-Dynamo-to-Salesforce.handler
       MemorySize: 128
-      Role: !GetAtt [MembershipSubPromotionsDataRole, Arn]
+      Role: !GetAtt [MembershipSubPromoCodeViewETLRole, Arn]
       Runtime: nodejs6.10
       Timeout: 10
       KmsKeyArn: !GetAtt SalesforceLambdaKMSKey.Arn
@@ -234,7 +272,7 @@ Resources:
       FunctionName: MembershipSub-PromoCode-View-Dynamo-to-Salesforce-UAT
       Handler: MembershipSub-PromoCode-View-Dynamo-to-Salesforce.handler
       MemorySize: 128
-      Role: !GetAtt [MembershipSubPromotionsDataRole, Arn]
+      Role: !GetAtt [MembershipSubPromoCodeViewETLRole, Arn]
       Runtime: nodejs6.10
       Timeout: 10
       KmsKeyArn: !GetAtt SalesforceLambdaKMSKey.Arn
@@ -248,7 +286,36 @@ Resources:
       FunctionName: MembershipSub-PromoCode-View-Dynamo-to-Salesforce-PROD
       Handler: MembershipSub-PromoCode-View-Dynamo-to-Salesforce.handler
       MemorySize: 128
-      Role: !GetAtt [MembershipSubPromotionsDataRole, Arn]
+      Role: !GetAtt [MembershipSubPromoCodeViewETLRole, Arn]
       Runtime: nodejs6.10
       Timeout: 10
       KmsKeyArn: !GetAtt SalesforceLambdaKMSKey.Arn
+  ScheduledBackupLambdaPROD:
+    Type: AWS::Lambda::Function
+    Properties:
+      Code:
+        S3Bucket: gu-promotions-tool-dist
+        S3Key: membership/PROD/MembershipSub-Promotions-PromoCode-View/MembershipSub-Promotions-PromoCode-View.zip
+      Description: A Lambda function to trigger the backup of the Campaigns and Promotions table and delete any old backups (retention days is defined in the code)
+      FunctionName: MembershipSub-Promotions-Scheduled-Dynamo-Backup-PROD
+      Handler: MembershipSub-Promotions-Scheduled-Dynamo-Backup.handler
+      MemorySize: 128
+      Role: !GetAtt [MembershipSubPromotionsDataBackupLambdaRole, Arn]
+      Runtime: nodejs8.10
+      Timeout: 30
+      KmsKeyArn: !GetAtt SalesforceLambdaKMSKey.Arn
+  BackupSchedule:
+    Type: AWS::Events::Rule
+    Properties:
+      ScheduleExpression: cron(20 12 * * ? *)
+      State: ENABLED
+      Targets:
+        - Id: ScheduledBackupLambdaPRODScheduler
+          Arn: !GetAtt [ScheduledBackupLambdaPROD, Arn]
+  InvokeLambdaPermission:
+    Type: AWS::Lambda::Permission
+    Properties:
+      FunctionName: !GetAtt [ScheduledBackupLambdaPROD, Arn]
+      Action: lambda:InvokeFunction
+      Principal: events.amazonaws.com
+      SourceArn: !GetAtt [BackupSchedule, Arn]

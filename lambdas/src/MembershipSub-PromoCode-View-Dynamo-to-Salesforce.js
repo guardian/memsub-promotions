@@ -246,7 +246,7 @@ function makeAPICalls(csvData) {
 
 exports.handler = (event, context, callback) => {
 
-    const source = /PROD$/.test(context.functionName) ? 'PROD' : 'UAT';
+    const TOUCHPOINT_BACKEND = /PROD$/.test(context.functionName) ? 'PROD' : /UAT$/.test(context.functionName) ? 'UAT' : 'DEV';
     const TableName = `MembershipSub-PromoCode-View-${source}`;
 
     docClient.scan({ TableName })

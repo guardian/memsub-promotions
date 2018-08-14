@@ -13,7 +13,8 @@ function enquote(anArray) {
 
 exports.handler = (event, context, callback) => {
 
-    const source = /PROD$/.test(context.functionName) ? 'PROD' : 'UAT';
+    const source = 'PROD'; // Only PROD PromoCode-View data goes to the Data Lake.
+
     const TableName = `MembershipSub-PromoCode-View-${source}`;
     const Bucket = 'ophan-raw-membership-promo-code-view';
     const Key = TableName + '.csv';
