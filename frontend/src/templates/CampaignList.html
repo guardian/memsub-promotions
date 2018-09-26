@@ -11,6 +11,7 @@
                     <div ui-sref="allPromotions.singleCampaign({code: campaign.code})">
                         <h3>{{ campaign.name }}</h3>
                         <p>{{ campaign.code }}</p>
+                        <p ng-if="campaign.sortDate">Starts/Started: {{ campaign.sortDate | date:"dd MMM yy 'at' h:mm a"}}</p>
                     </div>
                     <md-icon class="md-secondary" md-font-set="material-icons" ui-sref="editCampaign({code: campaign.code})">mode_edit</md-icon>
                 </div>

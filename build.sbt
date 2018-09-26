@@ -50,7 +50,7 @@ javaOptions in Universal ++= Seq(
   s"-J-Xloggc:/var/log/${packageName.value}/gc.log"
 )
 
-scalaVersion := "2.11.8"
+scalaVersion := "2.12.4"
 scalacOptions ++= Seq("-feature")
 
 libraryDependencies ++= Seq(
@@ -58,16 +58,16 @@ libraryDependencies ++= Seq(
   cache,
   ws,
   "org.scalaz" %% "scalaz-core" % "7.2.7",
-  "com.gu" %% "membership-common" % "0.519",
+  "com.gu" %% "membership-common" % "0.1-SNAPSHOT",
   "com.gu" %% "play-googleauth" % "0.7.6",
-  "com.softwaremill.macwire" %% "macros" % "2.2.2" % "provided",
-  "com.softwaremill.macwire" %% "util" % "2.2.2",
-  "com.softwaremill.macwire" %% "proxy" % "2.2.2",
+  "com.softwaremill.macwire" %% "macros" % "2.3.1" % "provided",
+  "com.softwaremill.macwire" %% "util" % "2.3.1",
+  "com.softwaremill.macwire" %% "proxy" % "2.3.1",
   "io.netty" % "netty" % "3.10.3.Final",
   "ch.qos.logback" % "logback-classic" % "1.2.3",
 // This is required to force aws libraries to use the latest version of jackson
   "com.fasterxml.jackson.core" % "jackson-databind" % "2.8.11.1",
-  "org.scalatestplus.play" %% "scalatestplus-play" % "1.5.1" % Test
+  "org.scalatestplus.play" %% "scalatestplus-play" % "3.1.2" % Test
 )
 
 resolvers ++= Seq(
