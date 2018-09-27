@@ -4,7 +4,7 @@ import com.github.nscala_time.time.Imports.DateTime
 import com.gu.memsub.promo.CampaignGroup.GuardianWeekly
 import com.gu.memsub.promo._
 import org.scalatestplus.play.PlaySpec
-import utils.CampaignUtils.displaySortCampaignsByPromotionDateThenName
+import utils.CampaignUtils.sortCampaignsByPromotionDateThenNameForDisplay
 
 class CampaignUtilsTest extends PlaySpec {
 
@@ -24,20 +24,20 @@ class CampaignUtilsTest extends PlaySpec {
     promotionType = Tracking
   )
 
-  "displaySortCampaignsByPromotionDateThenName" must {
+  "sortCampaignsByPromotionDateThenNameForDisplay" must {
     "sort by name" in {
       val campaigns = Seq(
         aRandomCampaign.copy(name = "Tracking Promotions 1"),
         aRandomCampaign.copy(name = "Tracking Promotions 3"),
         aRandomCampaign.copy(name = "Tracking Promotions 2")
       )
-      displaySortCampaignsByPromotionDateThenName(campaigns, Seq.empty) mustEqual Seq(
+      sortCampaignsByPromotionDateThenNameForDisplay(campaigns, Seq.empty) mustEqual Seq(
         aRandomCampaign.copy(name = "Tracking Promotions 1"),
         aRandomCampaign.copy(name = "Tracking Promotions 2"),
         aRandomCampaign.copy(name = "Tracking Promotions 3")
       )
     }
-    "sort by date" in {
+    "sort by date searching forward before it looks backward" in {
       val campaigns = Seq(
         aRandomCampaign.copy(code = CampaignCode("foo")),
         aRandomCampaign.copy(code = CampaignCode("no_promotions")),
@@ -50,7 +50,7 @@ class CampaignUtilsTest extends PlaySpec {
         aPromotion.copy(campaign = CampaignCode("bar"), starts = new DateTime(4)),
         aPromotion.copy(campaign = CampaignCode("baz"), starts = new DateTime(6)),
       )
-      displaySortCampaignsByPromotionDateThenName(campaigns, promotions, new DateTime(3)) mustEqual Seq(
+      sortCampaignsByPromotionDateThenNameForDisplay(campaigns, promotions, new DateTime(3)) mustEqual Seq(
         Campaign(CampaignCode("baz"), anyGroup, anyCampaignName, Some(new DateTime(6))), // forward from now
         Campaign(CampaignCode("bar"), anyGroup, anyCampaignName, Some(new DateTime(4))), // 4 not 2 as it looks forward from 3 first
         Campaign(CampaignCode("foo"), anyGroup, anyCampaignName, Some(new DateTime(1))), // back from now
@@ -72,7 +72,7 @@ class CampaignUtilsTest extends PlaySpec {
         aPromotion.copy(campaign = CampaignCode("baz"), starts = new DateTime(6)),
         aPromotion.copy(campaign = CampaignCode("foo"), starts = new DateTime(1))
       )
-      displaySortCampaignsByPromotionDateThenName(campaigns, promotions, new DateTime(3)) mustEqual Seq(
+      sortCampaignsByPromotionDateThenNameForDisplay(campaigns, promotions, new DateTime(3)) mustEqual Seq(
         Campaign(CampaignCode("baz"), anyGroup, anyCampaignName, Some(new DateTime(6))), // forward from now
         Campaign(CampaignCode("bar"), anyGroup, anyCampaignName, Some(new DateTime(4))), // 4 not 2 as it looks forward from 3 first
         Campaign(CampaignCode("foo"), anyGroup, anyCampaignName, Some(new DateTime(1))), // back from now

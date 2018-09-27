@@ -5,7 +5,7 @@ import com.gu.memsub.promo.Formatters.CampaignFormatters._
 import com.gu.memsub.promo.Promotion.AnyPromotion
 import com.gu.memsub.promo.{Campaign, CampaignCode, CampaignGroup}
 import com.gu.memsub.services.JsonDynamoService
-import utils.CampaignUtils.{filterCampaignsByOptionalGroup, displaySortCampaignsByPromotionDateThenName}
+import utils.CampaignUtils.{filterCampaignsByOptionalGroup, sortCampaignsByPromotionDateThenNameForDisplay}
 import play.api.libs.json.{JsError, Json}
 import play.api.mvc.Result
 import play.api.mvc.Results._
@@ -25,7 +25,7 @@ class CampaignController(googleAuthAction: GoogleAuthenticatedAction, campaignSe
       promotions <- promotionsF
     } yield {
       val filtered = filterCampaignsByOptionalGroup(group.flatMap(CampaignGroup.fromId), campaigns)
-      val campaignsSortedByDateThenName = displaySortCampaignsByPromotionDateThenName(filtered, promotions)
+      val campaignsSortedByDateThenName = sortCampaignsByPromotionDateThenNameForDisplay(filtered, promotions)
       Ok(Json.toJson(campaignsSortedByDateThenName))
     }
   }
