@@ -4,9 +4,8 @@ import actions.GoogleAuthAction.GoogleAuthenticatedAction
 import com.gu.memsub.promo.Formatters.CampaignFormatters._
 import com.gu.memsub.promo.Promotion.AnyPromotion
 import com.gu.memsub.promo.{Campaign, CampaignCode, CampaignGroup}
-import com.github.nscala_time.time.Imports.DateTime
-import com.github.nscala_time.time.Implicits.DateTimeOrdering
 import com.gu.memsub.services.JsonDynamoService
+import utils.CampaignUtils.{filterCampaignsByOptionalGroup, displaySortCampaignsByPromotionDateThenName}
 import play.api.libs.json.{JsError, Json}
 import play.api.mvc.Result
 import play.api.mvc.Results._
@@ -19,21 +18,14 @@ class CampaignController(googleAuthAction: GoogleAuthenticatedAction, campaignSe
   def all(group: Option[String]) = googleAuthAction.async {
     import com.gu.memsub.promo.Formatters.PromotionFormatters._
 
-    val now = DateTime.now
     val campaignsF = campaignService.all
     val promotionsF = promotionService.all
     for {
       campaigns <- campaignsF
       promotions <- promotionsF
     } yield {
-      val filtered = group.flatMap(CampaignGroup.fromId).map(group => campaigns.filter(_.group == group)) getOrElse campaigns
-      val campaignsSortedByDateThenName = filtered.sortBy(_.name).map(campaign => {
-        val campaignPromotionStartDateRange = promotions.filter(_.campaign == campaign.code).map(_.starts).sorted
-        val earliestNextToStartDate = campaignPromotionStartDateRange.find(now.isBefore)
-        val lastToStartDate = campaignPromotionStartDateRange.reverse.find(now.isAfter)
-        val sortDate = earliestNextToStartDate orElse lastToStartDate
-        campaign.copy(sortDate = sortDate)
-      }).sortBy(_.sortDate).reverse
+      val filtered = filterCampaignsByOptionalGroup(group.flatMap(CampaignGroup.fromId), campaigns)
+      val campaignsSortedByDateThenName = displaySortCampaignsByPromotionDateThenName(filtered, promotions)
       Ok(Json.toJson(campaignsSortedByDateThenName))
     }
   }
