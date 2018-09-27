@@ -7,25 +7,28 @@ import wiring.AppComponents.Stage
 case class WeeklyPlans(
                         zoneA: WeeklySchedules,
                         zoneB: WeeklySchedules,
-                        zoneC: WeeklySchedules
+                        zoneC: WeeklySchedules,
+                        domestic: WeeklySchedules,
+                        row: WeeklySchedules
                       )
 
 case class WeeklySchedules(
                             yearly: ProductRatePlanId,
                             quarterly: ProductRatePlanId,
                             six: Option[ProductRatePlanId],
-                            oneYear: ProductRatePlanId
+                            oneYear: Option[ProductRatePlanId]
                           )
 
 
 object WeeklyPlans {
-  def plansFor(config: Config, zone: String) = {
+  def plansFor(config: Config, product: String) = {
     WeeklySchedules(
-      yearly = ProductRatePlanId(config.getString(s"weekly.$zone.yearly")),
-      quarterly = ProductRatePlanId(config.getString(s"weekly.$zone.quarterly")),
-      six = if (config.hasPath(s"weekly.$zone.six"))
-        Option(ProductRatePlanId(config.getString(s"weekly.$zone.six"))) else None,
-      oneYear = ProductRatePlanId(config.getString(s"weekly.$zone.oneyear"))
+      yearly = ProductRatePlanId(config.getString(s"weekly.$product.yearly")),
+      quarterly = ProductRatePlanId(config.getString(s"weekly.$product.quarterly")),
+      six = if (config.hasPath(s"weekly.$product.six"))
+        Some(ProductRatePlanId(config.getString(s"weekly.$product.six"))) else None,
+      oneYear = if (config.hasPath(s"weekly.$product.oneYear"))
+        Some(ProductRatePlanId(config.getString(s"weekly.$product.oneYear"))) else None
     )
   }
 
@@ -35,7 +38,9 @@ object WeeklyPlans {
     WeeklyPlans(
       zoneA = plansFor(c, "zoneA"),
       zoneB = plansFor(c, "zoneB"),
-      zoneC = plansFor(c, "zoneC")
+      zoneC = plansFor(c, "zoneC"),
+      domestic = plansFor(c, "domestic"),
+      row = plansFor(c, "row")
     )
   }
 

@@ -84,19 +84,30 @@ class RatePlanController(
         RatePlan(paperPlans.voucher.everyday, "Voucher Everyday"),
         RatePlan(paperPlans.voucher.everydayplus, "Voucher Everyday+")
       ).map(enhance)),
-      GuardianWeekly.id -> Json.toJson((Seq(
-        RatePlan(weeklyPlans.zoneA.yearly, "Weekly Zone A Yearly"),
-        RatePlan(weeklyPlans.zoneA.quarterly, "Weekly Zone A Quarterly"),
-        RatePlan(weeklyPlans.zoneA.oneYear, "Weekly Zone A One Year"),
-        RatePlan(weeklyPlans.zoneB.yearly, "Weekly Zone B Yearly"),
-        RatePlan(weeklyPlans.zoneB.quarterly, "Weekly Zone B Quarterly"),
-        RatePlan(weeklyPlans.zoneB.oneYear, "Weekly Zone B One Year"),
-        RatePlan(weeklyPlans.zoneC.yearly, "Weekly Zone C Yearly"),
-        RatePlan(weeklyPlans.zoneC.quarterly, "Weekly Zone C Quarterly"),
-        RatePlan(weeklyPlans.zoneC.oneYear, "Weekly Zone C One Year")
-      ) ++
-        weeklyPlans.zoneA.six.map(id =>  RatePlan(id, "Weekly Zone A Six")) ++
-        weeklyPlans.zoneC.six.map(id =>  RatePlan(id, "Weekly Zone C Six"))).map(enhance))
+      GuardianWeekly.id -> Json.toJson(
+        (
+        Seq(
+          RatePlan(weeklyPlans.zoneA.yearly, "Zone A yearly (2017)"),
+          RatePlan(weeklyPlans.zoneA.quarterly, "Zone A quarterly (2017)"),
+          RatePlan(weeklyPlans.zoneB.yearly, "Zone B yearly (2015)"),
+          RatePlan(weeklyPlans.zoneB.quarterly, "Zone B quarterly (2015)"),
+          RatePlan(weeklyPlans.zoneC.yearly, "Zone C yearly (2017)"),
+          RatePlan(weeklyPlans.zoneC.quarterly, "Zone C quarterly (2017)"),
+          RatePlan(weeklyPlans.domestic.yearly, "Domestic yearly (2018)"),
+          RatePlan(weeklyPlans.domestic.quarterly, "Domestic quarterly (2018)"),
+          RatePlan(weeklyPlans.row.yearly, "ROW yearly (2018)"),
+          RatePlan(weeklyPlans.row.quarterly, "ROW quarterly (2018)")
+        ) ++ weeklyPlans.zoneA.six.map(id =>  RatePlan(id, "Zone A 6-for-6 (2017)"))
+          ++ weeklyPlans.zoneC.six.map(id =>  RatePlan(id, "Zone C 6-for-6 (2017)"))
+          ++ weeklyPlans.domestic.six.map(id => RatePlan(id, "6-for-6 Domestic (2018)"))
+          ++ weeklyPlans.row.six.map(id => RatePlan(id, "6-for-6 ROW (2018)"))
+          ++ weeklyPlans.zoneA.oneYear.map(id => RatePlan(id, "Zone A 1 year (Renewal - 2017)"))
+          ++ weeklyPlans.zoneB.oneYear.map(id => RatePlan(id, "Zone B 1 year (Renewal - 2015)"))
+          ++ weeklyPlans.zoneC.oneYear.map(id => RatePlan(id, "Zone C 1 year (Renewal - 2017)"))
+        )
+        .sortBy(_.ratePlanName)
+        .map(enhance)
+      )
     ))
   }
 }
