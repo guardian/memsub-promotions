@@ -66,7 +66,8 @@ libraryDependencies ++= Seq(
   "io.netty" % "netty" % "3.10.3.Final",
   "ch.qos.logback" % "logback-classic" % "1.2.3",
 // This is required to force aws libraries to use the latest version of jackson
-  "com.fasterxml.jackson.core" % "jackson-databind" % "2.8.11.1",
+  "com.fasterxml.jackson.core" % "jackson-databind" % "2.9.7",
+  "com.fasterxml.jackson.core" % "jackson-annotations" % "2.9.7", //ditto
   "org.scalatestplus.play" %% "scalatestplus-play" % "3.1.2" % Test
 )
 
