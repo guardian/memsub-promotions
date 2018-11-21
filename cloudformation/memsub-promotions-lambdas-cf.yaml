@@ -95,6 +95,7 @@ Resources:
             - dynamodb:CreateBackup
             - dynamodb:ListBackups
             - dynamodb:DescribeBackup
+            - dynamodb:DeleteBackup
             Resource:
             - '*'
   MembershipSubPromoCodeViewETLRole:
