@@ -27,8 +27,8 @@ object WeeklyPlans {
       quarterly = ProductRatePlanId(config.getString(s"weekly.$product.quarterly")),
       six = if (config.hasPath(s"weekly.$product.six"))
         Some(ProductRatePlanId(config.getString(s"weekly.$product.six"))) else None,
-      oneYear = if (config.hasPath(s"weekly.$product.oneYear"))
-        Some(ProductRatePlanId(config.getString(s"weekly.$product.oneYear"))) else None
+      oneYear = if (config.hasPath(s"weekly.$product.oneyear"))
+        Some(ProductRatePlanId(config.getString(s"weekly.$product.oneyear"))) else None
     )
   }
 
