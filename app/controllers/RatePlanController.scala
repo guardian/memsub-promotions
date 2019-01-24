@@ -97,7 +97,10 @@ class RatePlanController(
           RatePlan(weeklyPlans.domestic.quarterly, "Domestic quarterly (2018)"),
           RatePlan(weeklyPlans.row.yearly, "ROW yearly (2018)"),
           RatePlan(weeklyPlans.row.quarterly, "ROW quarterly (2018)")
-        ) ++ weeklyPlans.zoneA.six.map(id =>  RatePlan(id, "Zone A 6-for-6 (2017)"))
+        )
+          ++ weeklyPlans.domestic.oneYear.map(id => RatePlan(id, "Domestic 1 year (2018)"))
+          ++ weeklyPlans.row.oneYear.map(id => RatePlan(id, "ROW 1 year (2018)"))
+          ++ weeklyPlans.zoneA.six.map(id =>  RatePlan(id, "Zone A 6-for-6 (2017)"))
           ++ weeklyPlans.zoneC.six.map(id =>  RatePlan(id, "Zone C 6-for-6 (2017)"))
           ++ weeklyPlans.domestic.six.map(id => RatePlan(id, "6-for-6 Domestic (2018)"))
           ++ weeklyPlans.row.six.map(id => RatePlan(id, "6-for-6 ROW (2018)"))
