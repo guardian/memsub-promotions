@@ -63,21 +63,29 @@ class PromotionController(
   }
 
   def validate = googleAuthAction { request =>
-    (for {
+    val jsonValidationAttempt = for {
       jsonToTest <- request.body.asJson.toRight[Seq[(JsPath, Seq[JsonValidationError])]](Seq.empty).right
       promo <- Json.fromJson[AnyPromotion](jsonToTest).asEither.right
-    } yield promo).fold(e => Ok(JsError.toJson(e)), p => Ok(Json.obj("status" -> "ok")))
+    } yield promo
+
+    jsonValidationAttempt match {
+      case Right(promo) if productRatePlanIdsAreValidForStage(promo) =>
+        Ok(Json.obj("status" -> "ok"))
+      case Right(promo) =>
+        logger.warn(s"Failed to validate promotion $jsonValidationAttempt against $stage catalog")
+        InternalServerError
+      case Left(error) =>
+        logger.warn(s"Failed to parse promotion JSON correctly due to $error")
+        BadRequest
+    }
+
   }
 
   def upsert = googleAuthAction.async { request =>
     request.body.asJson.map { json =>
       json.validate[AnyPromotion].map { promotion => {
-        if (productRatePlanIdsAreValidForStage(promotion)) {
           dynamoService.add(normaliseDateTimes(promotion)).map(_ => Ok(Json.obj("status" -> "ok")))
-        } else {
-          Future.successful(BadRequest(s"Product Rate Plan Ids in request are not valid for ${stage}"))
         }
-      }
       }.recoverTotal{
         e => Future.successful(BadRequest("Detected error:"+ JsError.toJson(e)))
       }
