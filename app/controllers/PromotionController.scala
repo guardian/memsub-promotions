@@ -72,7 +72,7 @@ class PromotionController(
       case Right(promo) if productRatePlanIdsAreValidForStage(promo) =>
         Ok(Json.obj("status" -> "ok"))
       case Right(promo) =>
-        logger.warn(s"Failed to validate promotion $jsonValidationAttempt against $stage catalog")
+        logger.warn(s"Failed to validate promotion $promo against $stage catalog")
         InternalServerError
       case Left(error) =>
         logger.warn(s"Failed to parse promotion JSON correctly due to $error")
