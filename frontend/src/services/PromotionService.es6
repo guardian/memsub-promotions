@@ -58,17 +58,17 @@ export default class {
             method: 'POST',
             url: '/promotion/validate',
             data: promotion
-        }).then(r => {
-            let data = r.data;
-            if (data.status && data.status === 'ok') {
-                return this.$q.resolve(promotion);
+        }).then(() => {
+              return this.$q.resolve(promotion);
+          },
+          errorResponse => {
+            if (errorResponse.status === 400) {
+              return this.$q.reject(Object.keys(errorResponse.data).map(f =>
+                f + ": " + errorResponse.data[f].map(e => e.msg.join(" ")).join(" ")
+              ));
             } else {
-                return this.$q.reject(Object.keys(data).map(f => 
-                    f + ": " + data[f].map(e => e.msg.join(" ")).join(" ")
-                ));
+                return this.$q.reject([errorResponse.data.failureReason]);
             }
-        }, e => {
-            return this.$q.reject([e.status + " " + e.statusText])
         })
     }
 }
