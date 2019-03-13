@@ -8,14 +8,23 @@ import com.gu.memsub.promo.Formatters.PromotionFormatters._
 import com.gu.memsub.promo.Promotion.AnyPromotion
 import com.gu.memsub.promo._
 import com.gu.memsub.services.JsonDynamoService
+import com.gu.memsub.subsv2.services.CatalogService
+import com.typesafe.scalalogging.LazyLogging
 import org.joda.time.DateTimeZone
 import play.api.libs.json.{JsError, JsPath, Json, JsonValidationError}
 import play.api.mvc.Result
 import play.api.mvc.Results._
+import wiring.AppComponents.Stage
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.Try
 
-class PromotionController(googleAuthAction: GoogleAuthenticatedAction, service: JsonDynamoService[AnyPromotion, Future], implicit val ec: ExecutionContext) {
+class PromotionController(
+  stage: Stage,
+  googleAuthAction: GoogleAuthenticatedAction,
+  catalogService: CatalogService[Future],
+  dynamoService: JsonDynamoService[AnyPromotion, Future],
+  implicit val ec: ExecutionContext
+) extends LazyLogging {
 
   private val londonTimezone = DateTimeZone.forTimeZone(TimeZone.getTimeZone("Europe/London"))
 
@@ -34,32 +43,54 @@ class PromotionController(googleAuthAction: GoogleAuthenticatedAction, service: 
   }
 
   def all(campaignCode: Option[String]) = googleAuthAction.async {
-    campaignCode.map(CampaignCode).fold(service.all)(service.find).map(promos => Ok(Json.toJson(promos.sortBy(_.name))))
+    campaignCode.map(CampaignCode).fold(dynamoService.all)(dynamoService.find).map(promos => Ok(Json.toJson(promos.sortBy(_.name))))
   }
 
   def get(uuid: Option[String]) = googleAuthAction.async {
     uuid.flatMap(i => Try(UUID.fromString(i)).toOption).map {
-      i => service.find(i).map(_.headOption.fold[Result](NotFound)(promo => Ok(Json.toJson(promo))))
+      i => dynamoService.find(i).map(_.headOption.fold[Result](NotFound)(promo => Ok(Json.toJson(promo))))
     }.getOrElse[Future[Result]](Future.successful(BadRequest))
   }
 
+  def productRatePlanIdsAreValidForStage(promo: AnyPromotion): Boolean = promo.appliesTo.productRatePlanIds.forall {
+    productRatePlanId => {
+      val productRatePlanIdIsInCatalog = catalogService.unsafeCatalog.paid.exists(_.id == productRatePlanId)
+      if (!productRatePlanIdIsInCatalog) {
+        logger.info(s"$productRatePlanId was not found in the $stage catalog")
+      }
+      productRatePlanIdIsInCatalog
+    }
+  }
+
   def validate = googleAuthAction { request =>
-    (for {
+    val jsonValidationAttempt = for {
       jsonToTest <- request.body.asJson.toRight[Seq[(JsPath, Seq[JsonValidationError])]](Seq.empty).right
       promo <- Json.fromJson[AnyPromotion](jsonToTest).asEither.right
-    } yield promo).fold(e => Ok(JsError.toJson(e)), p => Ok(Json.obj("status" -> "ok")))
+    } yield promo
+
+    jsonValidationAttempt match {
+      case Right(promo) if productRatePlanIdsAreValidForStage(promo) =>
+        Ok
+      case Right(promo) =>
+        logger.warn(s"Failed to validate promotion $promo against $stage catalog")
+        InternalServerError(Json.obj("failureReason" -> s"Attempted to update a $stage promotion with invalid product rate plan ids"))
+      case Left(errors) =>
+        logger.warn(s"Failed to parse promotion JSON correctly due to $errors")
+        BadRequest(JsError.toJson(errors))
+    }
+
   }
 
   def upsert = googleAuthAction.async { request =>
     request.body.asJson.map { json =>
       json.validate[AnyPromotion].map { promotion => {
-        service.add(normaliseDateTimes(promotion)).map(_ => Ok(Json.obj("status" -> "ok")))
-      }
+          dynamoService.add(normaliseDateTimes(promotion)).map(_ => Ok(Json.obj("status" -> "ok")))
+        }
       }.recoverTotal{
-        e => Future(BadRequest("Detected error:"+ JsError.toJson(e)))
+        e => Future.successful(BadRequest("Detected error:"+ JsError.toJson(e)))
       }
     }.getOrElse {
-      Future(BadRequest("Could not parse campaign data"))
+      Future.successful(BadRequest("Could not parse campaign data"))
     }
   }
 }
