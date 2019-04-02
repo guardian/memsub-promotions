@@ -67,14 +67,14 @@ libraryDependencies ++= Seq(
   "com.softwaremill.macwire" %% "proxy" % "2.3.1",
   "io.netty" % "netty" % "3.10.3.Final",
   "ch.qos.logback" % "logback-classic" % "1.2.3",
-  "org.scalatestplus.play" %% "scalatestplus-play" % "3.1.2" % Test
+  "org.scalatestplus.play" %% "scalatestplus-play" % "3.1.2" % Test,
 
   // All the below are required to force aws libraries to use the latest version of jackson
   "com.fasterxml.jackson.core" % "jackson-databind" % jacksonVersion,
   "com.fasterxml.jackson.core" % "jackson-annotations" % jacksonVersion,
   "com.fasterxml.jackson.dataformat" % "jackson-dataformat-cbor" % jacksonVersion,
   "com.fasterxml.jackson.datatype" % "jackson-datatype-jdk8" % jacksonVersion,
-  "com.fasterxml.jackson.datatype" % "jackson-datatype-jsr310" % jacksonVersion,
+  "com.fasterxml.jackson.datatype" % "jackson-datatype-jsr310" % jacksonVersion
 )
 
 resolvers ++= Seq(
