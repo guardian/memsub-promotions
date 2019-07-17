@@ -60,7 +60,7 @@ libraryDependencies ++= Seq(
   cache,
   ws,
   "org.scalaz" %% "scalaz-core" % "7.2.7",
-  "com.gu" %% "membership-common" % "0.548",
+  "com.gu" %% "membership-common" % "0.549",
   "com.gu" %% "play-googleauth" % "0.7.7",
   "com.softwaremill.macwire" %% "macros" % "2.3.1" % "provided",
   "com.softwaremill.macwire" %% "util" % "2.3.1",
@@ -70,7 +70,7 @@ libraryDependencies ++= Seq(
   "org.scalatestplus.play" %% "scalatestplus-play" % "3.1.2" % Test,
 
   // All the below are required to force aws libraries to use the latest version of jackson
-  "com.fasterxml.jackson.core" % "jackson-databind" % jacksonVersion,
+  "com.fasterxml.jackson.core" % "jackson-databind" % (jacksonVersion+".1"),
   "com.fasterxml.jackson.core" % "jackson-annotations" % jacksonVersion,
   "com.fasterxml.jackson.dataformat" % "jackson-dataformat-cbor" % jacksonVersion,
   "com.fasterxml.jackson.datatype" % "jackson-datatype-jdk8" % jacksonVersion,
