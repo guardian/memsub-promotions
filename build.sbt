@@ -50,10 +50,10 @@ javaOptions in Universal ++= Seq(
   s"-J-Xloggc:/var/log/${packageName.value}/gc.log"
 )
 
-scalaVersion := "2.12.4"
+scalaVersion := "2.12.10"
 scalacOptions ++= Seq("-feature")
 
-val jacksonVersion = "2.9.9"
+val jacksonVersion = "2.10.0"
 
 libraryDependencies ++= Seq(
   jdbc,
@@ -70,7 +70,7 @@ libraryDependencies ++= Seq(
   "org.scalatestplus.play" %% "scalatestplus-play" % "3.1.2" % Test,
 
   // All the below are required to force aws libraries to use the latest version of jackson
-  "com.fasterxml.jackson.core" % "jackson-databind" % (jacksonVersion+".1"),
+  "com.fasterxml.jackson.core" % "jackson-databind" % jacksonVersion,
   "com.fasterxml.jackson.core" % "jackson-annotations" % jacksonVersion,
   "com.fasterxml.jackson.dataformat" % "jackson-dataformat-cbor" % jacksonVersion,
   "com.fasterxml.jackson.datatype" % "jackson-datatype-jdk8" % jacksonVersion,
