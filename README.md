@@ -2,27 +2,9 @@ Memsubity promotions
 ====================
 
 ### NGinx
-
-#### First, setup Nginx for `Identity-Platform`
-
-Set up Nginx config and SSL certs from Identity. Follow the README
-[here](https://github.com/guardian/identity-platform/blob/master/README.md#setup-nginx-for-local-development)
-first, before you do anything else but make sure to pass the profile 'membership' to the script:
-
-Within `identity-platform`, run:
-   ```
-   sudo -E nginx/setup.sh membership --with-jdk-import
-   ```
-and enter your password where prompted.
-
-#### Then, run the Nginx setup script specific to `memsub-promotions`
-
-Run the `memsub-promotions`-specific [setup.sh](nginx/setup.sh) script from the root
-of the `memsub-promotions` project:
-
-```
-./nginx/setup.sh
-```
+1. `cd nginx`
+1. Install dependencies `brew bundle`
+2. Run `./setup.sh`
 
 ## General Setup
 
