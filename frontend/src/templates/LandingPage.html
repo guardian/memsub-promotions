@@ -34,7 +34,7 @@
             <label>Subtitle</label><input name="subtitle" ng-model="promotion.landingPage.subtitle" delete-empty>
         </md-input-container>
         <md-input-container>
-            <label>Description</label>
+            <label>Description (supports Markdown)</label>
             <textarea name="landing-description" ng-model="promotion.landingPage.description" delete-empty></textarea>
         </md-input-container>
         <md-input-container>
@@ -42,6 +42,9 @@
         </md-input-container>
 
         <grid-image-selector ng-show="false" image="promotion.landingPage.image" label="an image"></grid-image-selector>
-
+        <span>
+            For examples of how to format text using Markdown see
+            <a href="https://guides.github.com/features/mastering-markdown/#examples" target="_blank">here</a>
+        </span>
     </div>
 </ng-form>
