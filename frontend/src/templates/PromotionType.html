@@ -53,11 +53,5 @@
         <!-- Renewal -->
         <md-tab label="Renewal" ng-click="ctrl.setPromotionType('retention')" ng-disabled="coPromotionType === 'retention'">
         </md-tab>
-        <!-- Tracking -->
-        <md-tab label="Tracking" ng-click="ctrl.setPromotionType('tracking')" ng-disabled="coPromotionType">
-            <md-content class="md-padding md-tab-content">
-                <p ng-show="campaignGroup == 'membership'">For Tracking promotions, the <b>Rate plans</b> below are only used to choose the landing page tier.</p>
-            </md-content>
-        </md-tab>
     </md-tabs>
 </ng-form>
