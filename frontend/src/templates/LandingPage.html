@@ -27,14 +27,6 @@
                 <md-radio-button value="bottom">Bottom</md-radio-button>
             </md-radio-group>
         </div>
-        <div layout="column" ng-show="weekly">
-            <h5>Title colour</h5>
-            <md-radio-group layout="row" ng-model="promotion.landingPage.sectionColour">
-                <md-radio-button value="blue" class="md-primary">Blue</md-radio-button>
-                <md-radio-button value="grey">Grey</md-radio-button>
-                <md-radio-button value="white">White</md-radio-button>
-            </md-radio-group>
-        </div>
         <md-input-container>
             <label>Title</label><input name="title" ng-model="promotion.landingPage.title" delete-empty/>
         </md-input-container>
@@ -42,23 +34,14 @@
             <label>Subtitle</label><input name="subtitle" ng-model="promotion.landingPage.subtitle" delete-empty>
         </md-input-container>
         <md-input-container>
-            <label>Description (supports a subset of <a href="https://guides.github.com/features/mastering-markdown/#examples">Github markdown</a>)</label>
+            <label>Description</label>
             <textarea name="landing-description" ng-model="promotion.landingPage.description" delete-empty></textarea>
         </md-input-container>
         <md-input-container>
-            <label>Roundel</label><textarea name="roundel-html" ng-model="promotion.landingPage.roundelHtml" delete-empty></textarea>
+            <label>Product page price card</label><textarea name="roundel-html" ng-model="promotion.landingPage.roundelHtml" delete-empty></textarea>
         </md-input-container>
 
-        <grid-image-selector image="promotion.landingPage.image" label="an image"></grid-image-selector>
-
-        <div layout="column" ng-show="digitalpack">
-            <h5>Subs stripe colour</h5>
-            <md-radio-group layout="row" ng-model="promotion.landingPage.sectionColour">
-                <md-radio-button value="blue" class="md-primary">Blue</md-radio-button>
-                <md-radio-button value="grey">Grey</md-radio-button>
-                <md-radio-button value="white">White</md-radio-button>
-            </md-radio-group>
-        </div>
+        <grid-image-selector ng-show="false" image="promotion.landingPage.image" label="an image"></grid-image-selector>
 
     </div>
 </ng-form>
