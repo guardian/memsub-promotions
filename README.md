@@ -1,4 +1,4 @@
-Memsubity promotions
+Subscription promotions tool
 ====================
 
 ### NGinx
