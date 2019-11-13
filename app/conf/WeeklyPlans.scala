@@ -5,19 +5,17 @@ import com.typesafe.config.Config
 import wiring.AppComponents.Stage
 
 case class WeeklyPlans(
-                        zoneA: WeeklySchedules,
-                        zoneB: WeeklySchedules,
-                        zoneC: WeeklySchedules,
-                        domestic: WeeklySchedules,
-                        row: WeeklySchedules
-                      )
+  domestic: WeeklySchedules,
+  row: WeeklySchedules
+)
 
 case class WeeklySchedules(
-                            yearly: ProductRatePlanId,
-                            quarterly: ProductRatePlanId,
-                            six: Option[ProductRatePlanId],
-                            oneYear: Option[ProductRatePlanId]
-                          )
+  yearly: ProductRatePlanId,
+  quarterly: ProductRatePlanId,
+  six: Option[ProductRatePlanId],
+  oneYear: Option[ProductRatePlanId],
+  threeMonth: Option[ProductRatePlanId]
+)
 
 
 object WeeklyPlans {
@@ -28,7 +26,9 @@ object WeeklyPlans {
       six = if (config.hasPath(s"weekly.$product.six"))
         Some(ProductRatePlanId(config.getString(s"weekly.$product.six"))) else None,
       oneYear = if (config.hasPath(s"weekly.$product.oneyear"))
-        Some(ProductRatePlanId(config.getString(s"weekly.$product.oneyear"))) else None
+        Some(ProductRatePlanId(config.getString(s"weekly.$product.oneyear"))) else None,
+      threeMonth = if (config.hasPath(s"weekly.$product.threemonths"))
+        Some(ProductRatePlanId(config.getString(s"weekly.$product.threemonths"))) else None
     )
   }
 
@@ -36,9 +36,6 @@ object WeeklyPlans {
     val c = config.getConfig(s"touchpoint.backend.environments.${stage.name}")
 
     WeeklyPlans(
-      zoneA = plansFor(c, "zoneA"),
-      zoneB = plansFor(c, "zoneB"),
-      zoneC = plansFor(c, "zoneC"),
       domestic = plansFor(c, "domestic"),
       row = plansFor(c, "row")
     )
