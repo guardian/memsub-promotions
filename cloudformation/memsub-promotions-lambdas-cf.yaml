@@ -149,7 +149,7 @@ Resources:
       Handler: MembershipSub-Promotions-to-PromoCode-View-Lambda.handler
       MemorySize: 128
       Role: !GetAtt [MembershipSubPromoCodeViewLambdaRole, Arn]
-      Runtime: nodejs8.10
+      Runtime: nodejs10.x
       Timeout: 10
   PromoCodeViewLambdaFunctionUAT:
     Type: AWS::Lambda::Function
@@ -163,7 +163,7 @@ Resources:
       Handler: MembershipSub-Promotions-to-PromoCode-View-Lambda.handler
       MemorySize: 128
       Role: !GetAtt [MembershipSubPromoCodeViewLambdaRole, Arn]
-      Runtime: nodejs8.10
+      Runtime: nodejs10.x
       Timeout: 10
   PromoCodeViewLambdaFunctionPROD:
     Type: AWS::Lambda::Function
@@ -177,7 +177,7 @@ Resources:
       Handler: MembershipSub-Promotions-to-PromoCode-View-Lambda.handler
       MemorySize: 128
       Role: !GetAtt [MembershipSubPromoCodeViewLambdaRole, Arn]
-      Runtime: nodejs8.10
+      Runtime: nodejs10.x
       Timeout: 10
   PromoCodeViewLambdaEventSourceDEV:
     Type: AWS::Lambda::EventSourceMapping
@@ -215,7 +215,7 @@ Resources:
       Handler: MembershipSub-PromoCode-View-Dynamo-to-Data-Lake.handler
       MemorySize: 128
       Role: !GetAtt [MembershipSubPromoCodeViewETLRole, Arn]
-      Runtime: nodejs8.10
+      Runtime: nodejs10.x
       Timeout: 10
 
   SalesforceLambdaKMSKey:
@@ -260,7 +260,7 @@ Resources:
       Handler: MembershipSub-PromoCode-View-Dynamo-to-Salesforce.handler
       MemorySize: 128
       Role: !GetAtt [MembershipSubPromoCodeViewETLRole, Arn]
-      Runtime: nodejs8.10
+      Runtime: nodejs10.x
       Timeout: 10
       KmsKeyArn: !GetAtt SalesforceLambdaKMSKey.Arn
       Environment:
@@ -281,7 +281,7 @@ Resources:
       Handler: MembershipSub-PromoCode-View-Dynamo-to-Salesforce.handler
       MemorySize: 128
       Role: !GetAtt [MembershipSubPromoCodeViewETLRole, Arn]
-      Runtime: nodejs8.10
+      Runtime: nodejs10.x
       Timeout: 10
       KmsKeyArn: !GetAtt SalesforceLambdaKMSKey.Arn
       Environment:
@@ -302,7 +302,7 @@ Resources:
       Handler: MembershipSub-PromoCode-View-Dynamo-to-Salesforce.handler
       MemorySize: 128
       Role: !GetAtt [MembershipSubPromoCodeViewETLRole, Arn]
-      Runtime: nodejs8.10
+      Runtime: nodejs10.x
       Timeout: 10
       KmsKeyArn: !GetAtt SalesforceLambdaKMSKey.Arn
       Environment:
@@ -323,7 +323,7 @@ Resources:
       Handler: MembershipSub-Promotions-Scheduled-Dynamo-Backup.handler
       MemorySize: 128
       Role: !GetAtt [MembershipSubPromotionsDataBackupLambdaRole, Arn]
-      Runtime: nodejs8.10
+      Runtime: nodejs10.x
       Timeout: 30
       KmsKeyArn: !GetAtt SalesforceLambdaKMSKey.Arn
   BackupSchedule:
