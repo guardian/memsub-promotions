@@ -341,3 +341,27 @@ Resources:
       Action: lambda:InvokeFunction
       Principal: events.amazonaws.com
       SourceArn: !GetAtt [BackupSchedule, Arn]
+  ETLSchedule:
+    Type: AWS::Events::Rule
+    Properties:
+      ScheduleExpression: cron(0 8 * * ? *)
+      State: ENABLED
+      Targets:
+        - Id: ETLPromoCodeViewSalesforceLambdaFunctionPRODSchedule
+          Arn: !GetAtt [PromoCodeViewSalesforceLambdaFunctionPROD, Arn]
+        - Id: ETLPromoCodeViewDataLakeLambdaFunctionPRODSchedule
+          Arn: !GetAtt [PromoCodeViewDataLakeLambdaFunctionPROD, Arn]
+  ETLInvokeLambdaPermissionSF:
+    Type: AWS::Lambda::Permission
+    Properties:
+      FunctionName: !GetAtt [PromoCodeViewSalesforceLambdaFunctionPROD, Arn]
+      Action: lambda:InvokeFunction
+      Principal: events.amazonaws.com
+      SourceArn: !GetAtt [ETLSchedule, Arn]
+  ETLInvokeLambdaPermissionDataLake:
+    Type: AWS::Lambda::Permission
+    Properties:
+      FunctionName: !GetAtt [PromoCodeViewDataLakeLambdaFunctionPROD, Arn]
+      Action: lambda:InvokeFunction
+      Principal: events.amazonaws.com
+      SourceArn: !GetAtt [ETLSchedule, Arn]
