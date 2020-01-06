@@ -1,14 +1,12 @@
 'use strict';
 
 const AWS = require('aws-sdk');
-const DOC = require('dynamodb-doc');
 const KMS = new AWS.KMS();
 
 const https = require('https');
 const querystring = require('querystring');
 
-const ddb = new AWS.DynamoDB();
-const docClient = new DOC.DynamoDB(ddb);
+const docClient = new AWS.DynamoDB.DocumentClient();
 
 function enquote(anArray) {
     return `"${anArray.join('","')}"`;
@@ -247,7 +245,7 @@ function makeAPICalls(csvData) {
 exports.handler = (event, context, callback) => {
 
     const TOUCHPOINT_BACKEND = /PROD$/.test(context.functionName) ? 'PROD' : /UAT$/.test(context.functionName) ? 'UAT' : 'DEV';
-    const TableName = `MembershipSub-PromoCode-View-${source}`;
+    const TableName = `MembershipSub-PromoCode-View-${TOUCHPOINT_BACKEND}`;
 
     docClient.scan({ TableName })
         .promise()

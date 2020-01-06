@@ -1,10 +1,7 @@
 'use strict';
 
 const AWS = require('aws-sdk');
-const DOC = require('dynamodb-doc');
-
-const ddb = new AWS.DynamoDB();
-const docClient = new DOC.DynamoDB(ddb);
+const docClient = new AWS.DynamoDB.DocumentClient();
 const s3 = new AWS.S3();
 
 function enquote(anArray) {
