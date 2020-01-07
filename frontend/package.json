@@ -17,9 +17,6 @@
   "babel": {
     "presets": [
       "@babel/preset-env"
-    ],
-    "plugins": [
-      "angularjs-annotate"
     ]
   },
   "devDependencies": {
@@ -39,7 +36,6 @@
     "angular-uuid": "0.0.2",
     "babel-core": "^7.0.0-0",
     "babel-loader": "^8.0.5",
-    "babel-plugin-angularjs-annotate": "^0.10.0",
     "babel-polyfill": "6.23.0",
     "grunt": "1.0.1",
     "material-design-lite": "1.1.3",
