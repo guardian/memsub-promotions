@@ -31,7 +31,6 @@ module.exports = {
         path: path.resolve(__dirname, '../public/'),
         chunkFilename:  'webpack/[chunkhash].js',
         filename: "javascripts/[name].js",
-        publicPath: '/',
         sourceMapFilename: "[file].map"
     },
 
@@ -39,8 +38,17 @@ module.exports = {
         main: path.resolve(__dirname, 'src/main.es6'),
     },
 
+    devtool: 'none',
+
     devServer: {
-        contentBase: path.resolve(__dirname, '../public/'),
-        filename: 'main.js'
+        contentBase: path.resolve(__dirname, '../public'),
+        publicPath: '/assets/',
+        disableHostCheck: true,
+        proxy: {
+            '**': {
+                target: 'http://promo.thegulocal.com:9500',
+                secure: false,
+            },
+        },
     }
 };

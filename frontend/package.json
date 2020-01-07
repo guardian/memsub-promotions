@@ -4,13 +4,15 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
+    "clean": "echo 'Cleaning Public Folder' && rimraf ../public/javascripts && rimraf ../public/stylesheets",
     "test": "echo \"Error: no test specified\" && exit 1",
     "js": "./node_modules/webpack/bin/webpack.js --mode=production --display-error-details --bail",
     "js-dev": "./node_modules/webpack/bin/webpack.js --mode=development --display-error-details --bail",
     "sass": "./node_modules/node-sass/bin/node-sass scss/main.scss ../public/stylesheets/main.css",
     "compile": "npm run js && npm run sass",
     "dev": "npm run js-dev && npm run sass",
-    "devrun": "webpack-dev-server --open"
+    "dev-server": "webpack-dev-server --port 9501 --public promo.thegulocal.com --disable-host-check",
+    "devrun": "npm run dev-server"
   },
   "babel": {
     "presets": [
@@ -43,6 +45,7 @@
     "material-design-lite": "1.1.3",
     "ng-annotate-loader": "0.1.0",
     "node-sass": "4.5.0",
+    "rimraf": "^3.0.0",
     "text-loader": "0.0.1",
     "webpack": "4.41.4",
     "webpack-cli": "^3.3.10",
