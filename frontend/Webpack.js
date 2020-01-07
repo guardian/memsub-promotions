@@ -37,7 +37,5 @@ module.exports = {
 
     entry: {
         main: path.resolve(__dirname, 'src/main.es6'),
-    },
-
-    mode: "production"
+    }
 };
