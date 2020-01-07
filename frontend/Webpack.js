@@ -4,34 +4,31 @@ var path = require('path');
 module.exports = {
 
     resolve: {
-        root: ["src/", "node_modules/"],
-        extensions: ["", ".js", ".es6"],
-        alias: {}
+        extensions: [".js", ".es6"],
+        modules: [
+            path.resolve(__dirname, 'src'),
+            path.resolve(__dirname, 'node_modules'),
+        ],
     },
 
     resolveLoader: {
-        root: path.join(process.env.PWD, 'node_modules/')
+        alias: {
+            text: 'text-loader'
+        }
     },
 
     module: {
-        loaders: [
+        rules: [
             {
                 test: /\.es6$/,
                 exclude: /node_modules/,
-                loader: 'ng-annotate!babel?presets[]=es2015'
+                use: ['babel-loader', 'ng-annotate-loader'],
             }
         ]
     },
 
-    progress: true,
-    failOnError: true,
-    keepalive: false,
-    inline: true,
-    watch: false,
-    hot: false,
-
     output: {
-        path: '../public/',
+        path: path.resolve(__dirname, '../public/'),
         chunkFilename:  'webpack/[chunkhash].js',
         filename: "javascripts/[name].js",
         publicPath: '/',
@@ -39,15 +36,8 @@ module.exports = {
     },
 
     entry: {
-        main: "./src/main"
+        main: path.resolve(__dirname, 'src/main.es6'),
     },
 
-    stats: {
-        modules: true,
-        reasons: true,
-        colors: true
-    },
-
-    context: '.',
-    debug: false
+    mode: "production"
 };
