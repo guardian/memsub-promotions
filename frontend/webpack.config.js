@@ -37,5 +37,10 @@ module.exports = {
 
     entry: {
         main: path.resolve(__dirname, 'src/main.es6'),
+    },
+
+    devServer: {
+        contentBase: path.resolve(__dirname, '../public/'),
+        filename: 'main.js'
     }
 };
