@@ -31,13 +31,14 @@ Subscription promotions tool
    aws s3 cp s3://gu-reader-revenue-private/membership/promotions-tool/DEV/memsub-promotions-keys.conf /etc/gu  --profile membership
    ```
 
-1. Install the frontend dependencies
+1. Install and compile the frontend resources
     ```
     cd frontend
     yarn install
+    yarn dev
     ```
 
-1. Run ``` ./devrun ``` and navigate to ```https://promo.thegulocal.com```
+1. Run ``` sbt devrun ``` and navigate to ```promo.thegulocal.com```
 
 ### Lambdas
 

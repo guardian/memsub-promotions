@@ -53,7 +53,6 @@ import GridImageSelectorController from "controllers/GridImageSelectorController
 import EnvironmentController from "controllers/EnvironmentController"
 import PreviewPromotionController from "controllers/PreviewPromotionController"
 import LandingPageController from "controllers/LandingPageController"
-import '../scss/main.scss';
 
 let module = angular.module("Promotions", ['ui.router', 'ngMessages', 'ngCookies', 'ngMaterial', 'angular-uuid']);
 
