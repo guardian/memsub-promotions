@@ -1,7 +1,12 @@
 var path = require('path');
-
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 module.exports = {
+    plugins: [
+        new MiniCssExtractPlugin({
+            filename: path.join('stylesheets', '[name].css'),
+        })
+    ],
 
     resolve: {
         extensions: [".js", ".es6"],
@@ -23,6 +28,16 @@ module.exports = {
                 test: /\.es6$/,
                 exclude: /node_modules/,
                 use: ['babel-loader', 'ng-annotate-loader'],
+            },
+            {
+                test: /\.scss$/,
+                use: [
+                    MiniCssExtractPlugin.loader,
+                    {
+                        loader: 'css-loader',
+                    },
+                    'sass-loader',
+                ],
             }
         ]
     },
@@ -38,7 +53,7 @@ module.exports = {
         main: path.resolve(__dirname, 'src/main.es6'),
     },
 
-    devtool: 'none',
+    devtool: 'source-map',
 
     devServer: {
         contentBase: path.resolve(__dirname, '../public'),

@@ -6,13 +6,10 @@
   "scripts": {
     "clean": "echo 'Cleaning Public Folder' && rimraf ../public/javascripts && rimraf ../public/stylesheets",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "js": "./node_modules/webpack/bin/webpack.js --mode=production --display-error-details --bail",
-    "js-dev": "./node_modules/webpack/bin/webpack.js --mode=development --display-error-details --bail",
-    "sass": "./node_modules/node-sass/bin/node-sass scss/main.scss ../public/stylesheets/main.css",
-    "compile": "npm run js && npm run sass",
-    "dev": "npm run js-dev && npm run sass",
-    "dev-server": "webpack-dev-server --port 9501 --public promo.thegulocal.com --disable-host-check",
-    "devrun": "npm run dev-server"
+    "build-prod": "webpack --mode=production --display-error-details --bail",
+    "build-dev": "webpack --mode=development --display-error-details --bail",
+    "compile": "npm run clean && npm run build-prod",
+    "devrun": "webpack-dev-server --port 9501 --public promo.thegulocal.com --disable-host-check"
   },
   "babel": {
     "presets": [
@@ -37,11 +34,14 @@
     "babel-core": "^7.0.0-0",
     "babel-loader": "^8.0.5",
     "babel-polyfill": "6.23.0",
+    "css-loader": "^3.4.1",
     "grunt": "1.0.1",
     "material-design-lite": "1.1.3",
     "ng-annotate-loader": "0.1.0",
+    "mini-css-extract-plugin": "^0.4.0",
     "node-sass": "4.5.0",
     "rimraf": "^3.0.0",
+    "sass-loader": "^8.0.0",
     "text-loader": "0.0.1",
     "webpack": "4.41.4",
     "webpack-cli": "^3.3.10",
