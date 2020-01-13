@@ -12,9 +12,8 @@
     "devrun": "webpack-dev-server --port 9501 --public promo.thegulocal.com --disable-host-check"
   },
   "babel": {
-    "presets": [
-      "@babel/preset-env"
-    ]
+    "presets": ["@babel/preset-env"],
+    "plugins": ["angularjs-annotate"]
   },
   "devDependencies": {
     "@babel/core": "^7.7.7",
@@ -32,12 +31,12 @@
     "angular-ui-router": "0.3.0",
     "angular-uuid": "0.0.2",
     "babel-loader": "^8.0.5",
+    "babel-plugin-angularjs-annotate": "^0.10.0",
     "babel-polyfill": "6.23.0",
     "css-loader": "^3.4.1",
     "grunt": "1.0.1",
     "material-design-lite": "1.1.3",
     "mini-css-extract-plugin": "^0.4.0",
-    "ng-annotate-loader": "0.1.0",
     "node-sass": "4.13.0",
     "rimraf": "^3.0.0",
     "sass-loader": "^8.0.0",

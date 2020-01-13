@@ -27,7 +27,7 @@ module.exports = {
             {
                 test: /\.es6$/,
                 exclude: /node_modules/,
-                use: ['babel-loader', 'ng-annotate-loader'],
+                use: ['babel-loader'],
             },
             {
                 test: /\.scss$/,
