@@ -1,10 +1,7 @@
 'use strict';
 
 const AWS = require('aws-sdk');
-const DOC = require('dynamodb-doc');
-
-const ddb = new AWS.DynamoDB();
-const docClient = new DOC.DynamoDB(ddb);
+const docClient = new AWS.DynamoDB.DocumentClient();
 const s3 = new AWS.S3();
 
 function enquote(anArray) {
@@ -18,7 +15,16 @@ exports.handler = (event, context, callback) => {
     const TableName = `MembershipSub-PromoCode-View-${source}`;
     const Bucket = 'ophan-raw-membership-promo-code-view';
     const Key = TableName + '.csv';
-    const fieldsToExport = ['promo_code', 'promotion_name', 'campaign_name', 'channel_name', 'product_family', 'promotion_type', 'discount_percent', 'discount_months'];
+    const fieldsToExport = [
+        'promo_code',
+        'promotion_name',
+        'campaign_name',
+        'channel_name',
+        'product_family',
+        'promotion_type',
+        'discount_percent',
+        'discount_months'
+    ];
     const ACL = 'bucket-owner-full-control';
 
     docClient.scan({ TableName })
