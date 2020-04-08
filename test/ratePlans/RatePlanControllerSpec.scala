@@ -18,13 +18,28 @@ class RatePlanControllerSpec extends PlaySpec {
         ProductRatePlanId("blah"),
         "Test plan",
         Some("19"),
-        Some(Map(GBP -> price)),
+        Some(List(price)),
         Some("description"),
         Some(3)
       )
       val json = Json.toJson(erp)
 
-      val expected = Json.parse("{\"ratePlanId\":\"blah\",\"ratePlanName\":\"Test plan\",\"price\":\"19\",\"priceSummary\":[[\"GBP\",\"19.0\"]],\"description\":\"description\",\"period\":3}")
+      val expected = Json.parse(
+        """
+          {
+              "ratePlanId": "blah",
+              "ratePlanName": "Test plan",
+              "price": "19",
+              "priceSummary": [
+                  {
+                      "currency": "GBP",
+                      "amount": "19.0"
+                  }
+              ],
+              "description": "description",
+              "period": 3
+          }
+        """)
       json mustBe expected
     }
   }

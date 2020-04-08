@@ -17,17 +17,16 @@ import scala.concurrent.Future
 
 case class RatePlan(ratePlanId: ProductRatePlanId, ratePlanName: String)
 
-case class EnhancedRatePlan(ratePlanId: ProductRatePlanId, ratePlanName: String, price: Option[String], priceSummary: Option[Map[Currency, Price]], description: Option[String],period:Option[Int])
+case class EnhancedRatePlan(ratePlanId: ProductRatePlanId, ratePlanName: String, price: Option[String], priceSummary: Option[Iterable[Price]], description: Option[String],period:Option[Int])
 
 class RatePlanController(
-
-                          googleAuthAction: GoogleAuthenticatedAction,
-                          paperPlans: PaperProducts,
-                          membershipIds: MembershipRatePlanIds,
-                          digipackIds: DigitalPackRatePlanIds,
-                          weeklyPlans: WeeklyPlans,
-                          catalogService: CatalogService[Future]
-                        ) {
+    googleAuthAction: GoogleAuthenticatedAction,
+    paperPlans: PaperProducts,
+    membershipIds: MembershipRatePlanIds,
+    digipackIds: DigitalPackRatePlanIds,
+    weeklyPlans: WeeklyPlans,
+    catalogService: CatalogService[Future]
+  ) {
 
   def enhance(ratePlan: RatePlan): EnhancedRatePlan = {
     val plan = find(ratePlan.ratePlanId)
@@ -35,7 +34,7 @@ class RatePlanController(
       ratePlan.ratePlanId,
       ratePlan.ratePlanName,
       plan.map(_.charges.gbpPrice.prettyAmount),
-      plan.map(_.charges.price.underlying),
+      plan.map(_.charges.price.prices),
       plan.map(_.description),
       plan.map(_.charges.billingPeriod.monthsInPeriod)
     )
@@ -101,7 +100,7 @@ class RatePlanController(
 object RatePlanController {
   implicit val prpidWrite: Writes[ProductRatePlanId] = (productRatePlanId: ProductRatePlanId) => JsString(productRatePlanId.get)
   implicit val ratePlanWrite: OWrites[RatePlan] = Json.writes[RatePlan]
-  implicit val priceWrite: Writes[Price] = (price: Price) => JsString(price.amount.toString)
+  implicit val priceWrite: Writes[Price] = (price: Price) => Json.obj(("currency", Json.toJson(price.currency)), ("amount", JsString(price.amount.toString)))
   implicit val currencyWrite: Writes[Currency] = (currency: Currency) => JsString(currency.iso)
   implicit val eratePlanWrite: OWrites[EnhancedRatePlan] = Json.writes[EnhancedRatePlan]
 }
