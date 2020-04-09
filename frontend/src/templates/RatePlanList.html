@@ -4,6 +4,7 @@
     <md-checkbox ng-model="ratePlanIds[plan.ratePlanId]" aria-label="{{plan.ratePlanName}}"
                  ng-repeat="plan in plans"
                  ng-change="ctrl.applyRatePlans(ratePlanIds)"
+                 class="half-width"
     >
       {{plan.ratePlanName}}
       <div class="discount-list">
