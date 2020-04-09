@@ -2,43 +2,54 @@ package controllers
 
 import actions.GoogleAuthAction.GoogleAuthenticatedAction
 import com.gu.config.{DigitalPackRatePlanIds, MembershipRatePlanIds}
+import com.gu.i18n.Currency
+import com.gu.i18n.Currency.{AUD, CAD, EUR, GBP, USD}
+import com.gu.memsub.Price
 import com.gu.memsub.Subscription.ProductRatePlanId
-import com.gu.memsub.promo.CampaignGroup.{DigitalPack, GuardianWeekly, Membership, Newspaper}
+import com.gu.memsub.promo.CampaignGroup.{DigitalPack, GuardianWeekly, Newspaper}
 import com.gu.memsub.subsv2.services.CatalogService
+import com.typesafe.scalalogging.LazyLogging
 import conf.{PaperProducts, WeeklyPlans}
+import controllers.RatePlanController._
 import play.api.libs.json._
 import play.api.mvc.Results._
 
 import scala.concurrent.Future
 
+case class RatePlan(ratePlanId: ProductRatePlanId, ratePlanName: String)
+
+case class EnhancedRatePlan(ratePlanId: ProductRatePlanId, ratePlanName: String, price: Option[String], priceSummary: Option[Iterable[Price]], description: Option[String],period:Option[Int])
+
 class RatePlanController(
+    googleAuthAction: GoogleAuthenticatedAction,
+    paperPlans: PaperProducts,
+    membershipIds: MembershipRatePlanIds,
+    digipackIds: DigitalPackRatePlanIds,
+    weeklyPlans: WeeklyPlans,
+    catalogService: CatalogService[Future]
+  ) {
 
-                          googleAuthAction: GoogleAuthenticatedAction,
-                          paperPlans: PaperProducts,
-                          membershipIds: MembershipRatePlanIds,
-                          digipackIds: DigitalPackRatePlanIds,
-                          weeklyPlans: WeeklyPlans,
-                          catalogService: CatalogService[Future]
-                        ) {
-
-  case class RatePlan(ratePlanId: ProductRatePlanId, ratePlanName: String)
-
-  case class EnhancedRatePlan(ratePlanId: ProductRatePlanId, ratePlanName: String, price: Option[String],description: Option[String],period:Option[Int])
+  def sortCurrency = (price: Price) => price.currency match {
+    case GBP => 0
+    case USD => 1
+    case AUD => 2
+    case EUR => 3
+    case CAD => 4
+    case _ => 5
+  }
 
   def enhance(ratePlan: RatePlan): EnhancedRatePlan = {
     val plan = find(ratePlan.ratePlanId)
-    EnhancedRatePlan(ratePlan.ratePlanId, ratePlan.ratePlanName, plan.map(_.charges.gbpPrice.prettyAmount), plan.map(_.description), plan.map(_.charges.billingPeriod.monthsInPeriod))
+    EnhancedRatePlan(
+      ratePlan.ratePlanId,
+      ratePlan.ratePlanName,
+      plan.map(_.charges.gbpPrice.prettyAmount),
+      plan.map(_.charges.price.prices.toList.sortBy(sortCurrency)),
+      plan.map(_.description),
+      plan.map(_.charges.billingPeriod.monthsInPeriod)
+    )
   }
 
-  implicit val prpidWrite: Writes[ProductRatePlanId] = new Writes[ProductRatePlanId] {
-    def writes(productRatePlanId: ProductRatePlanId): JsValue = {
-      JsString(productRatePlanId.get)
-    }
-  }
-
-
-  implicit val ratePlanWrite: OWrites[RatePlan] = Json.writes[RatePlan]
-  implicit val eratePlanWrite: OWrites[EnhancedRatePlan] = Json.writes[EnhancedRatePlan]
 
   lazy val catalog = catalogService.unsafeCatalog
 
@@ -48,15 +59,6 @@ class RatePlanController(
 
   def all = googleAuthAction {
     Ok(Json.obj(
-      Membership.id -> Json.toJson(Seq(
-        RatePlan(membershipIds.friend, "Friend"),
-        RatePlan(membershipIds.supporterMonthly, "Supporter monthly"),
-        RatePlan(membershipIds.supporterYearly, "Supporter yearly"),
-        RatePlan(membershipIds.partnerMonthly, "Partner monthly"),
-        RatePlan(membershipIds.partnerYearly, "Partner yearly"),
-        RatePlan(membershipIds.patronMonthly, "Patron monthly"),
-        RatePlan(membershipIds.patronYearly, "Patron yearly")
-      ).map(enhance)),
       DigitalPack.id -> Json.toJson(Seq(
         RatePlan(digipackIds.digitalPackMonthly, "Digital Pack monthly"),
         RatePlan(digipackIds.digitalPackQuaterly, "Digital Pack quarterly"),
@@ -103,4 +105,12 @@ class RatePlanController(
       )
     ))
   }
+}
+
+object RatePlanController {
+  implicit val prpidWrite: Writes[ProductRatePlanId] = (productRatePlanId: ProductRatePlanId) => JsString(productRatePlanId.get)
+  implicit val ratePlanWrite: OWrites[RatePlan] = Json.writes[RatePlan]
+  implicit val priceWrite: Writes[Price] = (price: Price) => Json.obj(("currency", Json.toJson(price.currency)), ("amount", JsString(price.amount.toString)))
+  implicit val currencyWrite: Writes[Currency] = (currency: Currency) => JsString(currency.iso)
+  implicit val eratePlanWrite: OWrites[EnhancedRatePlan] = Json.writes[EnhancedRatePlan]
 }

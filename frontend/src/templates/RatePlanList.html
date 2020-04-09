@@ -1,21 +1,25 @@
 <div layout="column" ng-repeat="(planKey, plans) in ratePlans" ng-show="planKey == campaignGroup">
   <h5>Rate plans</h5>
-  <div>
+  <div class="rate-plan-list">
     <md-checkbox ng-model="ratePlanIds[plan.ratePlanId]" aria-label="{{plan.ratePlanName}}"
                  ng-repeat="plan in plans"
                  ng-change="ctrl.applyRatePlans(ratePlanIds)"
-                 class="half-width"
     >
       {{plan.ratePlanName}}
-      <span ng-if="discount && plan.price">
-        <s>{{plan.price | currency:"£" }} </s>
-        <md-icon md-font-set="material-icons">arrow_forward</md-icon>
-        <strong>{{discountedPrice(plan) | currency:"£" }}</strong>
-        <span ng-show="showDiscountWarning(plan)">
-          <md-tooltip>The promotion is not a whole number of billing periods. The discount will be evenly spread over at least one complete billing period.</md-tooltip>
-          <md-icon md-font-set="material-icons">warning</md-icon>
-        </span>
-      </span>
+      <div class="discount-list">
+        <div
+                ng-if="discount && plan.priceSummary"
+                ng-repeat="price in plan.priceSummary"
+        >
+          <s>{{price.amount | currency: price.currency + " " }} </s>
+          <md-icon md-font-set="material-icons">arrow_forward</md-icon>
+          <strong>{{discountedPrice(plan.period, price.amount) | currency: price.currency + " " }}</strong>
+          <span ng-show="showDiscountWarning(plan)">
+            <md-tooltip>The promotion is not a whole number of billing periods. The discount will be evenly spread over at least one complete billing period.</md-tooltip>
+            <md-icon md-font-set="material-icons">warning</md-icon>
+          </span>
+        </div>
+      </div>
     </md-checkbox>
   </div>
 </div>
