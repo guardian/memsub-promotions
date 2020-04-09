@@ -180,6 +180,16 @@ s {
   width: 45%;
 }
 
-.full-width {
-  width: 90%;
+.discount-list {
+  padding-top: 8px;
 }
+
+.rate-plan-list {
+  md-checkbox {
+    margin-right: 25px;
+  }
+  md-checkbox .md-container {
+    top: 5%;
+  }
+}
+
