@@ -3,6 +3,7 @@ package controllers
 import actions.GoogleAuthAction.GoogleAuthenticatedAction
 import com.gu.config.{DigitalPackRatePlanIds, MembershipRatePlanIds}
 import com.gu.i18n.Currency
+import com.gu.i18n.Currency.{AUD, CAD, EUR, GBP, USD}
 import com.gu.memsub.Price
 import com.gu.memsub.Subscription.ProductRatePlanId
 import com.gu.memsub.promo.CampaignGroup.{DigitalPack, GuardianWeekly, Newspaper}
@@ -28,13 +29,22 @@ class RatePlanController(
     catalogService: CatalogService[Future]
   ) {
 
+  def sortCurrency = (price: Price) => price.currency match {
+    case GBP => 0
+    case USD => 1
+    case AUD => 2
+    case EUR => 3
+    case CAD => 4
+    case _ => 5
+  }
+
   def enhance(ratePlan: RatePlan): EnhancedRatePlan = {
     val plan = find(ratePlan.ratePlanId)
     EnhancedRatePlan(
       ratePlan.ratePlanId,
       ratePlan.ratePlanName,
       plan.map(_.charges.gbpPrice.prettyAmount),
-      plan.map(_.charges.price.prices),
+      plan.map(_.charges.price.prices.toList.sortBy(sortCurrency)),
       plan.map(_.description),
       plan.map(_.charges.billingPeriod.monthsInPeriod)
     )
