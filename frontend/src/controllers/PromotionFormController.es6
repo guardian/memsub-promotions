@@ -18,12 +18,14 @@ export default class {
         this.$state = $state;
         this.uuid = uuid;
         this.$q = $q;
-
         this.$scope.serverErrors = [];
         this.$scope.campaignGroup = this.environmentService.getCampaignGroup();
         this.$scope.campaignGroupDomain = this.environmentService.getCampaignGroupDomain();
 
         if ($stateParams.uuid) {
+            if ($stateParams.createPromotionCopy) {
+                this.$scope.createPromotionCopy = true;
+            } 
             this.fetchPromotion($stateParams.uuid);
         } else if ($stateParams.campaignCode) {
             this.createNewPromotion($stateParams.campaignCode);
@@ -36,6 +38,7 @@ export default class {
         const campaignCodeStub = {campaignCode: campaignCode, uuid: this.uuid.v4()};
         var landingPageStub = {landingPage: {type: this.environmentService.getCampaignGroup()}};
         this.$scope.promotion = Object.assign({}, emptyPromotion, campaignCodeStub, landingPageStub);
+        
         return this.fillCampaignInfo(this.$scope.promotion)
     }
 
@@ -44,6 +47,19 @@ export default class {
         this.service.get(uuid)
             .then(this.transformDates.bind(self))
             .then(this.fillCampaignInfo.bind(self))
+            .then(p => {
+                if (this.$scope.createPromotionCopy) {
+                    const { uuid, name, ..._ } = p;
+
+                    return {
+                        uuid: this.uuid.v4(),
+                        name: `${p.name} [COPY]`,
+                        ..._
+                    };
+                }
+
+                return { ...p };
+            })
             .then(p => this.$scope.promotion = p)
     }
 
@@ -77,7 +93,7 @@ export default class {
         this.$scope.serverErrors = [];
         this.service.validate(promotion)
             .then(
-                  valid => this.update(valid),
+                valid => this.update(valid),
                 invalid => this.$scope.serverErrors = invalid
             )
 
@@ -86,10 +102,10 @@ export default class {
     close(promotion) {
         this.$scope.serverErrors = [];
         this.service.validate(promotion)
-            .then(
-                    valid => this.update(valid).then(() => this.$state.go('allPromotions.singleCampaign', {code: promotion.campaignCode})),
-                  invalid => this.$scope.serverErrors = invalid
-            )
+        .then(
+            valid => this.update(valid).then(() => this.$state.go('allPromotions.singleCampaign', {code: promotion.campaignCode})),
+            invalid => this.$scope.serverErrors = invalid
+        )
             
     }
 }
