@@ -49,13 +49,10 @@ export default class {
             .then(this.fillCampaignInfo.bind(self))
             .then(p => {
                 if (this.$scope.createPromotionCopy) {
-                    const { uuid, name, ..._ } = p;
-
-                    return {
+                    return Object.assign({}, { ... p }, {
                         uuid: this.uuid.v4(),
                         name: `${p.name} [COPY]`,
-                        ..._
-                    };
+                    });
                 }
 
                 return { ...p };
