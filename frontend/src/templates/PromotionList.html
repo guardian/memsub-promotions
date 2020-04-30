@@ -4,15 +4,20 @@
             Promotions <md-icon class="add-button" md-font-set="material-icons" ui-sref="createPromotion({campaignCode: code})">add</md-icon>
         </md-subheader>
         <md-list-item class="md-3-line md-clickable" ng-repeat="promotion in promotions" md-ink-ripple="#AAAAAA">
-            <div class="md-list-item-text promotion-list-item" layout="column"  ui-sref="promotion({uuid: promotion.uuid})">
-                <h3>{{ promotion.name }}</h3>
-                <h4 class="promotion-code-list">
-                    <p ng-repeat="(channel, codes) in promotion.codes">{{ channel }}: {{ codes.join(", ") }}</p>
-                </h4>
-                <p>
-                    <md-icon md-font-set="material-icons">date_range</md-icon>
-                    {{ promotion.starts | date:"dd MMM yy 'at' h:mm a" }} - {{ promotion.expires | date:"dd MMM yy 'at' h:mm a" }}
-                </p>
+            <div class="promotion-list-item-container">
+                <div layout="column" class="md-list-item-text" ui-sref="promotion({uuid: promotion.uuid})">
+                    <h3>{{ promotion.name }}</h3>
+                    <h4 class="promotion-code-list">
+                        <p ng-repeat="(channel, codes) in promotion.codes">{{ channel }}: {{ codes.join(", ") }}</p>
+                    </h4>
+                    <p>
+                        <md-icon md-font-set="material-icons">date_range</md-icon>
+                        {{ promotion.starts | date:"dd MMM yy 'at' h:mm a" }} - {{ promotion.expires | date:"dd MMM yy 'at' h:mm a" }}
+                    </p>
+                </div>
+                <div layout="column">
+                    <md-button class="md-raised md-primary" ui-sref="copyPromotion({uuid: promotion.uuid})">Copy</md-button>
+                </div>
             </div>
             <md-divider></md-divider>
         </md-list-item>

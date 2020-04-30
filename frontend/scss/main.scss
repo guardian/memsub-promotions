@@ -77,8 +77,10 @@ md-icon > a {
   text-decoration: none;
 }
 
-.promotion-list-item {
-  max-width: 100%;
+.promotion-list-item-container {
+  flex: 1;
+  display: flex;
+  padding: 12px 16px;
 }
 
 .promotion-code-list {
