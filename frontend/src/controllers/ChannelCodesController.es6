@@ -51,7 +51,7 @@ export default class {
             const promoCodes = channels[k];
 
             if (this.$scope.regenerateCodes) {
-                const regeneratedPromoCodes = promoCodes.map(() => this.generateSuggestedPromoCode());
+                const regeneratedPromoCodes = promoCodes.map((_, i) => `${this.generateSuggestedPromoCode()}${i}`);
     
                 return {"name": k, "codes": regeneratedPromoCodes}; 
             }
