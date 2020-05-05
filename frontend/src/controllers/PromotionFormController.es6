@@ -21,11 +21,9 @@ export default class {
         this.$scope.serverErrors = [];
         this.$scope.campaignGroup = this.environmentService.getCampaignGroup();
         this.$scope.campaignGroupDomain = this.environmentService.getCampaignGroupDomain();
+        this.$scope.createPromotionCopy = !!$stateParams.createPromotionCopy;
 
         if ($stateParams.uuid) {
-            if ($stateParams.createPromotionCopy) {
-                this.$scope.createPromotionCopy = true;
-            } 
             this.fetchPromotion($stateParams.uuid);
         } else if ($stateParams.campaignCode) {
             this.createNewPromotion($stateParams.campaignCode);

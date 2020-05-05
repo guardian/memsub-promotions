@@ -47,7 +47,19 @@ export default class {
     }
 
     populateChannels(channels) {
-        this.$scope.channels = Object.keys(channels).map(k => { return {"name": k, "codes": channels[k]} })
+        this.$scope.channels = Object.keys(channels).map(k => { 
+            const promoCodes = channels[k];
+
+            if (this.$scope.regenerateCodes) {
+                const regeneratedPromoCodes = promoCodes.map(() => this.generateSuggestedPromoCode());
+    
+                return {"name": k, "codes": regeneratedPromoCodes}; 
+            }
+
+            return {"name": k, "codes": promoCodes}; 
+        })
+
+        this.applyChannels(this.$scope.channels);
     }
 
     applyChannels(channels) {
