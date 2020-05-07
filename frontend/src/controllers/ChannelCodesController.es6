@@ -47,11 +47,11 @@ export default class {
     }
 
     populateChannels(channels) {
-        this.$scope.channels = Object.keys(channels).map((k, i) => { 
+        this.$scope.channels = Object.keys(channels).map((k, channelIndex) => { 
             const promoCodes = channels[k];
 
             if (this.$scope.regenerateCodes) {
-                const regeneratedPromoCodes = promoCodes.map((_, ii) => `${this.generateSuggestedPromoCode()}${i}${ii}`);
+                const regeneratedPromoCodes = promoCodes.map((_, promoCodeIndex) => `${this.generateSuggestedPromoCode()}${channelIndex}${promoCodeIndex}`);
     
                 return {"name": k, "codes": regeneratedPromoCodes}; 
             }
