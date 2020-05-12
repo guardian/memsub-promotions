@@ -6,7 +6,6 @@ const emptyPromotion = {
   codes: {},
   promotionType: { name: "tracking" }
 };
-
 export default class {
 
     /* @ngInject */
@@ -40,6 +39,27 @@ export default class {
         return this.fillCampaignInfo(this.$scope.promotion)
     }
 
+    generateSuggestedPromoCode() {
+        return this.environmentService.getCampaignGroupPrefix() + new Date().getTime().toString(36).toUpperCase();
+    }
+    
+    regenerateCodes(channels) {
+        return Object.keys(channels).reduce((accumulator, channelID, channelIndex) => {
+            return {
+                ...accumulator,
+                [channelID]: channels[channelID].map((code, codeIndex) => `${this.generateSuggestedPromoCode()}${channelIndex}${codeIndex}`)
+            }
+        }, {});
+    }
+
+    copyPromotion(promotion) {
+        return Object.assign({}, { ... promotion }, {
+            uuid: this.uuid.v4(),
+            name: `${promotion.name} [COPY]`,
+            codes: this.regenerateCodes(promotion.codes)
+        });
+    }
+
     fetchPromotion(uuid) {
         let self = this;
         this.service.get(uuid)
@@ -47,10 +67,7 @@ export default class {
             .then(this.fillCampaignInfo.bind(self))
             .then(p => {
                 if (this.$scope.createPromotionCopy) {
-                    return Object.assign({}, { ... p }, {
-                        uuid: this.uuid.v4(),
-                        name: `${p.name} [COPY]`,
-                    });
+                    return this.copyPromotion(p);
                 }
 
                 return { ...p };

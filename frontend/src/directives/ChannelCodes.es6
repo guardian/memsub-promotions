@@ -4,8 +4,7 @@ import channelCodes from "text!templates/ChannelCodes.html"
 export default () => {
     return {
         scope: {
-            codes: '=',
-            regenerateCodes: '='
+            codes: '='
         },
         restrict: 'E',
         template: channelCodes,
