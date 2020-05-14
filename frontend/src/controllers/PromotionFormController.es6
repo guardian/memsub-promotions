@@ -6,7 +6,6 @@ const emptyPromotion = {
   codes: {},
   promotionType: { name: "tracking" }
 };
-
 export default class {
 
     /* @ngInject */
@@ -18,10 +17,10 @@ export default class {
         this.$state = $state;
         this.uuid = uuid;
         this.$q = $q;
-
         this.$scope.serverErrors = [];
         this.$scope.campaignGroup = this.environmentService.getCampaignGroup();
         this.$scope.campaignGroupDomain = this.environmentService.getCampaignGroupDomain();
+        this.$scope.createPromotionCopy = !!$stateParams.createPromotionCopy;
 
         if ($stateParams.uuid) {
             this.fetchPromotion($stateParams.uuid);
@@ -36,7 +35,29 @@ export default class {
         const campaignCodeStub = {campaignCode: campaignCode, uuid: this.uuid.v4()};
         var landingPageStub = {landingPage: {type: this.environmentService.getCampaignGroup()}};
         this.$scope.promotion = Object.assign({}, emptyPromotion, campaignCodeStub, landingPageStub);
+        
         return this.fillCampaignInfo(this.$scope.promotion)
+    }
+
+    generateSuggestedPromoCode() {
+        return this.environmentService.getCampaignGroupPrefix() + new Date().getTime().toString(36).toUpperCase();
+    }
+    
+    regenerateCodes(channels) {
+        return Object.keys(channels).reduce((accumulator, channelID, channelIndex) => {
+            return {
+                ...accumulator,
+                [channelID]: channels[channelID].map((code, codeIndex) => `${this.generateSuggestedPromoCode()}${channelIndex}${codeIndex}`)
+            }
+        }, {});
+    }
+
+    copyPromotion(promotion) {
+        return Object.assign({}, { ... promotion }, {
+            uuid: this.uuid.v4(),
+            name: `${promotion.name} [COPY]`,
+            codes: this.regenerateCodes(promotion.codes)
+        });
     }
 
     fetchPromotion(uuid) {
@@ -44,6 +65,13 @@ export default class {
         this.service.get(uuid)
             .then(this.transformDates.bind(self))
             .then(this.fillCampaignInfo.bind(self))
+            .then(p => {
+                if (this.$scope.createPromotionCopy) {
+                    return this.copyPromotion(p);
+                }
+
+                return { ...p };
+            })
             .then(p => this.$scope.promotion = p)
     }
 
@@ -77,7 +105,7 @@ export default class {
         this.$scope.serverErrors = [];
         this.service.validate(promotion)
             .then(
-                  valid => this.update(valid),
+                valid => this.update(valid),
                 invalid => this.$scope.serverErrors = invalid
             )
 
@@ -86,10 +114,10 @@ export default class {
     close(promotion) {
         this.$scope.serverErrors = [];
         this.service.validate(promotion)
-            .then(
-                    valid => this.update(valid).then(() => this.$state.go('allPromotions.singleCampaign', {code: promotion.campaignCode})),
-                  invalid => this.$scope.serverErrors = invalid
-            )
+        .then(
+            valid => this.update(valid).then(() => this.$state.go('allPromotions.singleCampaign', {code: promotion.campaignCode})),
+            invalid => this.$scope.serverErrors = invalid
+        )
             
     }
 }

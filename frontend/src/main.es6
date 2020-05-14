@@ -117,6 +117,15 @@ module.config(($stateProvider, $urlRouterProvider) => {
         controller: 'promotionFormController',
         controllerAs: 'ctrl'
     })
+    .state('copyPromotion', {
+        url: "/promotion/copy/:uuid",
+        params: {
+            createPromotionCopy: true
+        },
+        template: promotionForm,
+        controller: 'promotionFormController',
+        controllerAs: 'ctrl'
+    })
     .state('createPromotion', {
         url: "/promotion/new/:campaignCode",
         template: promotionForm,
