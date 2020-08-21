@@ -50,7 +50,7 @@ javaOptions in Universal ++= Seq(
   s"-J-Xloggc:/var/log/${packageName.value}/gc.log"
 )
 
-scalaVersion := "2.12.10"
+scalaVersion := "2.12.12"
 scalacOptions ++= Seq("-feature")
 
 val jacksonVersion = "2.10.0"
@@ -61,7 +61,7 @@ libraryDependencies ++= Seq(
   ws,
   "org.scalaz" %% "scalaz-core" % "7.2.7",
   "com.gu" %% "membership-common" % "0.561",
-  "com.gu.play-googleauth" %% "play-v26" % "1.0.4",
+  "com.gu.play-googleauth" %% "play-v26" % "1.0.7",
   "com.softwaremill.macwire" %% "macros" % "2.3.1" % "provided",
   "com.softwaremill.macwire" %% "util" % "2.3.1",
   "com.softwaremill.macwire" %% "proxy" % "2.3.1",
