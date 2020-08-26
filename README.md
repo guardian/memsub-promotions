@@ -41,8 +41,7 @@ Subscription promotions tool
 
 ### Lambdas
 
-teamcity will run lambdas/build.sh, then upload the MembershipSub-Promotions-to-PromoCode-View-Lambda.zip to the Lambda function on S3 and refresh the package.
-The deploy is called MemSub::Membership Admin::Promotions Tool Lambda
+See the [lambdas/](lambdas/) folder
    
 ### Code environment
 [https://promo.code.memsub-promotions.gutools.co.uk](https://promo.code.memsub-promotions.gutools.co.uk)
