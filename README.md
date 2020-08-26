@@ -41,10 +41,7 @@ Subscription promotions tool
 
 ### Lambdas
 
-   1. Go to lambdas/ folder
-   1. Run build.sh
-   1. Upload the MembershipSub-Promotions-to-PromoCode-View-Lambda.zip to the Lambda function on S3.
-   1. Alternatively, TeamCity will run this same script and build artifact.zip which will be uploaded to riffraff and deployable from there.
+See the [lambdas/](lambdas/) folder
    
 ### Code environment
 [https://promo.code.memsub-promotions.gutools.co.uk](https://promo.code.memsub-promotions.gutools.co.uk)
