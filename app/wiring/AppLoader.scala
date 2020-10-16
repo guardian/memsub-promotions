@@ -6,6 +6,7 @@ import play.api.mvc._
 import play.api.routing.Router
 import play.api.{ApplicationLoader, BuiltInComponentsFromContext, _}
 import _root_.controllers.AssetsComponents
+import play.api.http.HttpRequestHandler
 import play.filters.HttpFiltersComponents
 import play.filters.csrf.CSRFFilter
 import play.filters.hosts.AllowedHostsFilter
@@ -32,10 +33,20 @@ class AppLoader extends ApplicationLoader {
         "DEV" -> new AppComponents(AppComponents.DEV, this, controllerComponents, this).router
       )
 
-      lazy val defaultRouter = applicationComponentsMap("PROD")
+      lazy val router = applicationComponentsMap("PROD")
 
-      lazy val router: Router = new MultiRouter((c: Cookies) =>
-        c.find(_.name == "stage").map(_.value.toUpperCase).flatMap(applicationComponentsMap.get).getOrElse(defaultRouter), defaultRouter)
+      private def routerForStage(cookies: Cookies): Router = (for {
+        stageFromCookie <- cookies.find(_.name == "stage").map(_.value.toUpperCase)
+        routerForStage <- applicationComponentsMap.get(stageFromCookie)
+      } yield routerForStage).getOrElse(router)
+
+      override lazy val httpRequestHandler: HttpRequestHandler = new MultiHttpRequestHandler(
+        httpErrorHandler,
+        httpConfiguration,
+        httpFilters,
+        routerForStage,
+        router
+      )
 
     }.application
   }
