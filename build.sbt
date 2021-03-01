@@ -40,6 +40,8 @@ riffRaffPackageName := "promotions-tool"
 riffRaffUploadArtifactBucket := Option("riffraff-artifact")
 riffRaffUploadManifestBucket := Option("riffraff-builds")
 
+riffRaffArtifactResources += (file("cloudformation/memsub-promotions-cf.yaml"), "cfn/cfn.yaml")
+
 javaOptions in Universal ++= Seq(
   "-Dpidfile.path=/dev/null",
   "-J-XX:MaxRAMFraction=2",

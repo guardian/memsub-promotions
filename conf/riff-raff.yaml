@@ -1,17 +1,17 @@
 stacks: [membership]
 regions: [eu-west-1]
 deployments:
-  ami:
-    type: ami-cloudformation-parameter
+  cfn:
+    type: cloud-formation
     app: promotions-tool
     parameters:
       amiTags:
-        Recipe: xenial-membership
+        Recipe: bionic-membership-ARM
         AmigoStage: PROD
       amiParameter: AmiId
       amiEncrypted: true
   promotions-tool:
     type: autoscaling
-    dependencies: [ami]
+    dependencies: [cfn]
     parameters:
       bucket: gu-promotions-tool-dist
