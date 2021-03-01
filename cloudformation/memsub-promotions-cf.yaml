@@ -10,15 +10,6 @@ Parameters:
     AllowedValues:
     - PROD
     - CODE
-  InstanceType:
-    Description: EC2 instance type
-    Type: String
-    AllowedValues:
-    - t2.micro
-    - t2.small
-    - t3.micro
-    - t3.small
-    ConstraintDescription: must be a valid EC2 instance type.
   MaxInstances:
     Description: Maximum number of instances. This should be (at least) double the
       desired capacity.
@@ -200,7 +191,7 @@ Resources:
       ImageId: !Ref 'AmiId'
       SecurityGroups:
       - !Ref 'InstanceSecurityGroup'
-      InstanceType: !Ref 'InstanceType'
+      InstanceType: t4g.micro
       AssociatePublicIpAddress: 'False'
       IamInstanceProfile: !Ref 'InstanceProfile'
       UserData:
