@@ -5,6 +5,7 @@ deployments:
     type: cloud-formation
     app: promotions-tool
     parameters:
+      templatePath: cfn.yaml
       amiTags:
         Recipe: bionic-membership-ARM
         AmigoStage: PROD
