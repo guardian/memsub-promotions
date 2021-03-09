@@ -90,7 +90,11 @@ Resources:
             Action: s3:GetObject
             Resource: !FindInMap [StageMap, !Ref Stage, ReadableS3Resources]
           - Effect: Allow
-            Action: ec2:DescribeTags
+            Action:
+            - ec2:DescribeTags
+            - ec2:DescribeInstances
+            - autoscaling:DescribeAutoScalingGroups
+            - autoscaling:DescribeAutoScalingInstances
             Resource: '*'
           - Effect: Allow
             Action:
@@ -191,6 +195,7 @@ Resources:
       ImageId: !Ref 'AmiId'
       SecurityGroups:
       - !Ref 'InstanceSecurityGroup'
+      - !Ref WazuhSecurityGroup
       InstanceType: t4g.micro
       AssociatePublicIpAddress: 'False'
       IamInstanceProfile: !Ref 'InstanceProfile'
@@ -248,6 +253,18 @@ Resources:
         FromPort: '443'
         ToPort: '443'
         CidrIp: 0.0.0.0/0
+  WazuhSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Allow outbound traffic from wazuh agent to manager
+      VpcId:
+        Ref: VpcId
+      SecurityGroupEgress:
+        - IpProtocol: tcp
+          FromPort: 1514
+          ToPort: 1515
+          CidrIp: 0.0.0.0/0
+
   alarmNoHealthyHosts:
     Type: AWS::CloudWatch::Alarm
     Properties:
