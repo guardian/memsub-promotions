@@ -81,7 +81,6 @@ libraryDependencies ++= Seq(
 resolvers ++= Seq(
   "Guardian Github Releases" at "https://guardian.github.io/maven/repo-releases",
   "Guardian Github Snapshots" at "https://guardian.github.com/maven/repo-snapshots",
-  "scalaz-bintray" at "https://dl.bintray.com/scalaz/releases",
   Resolver.sonatypeRepo("releases"))
 
 addCommandAlias("devrun", "run -Dconfig.resource=DEV.conf 9500")
