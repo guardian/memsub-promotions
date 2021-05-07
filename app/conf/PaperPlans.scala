@@ -4,6 +4,7 @@ import com.typesafe.config.Config
 import wiring.AppComponents.Stage
 
 case class PaperProducts(
+  digitalVoucher: PaperPlans,
   voucher: PaperPlans,
   delivery: PaperPlans
 )
@@ -40,6 +41,7 @@ object PaperProducts {
     val c = config.getConfig(s"touchpoint.backend.environments.${stage.name}")
 
     PaperProducts(
+      digitalVoucher = plansFor(c, "digitalVoucher"),
       voucher = plansFor(c, "voucher"),
       delivery = plansFor(c, "delivery")
     )
