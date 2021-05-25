@@ -19,11 +19,7 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Set command to monitor
-        if:
-          contains('
-            refs/heads/main
-            refs/heads/snyk-action
-          ', github.ref)
+        if: github.ref == 'refs/heads/main'
         run: echo "SNYK_COMMAND=monitor" >> $GITHUB_ENV
 
       - name: Run Snyk to check for Node vulnerabilities
