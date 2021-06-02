@@ -55,7 +55,7 @@ javaOptions in Universal ++= Seq(
 scalaVersion := "2.12.12"
 scalacOptions ++= Seq("-feature")
 
-val jacksonVersion = "2.12.0"
+val jacksonVersion = "2.10.5.1"
 
 libraryDependencies ++= Seq(
   jdbc,
