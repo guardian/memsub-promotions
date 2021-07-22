@@ -96,7 +96,9 @@ class RatePlanController(
           RatePlan(weeklyPlans.domestic.yearly, "Domestic Annual"),
           RatePlan(weeklyPlans.row.yearly, "ROW Annual"),
           RatePlan(weeklyPlans.domestic.quarterly, "Domestic Quarterly"),
-          RatePlan(weeklyPlans.row.quarterly, "ROW Quarterly")
+          RatePlan(weeklyPlans.row.quarterly, "ROW Quarterly"),
+          RatePlan(weeklyPlans.domestic.monthly, "Domestic Monthly"),
+          RatePlan(weeklyPlans.row.monthly, "ROW Monthly")
         )
           ++ weeklyPlans.domestic.six.map(id => RatePlan(id, "Domestic 6-for-6"))
           ++ weeklyPlans.row.six.map(id => RatePlan(id, "ROW 6-for-6"))

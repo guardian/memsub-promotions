@@ -12,6 +12,7 @@ case class WeeklyPlans(
 case class WeeklySchedules(
   yearly: ProductRatePlanId,
   quarterly: ProductRatePlanId,
+  monthly: ProductRatePlanId,
   six: Option[ProductRatePlanId],
   oneYear: Option[ProductRatePlanId],
   threeMonth: Option[ProductRatePlanId]
@@ -23,6 +24,7 @@ object WeeklyPlans {
     WeeklySchedules(
       yearly = ProductRatePlanId(config.getString(s"weekly.$product.yearly")),
       quarterly = ProductRatePlanId(config.getString(s"weekly.$product.quarterly")),
+      monthly = ProductRatePlanId(config.getString(s"weekly.$product.monthly")),
       six = if (config.hasPath(s"weekly.$product.six"))
         Some(ProductRatePlanId(config.getString(s"weekly.$product.six"))) else None,
       oneYear = if (config.hasPath(s"weekly.$product.oneyear"))
