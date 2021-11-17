@@ -52,7 +52,7 @@ javaOptions in Universal ++= Seq(
   s"-J-Xloggc:/var/log/${packageName.value}/gc.log"
 )
 
-scalaVersion := "2.13.0"
+scalaVersion := "2.13.7"
 scalacOptions ++= Seq("-feature")
 
 libraryDependencies ++= Seq(
