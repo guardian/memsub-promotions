@@ -55,8 +55,6 @@ javaOptions in Universal ++= Seq(
 scalaVersion := "2.13.0"
 scalacOptions ++= Seq("-feature")
 
-val jacksonVersion = "2.13.0"
-
 libraryDependencies ++= Seq(
   jdbc,
   cache,
@@ -67,14 +65,7 @@ libraryDependencies ++= Seq(
   "com.softwaremill.macwire" %% "util" % "2.5.0",
   "com.softwaremill.macwire" %% "proxy" % "2.5.0",
   "ch.qos.logback" % "logback-classic" % "1.2.3",
-  "org.scalatestplus.play" %% "scalatestplus-play" % "5.1.0" % Test,
-
-  // All the below are required to force aws libraries to use the latest version of jackson
-  "com.fasterxml.jackson.core" % "jackson-databind" % jacksonVersion,
-  "com.fasterxml.jackson.core" % "jackson-annotations" % jacksonVersion,
-  "com.fasterxml.jackson.dataformat" % "jackson-dataformat-cbor" % jacksonVersion,
-  "com.fasterxml.jackson.datatype" % "jackson-datatype-jdk8" % jacksonVersion,
-  "com.fasterxml.jackson.datatype" % "jackson-datatype-jsr310" % jacksonVersion
+  "org.scalatestplus.play" %% "scalatestplus-play" % "5.1.0" % Test
 )
 
 resolvers ++= Seq(
