@@ -57,10 +57,10 @@ scalacOptions ++= Seq("-feature")
 
 libraryDependencies ++= Seq(
   jdbc,
-  cache,
+  ehcache,
   ws,
   "com.gu" %% "membership-common" % "0.608",
-  "com.gu.play-googleauth" %% "play-v27" % "1.0.7",
+  "com.gu.play-googleauth" %% "play-v28" % "2.1.1",
   "com.softwaremill.macwire" %% "macros" % "2.5.0" % "provided",
   "com.softwaremill.macwire" %% "util" % "2.5.0",
   "com.softwaremill.macwire" %% "proxy" % "2.5.0",
