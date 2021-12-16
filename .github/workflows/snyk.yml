@@ -35,7 +35,7 @@ jobs:
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
         with:
-          args: --org=the-guardian-cuu --project-name=memsub-promotions-sbt
+          args: --org=the-guardian-cuu --project-name=memsub-promotions-sbt --file=./build.sbt
           command: ${{ env.SNYK_COMMAND }}
 
       - name: Run Snyk to check for vulnerabilities in the lambdas
