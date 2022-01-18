@@ -65,12 +65,11 @@ libraryDependencies ++= Seq(
   "com.softwaremill.macwire" %% "util" % "2.5.0",
   "com.softwaremill.macwire" %% "proxy" % "2.5.0",
   "ch.qos.logback" % "logback-classic" % "1.2.3",
-  "com.fasterxml.jackson.core" % "jackson-databind" % jacksonDatabindVersion,
   "org.scalatestplus.play" %% "scalatestplus-play" % "5.1.0" % Test
 )
 
 // Force jackson-databind version to avoid incompatibility with Play
-val jacksonDatabindVersion = "2.12.3"
+val jacksonDatabindVersion = "2.11.4"
 dependencyOverrides += "com.fasterxml.jackson.core" % "jackson-databind" % jacksonDatabindVersion
 
 resolvers ++= Seq(
