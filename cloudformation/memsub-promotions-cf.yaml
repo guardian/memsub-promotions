@@ -119,6 +119,18 @@ Resources:
             - cloudwatch:*
             - logs:*
             Resource: '*'
+      - PolicyName: SSMTunnel
+        PolicyDocument:
+          Version: 2012-10-17
+          Statement:
+            - Effect: Allow
+              Action:
+                - ssm:UpdateInstanceInformation
+                - ssmmessages:CreateControlChannel
+                - ssmmessages:CreateDataChannel
+                - ssmmessages:OpenControlChannel
+                - ssmmessages:OpenDataChannel
+              Resource: '*'
       ManagedPolicyArns:
       - !Sub arn:aws:iam::${AWS::AccountId}:policy/guardian-ec2-role-for-ssm
   InstanceProfile:
