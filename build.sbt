@@ -57,16 +57,20 @@ scalacOptions ++= Seq("-feature")
 
 libraryDependencies ++= Seq(
   jdbc,
-  cache,
+  ehcache,
   ws,
-  "com.gu" %% "membership-common" % "0.608",
-  "com.gu.play-googleauth" %% "play-v27" % "1.0.7",
+  "com.gu" %% "membership-common" % "0.610",
+  "com.gu.play-googleauth" %% "play-v28" % "2.2.2",
   "com.softwaremill.macwire" %% "macros" % "2.5.0" % "provided",
   "com.softwaremill.macwire" %% "util" % "2.5.0",
   "com.softwaremill.macwire" %% "proxy" % "2.5.0",
   "ch.qos.logback" % "logback-classic" % "1.2.3",
   "org.scalatestplus.play" %% "scalatestplus-play" % "5.1.0" % Test
 )
+
+// Force jackson-databind version to avoid incompatibility with Play
+val jacksonDatabindVersion = "2.11.4"
+dependencyOverrides += "com.fasterxml.jackson.core" % "jackson-databind" % jacksonDatabindVersion
 
 resolvers ++= Seq(
   "Guardian Github Releases" at "https://guardian.github.io/maven/repo-releases",

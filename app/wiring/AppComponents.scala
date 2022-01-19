@@ -36,7 +36,7 @@ class AppComponents(private val stage: Stage, c: BuiltInComponents with AhcWSCom
 
   private val googleAuthConfig = googleAuthConfigFor(config, httpConfiguration)
 
-  val authAction = new AuthAction[AnyContent](googleAuthConfig, routes.AuthController.loginAction(), controllerComponents.parsers.default)
+  val authAction = new AuthAction[AnyContent](googleAuthConfig, routes.AuthController.loginAction, controllerComponents.parsers.default)
 
   lazy val authController = wire[AuthController]
   lazy val healthController = wire[HealthCheckController]

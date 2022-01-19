@@ -9,7 +9,7 @@ object CampaignUtils {
   def filterCampaignsByOptionalGroup(group: Option[CampaignGroup], campaigns: Seq[Campaign]): Seq[Campaign] = {
     group.map(group => campaigns.filter(_.group == group)) getOrElse campaigns
   }
-  def sortCampaignsByPromotionDateThenNameForDisplay(campaigns: Seq[Campaign], promotions: Seq[AnyPromotion], now: DateTime = DateTime.now): Seq[Campaign] = {
+  def sortCampaignsByPromotionDateThenNameForDisplay(campaigns: Seq[Campaign], promotions: Seq[AnyPromotion], now: DateTime = DateTime.now()): Seq[Campaign] = {
     campaigns.sortBy(_.name).reverse.map(campaign => {
       val campaignPromotionStartDateRange = promotions.filter(_.campaign == campaign.code).map(_.starts).sorted
       val earliestNextToStartDate = campaignPromotionStartDateRange.find(now.isBefore)

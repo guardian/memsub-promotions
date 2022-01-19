@@ -35,11 +35,11 @@ class AuthController(val wsClient: WSClient, components: ControllerComponents, c
     processOauth2Callback()
   }
 
-  val authAction = new googleauth.AuthAction[AnyContent](authConfig, routes.AuthController.loginAction(), controllerComponents.parsers.default) andThen requireGroup[GoogleAuthRequest](Set(
+  val authAction = new googleauth.AuthAction[AnyContent](authConfig, routes.AuthController.loginAction, controllerComponents.parsers.default) andThen requireGroup[GoogleAuthRequest](Set(
     "subscriptions-promotion-tool@guardian.co.uk"  // Managed by Reader Revenue Dev Managers.
   ))
 
-  override val failureRedirectTarget: Call = routes.AuthController.loginAction()
-  override val defaultRedirectTarget: Call = routes.StaticController.index()
+  override val failureRedirectTarget: Call = routes.AuthController.loginAction
+  override val defaultRedirectTarget: Call = routes.StaticController.index
 
 }
