@@ -221,9 +221,8 @@ Resources:
               dpkg -i /tmp/promotions-tool_1.0-SNAPSHOT_all.deb
               mkdir -p /etc/gu
               aws s3 cp s3://gu-reader-revenue-private/${Stack}/${App}/${Stage}/memsub-promotions-keys.conf /etc/gu
-              aws s3 cp s3://gu-reader-revenue-private/${Stack}/${App}/${Stage}/memsub-promotions.private.conf /etc/gu
-              chown promotions-tool /etc/gu/memsub-promotions-keys.conf /etc/gu/memsub-promotions.private.conf
-              chmod 0600 /etc/gu/memsub-promotions-keys.conf /etc/gu/memsub-promotions.private.conf
+              chown promotions-tool /etc/gu/memsub-promotions-keys.conf
+              chmod 0600 /etc/gu/memsub-promotions-keys.conf
               wget https://s3.amazonaws.com/aws-cloudwatch/downloads/latest/awslogs-agent-setup.py
 
               sed -i -e "s/__DATE/$(date +%F)/" -e 's/__STAGE/${Stage}/' $CONF_DIR/logger.conf
