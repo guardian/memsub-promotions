@@ -65,6 +65,8 @@ class RatePlanController(
         RatePlan(digipackIds.digitalPackYearly, "Digital Pack yearly")
       ).map(enhance)),
       Newspaper.id -> Json.toJson(Seq(
+        RatePlan(paperPlans.delivery.saturday, "Home Delivery Saturday"),
+        RatePlan(paperPlans.delivery.saturdayplus, "Home Delivery Saturday+"),
         RatePlan(paperPlans.delivery.sunday, "Home Delivery Sunday"),
         RatePlan(paperPlans.delivery.sundayplus, "Home Delivery Sunday+"),
         RatePlan(paperPlans.delivery.weekend, "Home Delivery Weekend"),
@@ -73,6 +75,8 @@ class RatePlanController(
         RatePlan(paperPlans.delivery.sixdayplus, "Home Delivery Sixday+"),
         RatePlan(paperPlans.delivery.everyday, "Home Delivery Everyday"),
         RatePlan(paperPlans.delivery.everydayplus, "Home Delivery Everyday+"),
+        RatePlan(paperPlans.voucher.saturday, "Voucher Saturday"),
+        RatePlan(paperPlans.voucher.saturdayplus, "Voucher Saturday+"),
         RatePlan(paperPlans.voucher.sunday, "Voucher Sunday"),
         RatePlan(paperPlans.voucher.sundayplus, "Voucher Sunday+"),
         RatePlan(paperPlans.voucher.weekend, "Voucher Weekend"),
@@ -81,6 +85,8 @@ class RatePlanController(
         RatePlan(paperPlans.voucher.sixdayplus, "Voucher Sixday+"),
         RatePlan(paperPlans.voucher.everyday, "Voucher Everyday"),
         RatePlan(paperPlans.voucher.everydayplus, "Voucher Everyday+"),
+        RatePlan(paperPlans.digitalVoucher.saturday, "Subscription Card Saturday"),
+        RatePlan(paperPlans.digitalVoucher.saturdayplus, "Subscription Card Saturday+"),
         RatePlan(paperPlans.digitalVoucher.sunday, "Subscription Card Sunday"),
         RatePlan(paperPlans.digitalVoucher.sundayplus, "Subscription Card Sunday+"),
         RatePlan(paperPlans.digitalVoucher.weekend, "Subscription Card Weekend"),
