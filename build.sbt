@@ -69,7 +69,7 @@ libraryDependencies ++= Seq(
 )
 
 // Force jackson-databind version to avoid incompatibility with Play
-val jacksonDatabindVersion = "2.13.2.2"
+val jacksonDatabindVersion = "2.11.4"
 dependencyOverrides += "com.fasterxml.jackson.core" % "jackson-databind" % jacksonDatabindVersion
 
 resolvers ++= Seq(
