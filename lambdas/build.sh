@@ -1,11 +1,7 @@
 #!/bin/bash
 
-#Installing node 12.22
-NODE_VERSION="12.22"
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"  # This loads nvm
-nvm install ${NODE_VERSION}
-nvm use ${NODE_VERSION}
 
 # Installing yarn
 YARN_VERSION="1.3.2"
