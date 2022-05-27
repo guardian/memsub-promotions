@@ -84,7 +84,7 @@ function batchWriteRequestsForCodes(promoCodes, callback, TOUCHPOINT_BACKEND) {
     const RequestItemsObj = {};
     RequestItemsObj['MembershipSub-PromoCode-View-' + TOUCHPOINT_BACKEND] = putRequestsAsArray;
 
-    docClient.batchWriteItem({
+    docClient.batchWrite({
         RequestItems: RequestItemsObj
     })
     .promise()
