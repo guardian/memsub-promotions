@@ -150,7 +150,7 @@ Resources:
       MemorySize: 128
       Role: !GetAtt [MembershipSubPromoCodeViewLambdaRole, Arn]
       Runtime: nodejs12.x
-      Timeout: 10
+      Timeout: 60
   PromoCodeViewLambdaFunctionUAT:
     Type: AWS::Lambda::Function
     Properties:
@@ -164,7 +164,7 @@ Resources:
       MemorySize: 128
       Role: !GetAtt [MembershipSubPromoCodeViewLambdaRole, Arn]
       Runtime: nodejs12.x
-      Timeout: 10
+      Timeout: 60
   PromoCodeViewLambdaFunctionPROD:
     Type: AWS::Lambda::Function
     Properties:
@@ -178,7 +178,7 @@ Resources:
       MemorySize: 128
       Role: !GetAtt [MembershipSubPromoCodeViewLambdaRole, Arn]
       Runtime: nodejs12.x
-      Timeout: 10
+      Timeout: 60
   PromoCodeViewLambdaEventSourceDEV:
     Type: AWS::Lambda::EventSourceMapping
     Properties:
@@ -216,7 +216,7 @@ Resources:
       MemorySize: 128
       Role: !GetAtt [MembershipSubPromoCodeViewETLRole, Arn]
       Runtime: nodejs12.x
-      Timeout: 10
+      Timeout: 60
 
   SalesforceLambdaKMSKey:
     Type: AWS::KMS::Key
@@ -261,7 +261,7 @@ Resources:
       MemorySize: 128
       Role: !GetAtt [MembershipSubPromoCodeViewETLRole, Arn]
       Runtime: nodejs12.x
-      Timeout: 10
+      Timeout: 60
       KmsKeyArn: !GetAtt SalesforceLambdaKMSKey.Arn
       Environment:
         Variables:
@@ -282,7 +282,7 @@ Resources:
       MemorySize: 128
       Role: !GetAtt [MembershipSubPromoCodeViewETLRole, Arn]
       Runtime: nodejs12.x
-      Timeout: 10
+      Timeout: 60
       KmsKeyArn: !GetAtt SalesforceLambdaKMSKey.Arn
       Environment:
         Variables:
@@ -303,7 +303,7 @@ Resources:
       MemorySize: 128
       Role: !GetAtt [MembershipSubPromoCodeViewETLRole, Arn]
       Runtime: nodejs12.x
-      Timeout: 10
+      Timeout: 60
       KmsKeyArn: !GetAtt SalesforceLambdaKMSKey.Arn
       Environment:
         Variables:
@@ -324,7 +324,7 @@ Resources:
       MemorySize: 128
       Role: !GetAtt [MembershipSubPromotionsDataBackupLambdaRole, Arn]
       Runtime: nodejs12.x
-      Timeout: 30
+      Timeout: 60
       KmsKeyArn: !GetAtt SalesforceLambdaKMSKey.Arn
   BackupSchedule:
     Type: AWS::Events::Rule
