@@ -60,7 +60,7 @@ libraryDependencies ++= Seq(
   ehcache,
   ws,
   "com.gu" %% "membership-common" % "0.610",
-  "com.gu.play-googleauth" %% "play-v28" % "2.2.2",
+  "com.gu.play-googleauth" %% "play-v28" % "2.2.6",
   "com.softwaremill.macwire" %% "macros" % "2.5.0" % "provided",
   "com.softwaremill.macwire" %% "util" % "2.5.0",
   "com.softwaremill.macwire" %% "proxy" % "2.5.0",
