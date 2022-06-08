@@ -38,7 +38,7 @@ function decryptEnvironmentVariable(fieldName) {
     return function (collection) {
         const encrypted = process.env[fieldName];
         return new Promise((fulfilled, rejected) => {
-            KMS.decrypt({CiphertextBlob: new Buffer(encrypted, 'base64')}, (err, data) => {
+            KMS.decrypt({CiphertextBlob: Buffer.from(encrypted, 'base64')}, (err, data) => {
                 if (err) {
                     rejected(`Decrypt error: ${err}`);
                 } else {

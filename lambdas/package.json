@@ -20,5 +20,7 @@
     "riffraff": "VERBOSE=true ARTEFACT_PATH=$PWD yarn riffraff-artefact",
     "clean": "rm -rf dist && rm -rf target"
   },
-  "dependencies": {}
+  "dependencies": {
+    "aws-sdk": "^2.1143.0"
+  }
 }

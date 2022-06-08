@@ -1,11 +1,9 @@
 #!/bin/bash
 
-#Installing node 6.10
-NODE_VERSION="6.10"
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"  # This loads nvm
-nvm install ${NODE_VERSION}
-nvm use ${NODE_VERSION}
+nvm install
+nvm use
 
 # Installing yarn
 YARN_VERSION="1.3.2"
