@@ -24,7 +24,7 @@ This lambda sends data to salesforce on a daily schedule. We can just check the 
 
 Three versions of this lambda (PROD, UAT, DEV) exist in AWS, each of which maps to thge equivalent environment in the SalesForce cloud. We can use the DEV version for testing. 
 
-The lambda relies on SalesForce usernames/passwords which have been stored in AWS in ???
+The lambda relies on SalesForce usernames/passwords which have been stored in AWS as encrypted environment variables.
 
 Only the PROD will rebuild automatically when a PR branch merges into `main`.
 
