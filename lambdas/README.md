@@ -1,6 +1,6 @@
 # Lambdas
 
-These lambdas relate to automated tasks, run on a daily or weekly basis, which copy promotions data stored in the DynamoDB tables over to SalesForce and BigQuery, as well as backing up the DB tables themselves.
+These lambdas relate to automated tasks, usually run on a daily basis, which copy promotions data stored in the DynamoDB tables over to SalesForce and BigQuery, as well as backing up the DB tables themselves.
 
 Five lambda functions are defined in the lambdas/src folder. They relate to eight lambdas in AWS,  in the memsub-promotions-lambdas application - link here: https://eu-west-1.console.aws.amazon.com/lambda/home?region=eu-west-1#/applications/memsub-promotions-lambdas 
 
@@ -55,10 +55,5 @@ Because these are lambdas, we cannot develop and test on local devices. Instead 
 ## Deployment
 
 The deploy is called MemSub::Membership Admin::Promotions Tool Lambda
-
-teamcity will
-+ run lambdas/build.sh
-+ then upload the MembershipSub-Promotions-to-PromoCode-View-Lambda.zip to the Lambda function on S3 
-+ refresh the package
 
 Note that only the PROD versions of the lambdas will automatically rebuild. UAT and DEV versions need to be updated manually in the AWS lambdas console
