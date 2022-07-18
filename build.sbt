@@ -55,6 +55,8 @@ javaOptions in Universal ++= Seq(
 scalaVersion := "2.13.7"
 scalacOptions ++= Seq("-feature")
 
+val jacksonVersion = "2.13.3"
+
 libraryDependencies ++= Seq(
   jdbc,
   ehcache,
@@ -65,12 +67,11 @@ libraryDependencies ++= Seq(
   "com.softwaremill.macwire" %% "util" % "2.5.0",
   "com.softwaremill.macwire" %% "proxy" % "2.5.0",
   "ch.qos.logback" % "logback-classic" % "1.2.3",
+  // Use the latest version of jackson
+  "com.fasterxml.jackson.core" % "jackson-databind" % jacksonVersion,
+  "com.fasterxml.jackson.module" %% "jackson-module-scala" % jacksonVersion,
   "org.scalatestplus.play" %% "scalatestplus-play" % "5.1.0" % Test
 )
-
-// Force jackson-databind version to avoid incompatibility with Play
-val jacksonDatabindVersion = "2.11.4"
-dependencyOverrides += "com.fasterxml.jackson.core" % "jackson-databind" % jacksonDatabindVersion
 
 resolvers ++= Seq(
   "Guardian Github Releases" at "https://guardian.github.io/maven/repo-releases",
