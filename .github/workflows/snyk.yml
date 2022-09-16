@@ -1,39 +1,14 @@
-name: Snyk
+# This action is just a test
+name: Snyk (test)
 
-on:
-  push:
-    branches:
-      - main
-      - jd-snyk-fix
-  workflow_dispatch:
+on: push
 
 jobs:
   security:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout branch
-        uses: actions/checkout@v2
-
-      - name: Run Snyk to check for Node vulnerabilities
-        uses: snyk/actions/node@0.3.0
-        env:
-          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
-        with:
-          args: --org=the-guardian-cuu --project-name=memsub-promotions-node --file=./frontend/yarn.lock
-          command: monitor
-
-      - name: Run Snyk to check for Scala vulnerabilities
-        uses: snyk/actions/scala@0.3.0
-        env:
-          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
-        with:
-          args: --org=the-guardian-cuu --project-name=memsub-promotions-sbt --file=./build.sbt
-          command: monitor
-
-      - name: Run Snyk to check for vulnerabilities in the lambdas
-        uses: snyk/actions/node@0.3.0
-        env:
-          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
-        with:
-          args: --org=the-guardian-cuu --project-name=memsub-promotions-lambdas --file=./lambdas/yarn.lock
-          command: monitor
+    uses: guardian/.github/.github/workflows/sbt-node-snyk.yml@main
+    with:
+      DEBUG: true
+      ORG: guardian-test
+      SKIP_NODE: false
+    secrets:
+       SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
