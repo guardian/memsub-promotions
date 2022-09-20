@@ -61,7 +61,7 @@ libraryDependencies ++= Seq(
   jdbc,
   ehcache,
   ws,
-  "com.gu" %% "membership-common" % "0.623",
+  "com.gu" %% "membership-common" % "0.625",
   "com.gu.play-googleauth" %% "play-v28" % "2.2.6",
   "com.softwaremill.macwire" %% "macros" % "2.5.0" % "provided",
   "com.softwaremill.macwire" %% "util" % "2.5.0",
