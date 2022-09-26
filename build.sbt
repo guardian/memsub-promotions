@@ -46,7 +46,6 @@ javaOptions in Universal ++= Seq(
   "-J-XX:InitialRAMFraction=2",
   "-J-XX:MaxMetaspaceSize=500m",
   "-J-XX:+PrintGCDetails",
-  "-J-XX:+PrintGCDateStamps",
   s"-J-Xloggc:/var/log/${packageName.value}/gc.log"
 )
 
