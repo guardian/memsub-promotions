@@ -28,8 +28,6 @@ lazy val root = (project in file(".")).enablePlugins(
 
 enablePlugins(SystemdPlugin)
 
-debianPackageDependencies := Seq("openjdk-8-jre-headless")
-
 packageSummary := "Memsub-promotions"
 packageDescription := """Memsub-promotions tool"""
 maintainer := "Membership Dev <membership.dev@theguardian.com>"
