@@ -28,8 +28,6 @@ lazy val root = (project in file(".")).enablePlugins(
 
 enablePlugins(SystemdPlugin)
 
-debianPackageDependencies := Seq("openjdk-8-jre-headless")
-
 packageSummary := "Memsub-promotions"
 packageDescription := """Memsub-promotions tool"""
 maintainer := "Membership Dev <membership.dev@theguardian.com>"
@@ -44,12 +42,9 @@ riffRaffArtifactResources += (file("cloudformation/memsub-promotions-cf.yaml"), 
 
 javaOptions in Universal ++= Seq(
   "-Dpidfile.path=/dev/null",
-  "-J-XX:MaxRAMFraction=2",
-  "-J-XX:InitialRAMFraction=2",
   "-J-XX:MaxMetaspaceSize=500m",
   "-J-XX:+PrintGCDetails",
-  "-J-XX:+PrintGCDateStamps",
-  s"-J-Xloggc:/var/log/${packageName.value}/gc.log"
+  s"-J-Xlog:gc:/var/log/${packageName.value}/gc.log"
 )
 
 scalaVersion := "2.13.7"
