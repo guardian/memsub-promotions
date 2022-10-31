@@ -47,7 +47,7 @@ javaOptions in Universal ++= Seq(
   s"-J-Xlog:gc:/var/log/${packageName.value}/gc.log"
 )
 
-scalaVersion := "2.13.7"
+scalaVersion := "2.13.10"
 scalacOptions ++= Seq("-feature")
 
 val jacksonVersion = "2.13.3"
