@@ -1,5 +1,4 @@
 package controllers
-import actions.GoogleAuthAction.GoogleAuthRequest
 import com.gu.googleauth
 import com.gu.googleauth.GoogleGroupChecker
 import com.gu.memsub.auth.common.MemSub.Google._
@@ -14,7 +13,7 @@ class AuthController(val wsClient: WSClient, components: ControllerComponents, c
   extends AbstractController(components) with googleauth.LoginSupport with googleauth.Filters {
 
   override val authConfig = googleAuthConfigFor(config, httpConfiguration)
-  override lazy val groupChecker = googleGroupCheckerFor(config)
+  override lazy val groupChecker: GoogleGroupChecker = googleGroupCheckerFor(config)
 
   val ANTI_FORGERY_KEY = "antiForgeryToken"
 
@@ -32,14 +31,11 @@ class AuthController(val wsClient: WSClient, components: ControllerComponents, c
     */
 
   def oauth2Callback: Action[AnyContent] = Action.async { implicit request =>
-    processOauth2Callback()
+    processOauth2Callback(Set(
+      "subscriptions-promotion-tool@guardian.co.uk" // Managed by Reader Revenue Dev Managers.
+    ), groupChecker)
   }
-
-  val authAction = new googleauth.AuthAction[AnyContent](authConfig, routes.AuthController.loginAction, controllerComponents.parsers.default) andThen requireGroup[GoogleAuthRequest](Set(
-    "subscriptions-promotion-tool@guardian.co.uk"  // Managed by Reader Revenue Dev Managers.
-  ))
 
   override val failureRedirectTarget: Call = routes.AuthController.loginAction
   override val defaultRedirectTarget: Call = routes.StaticController.index
-
 }

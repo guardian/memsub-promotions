@@ -3,6 +3,7 @@ package com.gu.memsub.auth.common
 import com.amazonaws.auth.profile.ProfileCredentialsProvider
 import com.amazonaws.auth.{AWSCredentialsProviderChain, InstanceProfileCredentialsProvider}
 import com.amazonaws.services.s3.model.S3ObjectId
+import com.google.auth.oauth2.ServiceAccountCredentials
 import com.gu.googleauth.{AntiForgeryChecker, GoogleAuthConfig, GoogleGroupChecker, GoogleServiceAccount}
 import com.typesafe.config.Config
 import play.api.http.HttpConfiguration
@@ -37,11 +38,11 @@ object MemSub {
 
     def googleGroupCheckerFor(config: Config): GoogleGroupChecker = {
       val con = config.getConfig("google.directory.service_account")
-      new GoogleGroupChecker(GoogleServiceAccount(
-        email = con.getString("id"),
-        privateKey = ServiceAccount.PrivateKey,
-        impersonatedUser = con.getString("email")
-      ))
+      new GoogleGroupChecker(con.getString("email"), ServiceAccountCredentials
+        .newBuilder()
+        .setClientEmail(con.getString("id"))
+        .setPrivateKey(ServiceAccount.PrivateKey)
+        .build())
     }
   }
 
