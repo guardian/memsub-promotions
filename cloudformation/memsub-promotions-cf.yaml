@@ -235,12 +235,12 @@ Resources:
     Type: AWS::EC2::SecurityGroup
     Properties:
       VpcId: !Ref 'VpcId'
-      GroupDescription: Open up HTTPS access to load balancer
+      GroupDescription: Open up HTTPS ingress from internet
       SecurityGroupIngress:
       - IpProtocol: tcp
         FromPort: '443'
         ToPort: '443'
-        CidrIp: !Ref 'InternalCidrIp'
+        CidrIp: 0.0.0.0/0
       SecurityGroupEgress:
       - IpProtocol: tcp
         FromPort: '9000'
@@ -250,7 +250,7 @@ Resources:
     Type: AWS::EC2::SecurityGroup
     Properties:
       VpcId: !Ref 'VpcId'
-      GroupDescription: Open up HTTP access to load balancer, SSH to office
+      GroupDescription: Open up HTTP ingress from the load balancer, and SSH ingress from the office
       SecurityGroupIngress:
       - IpProtocol: tcp
         FromPort: '22'
