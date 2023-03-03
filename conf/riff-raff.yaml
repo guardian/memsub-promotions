@@ -7,7 +7,7 @@ deployments:
     parameters:
       templatePath: cfn.yaml
       amiTags:
-        Recipe: jammy-membership-java11
+        Recipe: bionic-membership-java11
         AmigoStage: PROD
       amiParameter: AmiId
       amiEncrypted: true
