@@ -3,7 +3,7 @@ const DEFAULT_CAMPAIGN_GROUP = 'digitalpack';
 const STAGE = 'stage';
 const DEFAULT_STAGE = 'PROD';   // Must match the default router in AppLoader.scala
 const PRODUCT_DOMAINS = {
-    'DEV': {
+    'CODE': {
         'membership': 'mem.thegulocal.com',
         'digitalpack': 'sub.thegulocal.com',
         'newspaper': 'sub.thegulocal.com',
@@ -11,13 +11,6 @@ const PRODUCT_DOMAINS = {
         'grid': 'media.gutools.co.uk'
     },
     'PROD': {
-        'membership': 'membership.theguardian.com',
-        'digitalpack': 'subscribe.theguardian.com',
-        'newspaper': 'subscribe.theguardian.com',
-        'weekly': 'subscribe.theguardian.com',
-        'grid': 'media.gutools.co.uk'
-    },
-    'UAT': {
         'membership': 'membership.theguardian.com',
         'digitalpack': 'subscribe.theguardian.com',
         'newspaper': 'subscribe.theguardian.com',

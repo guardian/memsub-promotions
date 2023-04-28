@@ -2,6 +2,9 @@ stacks:
 - membership
 regions:
 - eu-west-1
+allowedStages:
+- CODE
+- PROD
 deployments:
   MembershipSub-Promotions-PromoCode-View:
     type: aws-lambda

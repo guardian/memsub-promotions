@@ -2,7 +2,7 @@
 
 /*
     This file can be uploaded to a Lambda function and used to do a full refresh of the MembershipSub-PromoCode-View-[STAGE] database.
-    You just have to run the index.handler function inside a Lambda whose name ends with -PROD or -UAT depending on what stage's MembershipSub-PromoCode-View- table you want to update.
+    You just have to run the index.handler function inside a Lambda whose name ends with -PROD or -CODE depending on what stage's MembershipSub-PromoCode-View- table you want to update.
 */
 
 const fs = require('fs');
@@ -126,7 +126,7 @@ exports.handler = (event, context, callback) => {
 
     const ddb = new AWS.DynamoDB();
 
-    const source = /PROD$/.test(context.functionName) ? 'PROD' : 'UAT';
+    const source = /PROD$/.test(context.functionName) ? 'PROD' : 'CODE';
 
     const campaignsP = ddb.scan({ TableName: `MembershipSub-Campaigns-${source}`}).promise();
     const promotionsP = ddb.scan({ TableName: `MembershipSub-Promotions-${source}`}).promise();
