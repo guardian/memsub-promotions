@@ -57,7 +57,6 @@ object AppComponents {
   def ratePlanPath(stage: Stage): String = s"touchpoint.backend.environments.${stage.name}.zuora.ratePlanIds"
 
   sealed trait Stage { def name: String }
-  case object DEV extends Stage { override def name = "DEV" }
-  case object UAT extends Stage { override def name = "UAT" }
+  case object CODE extends Stage { override def name = "CODE" }
   case object PROD extends Stage { override def name = "PROD" }
 }

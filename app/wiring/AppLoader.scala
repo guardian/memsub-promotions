@@ -29,8 +29,7 @@ class AppLoader extends ApplicationLoader {
 
       lazy val applicationComponentsMap: Map[String, Router] = Map[String, Router](
         "PROD" -> new AppComponents(AppComponents.PROD, this, controllerComponents, this).router,
-        "UAT" ->  new AppComponents(AppComponents.UAT, this, controllerComponents, this).router,
-        "DEV" -> new AppComponents(AppComponents.DEV, this, controllerComponents, this).router
+        "CODE" -> new AppComponents(AppComponents.CODE, this, controllerComponents, this).router
       )
 
       lazy val router = applicationComponentsMap("PROD")

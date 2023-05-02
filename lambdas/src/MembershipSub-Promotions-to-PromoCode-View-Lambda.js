@@ -107,7 +107,7 @@ function attemptToComplete(callback) {
 
 exports.handler = (event, context, callback) => {
 
-    const TOUCHPOINT_BACKEND = /PROD$/.test(context.functionName) ? 'PROD' : /UAT$/.test(context.functionName) ? 'UAT' : 'DEV';
+    const TOUCHPOINT_BACKEND = /PROD$/.test(context.functionName) ? 'PROD' : 'CODE';
 
     docClient.scan({
         TableName: 'MembershipSub-Campaigns-' + TOUCHPOINT_BACKEND

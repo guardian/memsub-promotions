@@ -110,10 +110,8 @@ Resources:
             Resource:
             - arn:aws:dynamodb:*:*:table/MembershipSub-Promotions-PROD
             - arn:aws:dynamodb:*:*:table/MembershipSub-Campaigns-PROD
-            - arn:aws:dynamodb:*:*:table/MembershipSub-Promotions-UAT
-            - arn:aws:dynamodb:*:*:table/MembershipSub-Campaigns-UAT
-            - arn:aws:dynamodb:*:*:table/MembershipSub-Promotions-DEV
-            - arn:aws:dynamodb:*:*:table/MembershipSub-Campaigns-DEV
+            - arn:aws:dynamodb:*:*:table/MembershipSub-Promotions-CODE
+            - arn:aws:dynamodb:*:*:table/MembershipSub-Campaigns-CODE
           - Effect: Allow
             Action:
             - cloudwatch:*

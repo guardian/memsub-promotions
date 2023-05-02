@@ -1,14 +1,9 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Description: Membership/Subscription promotions tool lambda functions
 Parameters:
-  DEVPromotionsTableStreamARN:
-    Description: ARN of the MembershipSub-Promotions-DEV DynamoDB stream to trigger
-      the lambda function which updates the MembershipSub-PromoCode-View-DEV table
-    Type: String
-    Default: ''
-  UATPromotionsTableStreamARN:
-    Description: ARN of the MembershipSub-Promotions-UAT DynamoDB stream to trigger
-      the lambda function which updates the MembershipSub-PromoCode-View-UAT table
+  CODEPromotionsTableStreamARN:
+    Description: ARN of the MembershipSub-Promotions-CODE DynamoDB stream to trigger
+      the lambda function which updates the MembershipSub-PromoCode-View-CODE table
     Type: String
     Default: ''
   PRODPromotionsTableStreamARN:
@@ -57,8 +52,7 @@ Resources:
             - dynamodb:PutItem
             Resource:
             - arn:aws:dynamodb:*:*:table/MembershipSub-PromoCode-View-PROD
-            - arn:aws:dynamodb:*:*:table/MembershipSub-PromoCode-View-UAT
-            - arn:aws:dynamodb:*:*:table/MembershipSub-PromoCode-View-DEV
+            - arn:aws:dynamodb:*:*:table/MembershipSub-PromoCode-View-CODE
   MembershipSubPromotionsDataBackupLambdaRole:
     Type: AWS::IAM::Role
     Properties:
@@ -129,15 +123,14 @@ Resources:
             - dynamodb:Scan
             Resource:
             - arn:aws:dynamodb:*:*:table/MembershipSub-PromoCode-View-PROD
-            - arn:aws:dynamodb:*:*:table/MembershipSub-PromoCode-View-UAT
-            - arn:aws:dynamodb:*:*:table/MembershipSub-PromoCode-View-DEV
+            - arn:aws:dynamodb:*:*:table/MembershipSub-PromoCode-View-CODE
           - Effect: Allow
             Action:
             - s3:PutObject
             - s3:PutObjectAcl
             Resource:
             - arn:aws:s3:::ophan-raw-membership-promo-code-view/*
-  PromoCodeViewLambdaFunctionDEV:
+  PromoCodeViewLambdaFunctionCODE:
     Type: AWS::Lambda::Function
     Properties:
       Code:
@@ -145,21 +138,7 @@ Resources:
         S3Key: membership/PROD/MembershipSub-Promotions-PromoCode-View/MembershipSub-Promotions-PromoCode-View.zip
       Description: An Amazon DynamoDB trigger that creates a view of data associated
         with a particular promo code for the data pipeline to collect.
-      FunctionName: MembershipSub-Promotions-to-PromoCode-View-DEV
-      Handler: MembershipSub-Promotions-to-PromoCode-View-Lambda.handler
-      MemorySize: 128
-      Role: !GetAtt [MembershipSubPromoCodeViewLambdaRole, Arn]
-      Runtime: nodejs12.x
-      Timeout: 60
-  PromoCodeViewLambdaFunctionUAT:
-    Type: AWS::Lambda::Function
-    Properties:
-      Code:
-        S3Bucket: gu-promotions-tool-dist
-        S3Key: membership/PROD/MembershipSub-Promotions-PromoCode-View/MembershipSub-Promotions-PromoCode-View.zip
-      Description: An Amazon DynamoDB trigger that creates a view of data associated
-        with a particular promo code for the data pipeline to collect.
-      FunctionName: MembershipSub-Promotions-to-PromoCode-View-UAT
+      FunctionName: MembershipSub-Promotions-to-PromoCode-View-CODE
       Handler: MembershipSub-Promotions-to-PromoCode-View-Lambda.handler
       MemorySize: 128
       Role: !GetAtt [MembershipSubPromoCodeViewLambdaRole, Arn]
@@ -179,21 +158,13 @@ Resources:
       Role: !GetAtt [MembershipSubPromoCodeViewLambdaRole, Arn]
       Runtime: nodejs12.x
       Timeout: 60
-  PromoCodeViewLambdaEventSourceDEV:
+  PromoCodeViewLambdaEventSourceCODE:
     Type: AWS::Lambda::EventSourceMapping
     Properties:
       BatchSize: 1
       Enabled: true
-      EventSourceArn: !Ref 'DEVPromotionsTableStreamARN'
-      FunctionName: !Ref 'PromoCodeViewLambdaFunctionDEV'
-      StartingPosition: TRIM_HORIZON
-  PromoCodeViewLambdaEventSourceUAT:
-    Type: AWS::Lambda::EventSourceMapping
-    Properties:
-      BatchSize: 1
-      Enabled: true
-      EventSourceArn: !Ref 'UATPromotionsTableStreamARN'
-      FunctionName: !Ref 'PromoCodeViewLambdaFunctionUAT'
+      EventSourceArn: !Ref 'CODEPromotionsTableStreamARN'
+      FunctionName: !Ref 'PromoCodeViewLambdaFunctionCODE'
       StartingPosition: TRIM_HORIZON
   PromoCodeViewLambdaEventSourcePROD:
     Type: AWS::Lambda::EventSourceMapping
@@ -249,35 +220,14 @@ Resources:
       AliasName: !Sub alias/MembershipSub-Promotions-Salesforce-Lambda-kms-key
       TargetKeyId: !Ref 'SalesforceLambdaKMSKey'
 
-  PromoCodeViewSalesforceLambdaFunctionDEV:
+  PromoCodeViewSalesforceLambdaFunctionCODE:
     Type: AWS::Lambda::Function
     Properties:
       Code:
         S3Bucket: gu-promotions-tool-dist
         S3Key: membership/PROD/MembershipSub-Promotions-PromoCode-View/MembershipSub-Promotions-PromoCode-View.zip
-      Description: A Lambda function to replicate the MembershipSub-PromoCode-View-DEV Dynamo table to Salesforce
-      FunctionName: MembershipSub-PromoCode-View-Dynamo-to-Salesforce-DEV
-      Handler: MembershipSub-PromoCode-View-Dynamo-to-Salesforce.handler
-      MemorySize: 128
-      Role: !GetAtt [MembershipSubPromoCodeViewETLRole, Arn]
-      Runtime: nodejs12.x
-      Timeout: 60
-      KmsKeyArn: !GetAtt SalesforceLambdaKMSKey.Arn
-      Environment:
-        Variables:
-          client_id: ''
-          client_secret: ''
-          password: ''
-          salesforce_url: 'test.salesforce.com'
-          username: ''
-  PromoCodeViewSalesforceLambdaFunctionUAT:
-    Type: AWS::Lambda::Function
-    Properties:
-      Code:
-        S3Bucket: gu-promotions-tool-dist
-        S3Key: membership/PROD/MembershipSub-Promotions-PromoCode-View/MembershipSub-Promotions-PromoCode-View.zip
-      Description: A Lambda function to replicate the MembershipSub-PromoCode-View-UAT Dynamo table to Salesforce
-      FunctionName: MembershipSub-PromoCode-View-Dynamo-to-Salesforce-UAT
+      Description: A Lambda function to replicate the MembershipSub-PromoCode-View-CODE Dynamo table to Salesforce
+      FunctionName: MembershipSub-PromoCode-View-Dynamo-to-Salesforce-CODE
       Handler: MembershipSub-PromoCode-View-Dynamo-to-Salesforce.handler
       MemorySize: 128
       Role: !GetAtt [MembershipSubPromoCodeViewETLRole, Arn]

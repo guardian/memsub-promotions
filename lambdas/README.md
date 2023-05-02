@@ -18,11 +18,11 @@ It runs on a daily schedule; for dev work we can run it manually and check that 
 A single version (PROD) of this lambda exists in AWS, and will rebuild automatically when a PR branch merges into `main`.
 
 ### MembershipSub-PromoCode-View-Dynamo-to-Salesforce
-A Lambda function to replicate the MembershipSub-PromoCode-View-DEV Dynamo table to Salesforce.
+A Lambda function to replicate the MembershipSub-PromoCode-View-CODE Dynamo table to Salesforce.
 
 This lambda sends data to salesforce on a daily schedule. We can just check the lambda's cloudwatch logs to confirm that it's happy - it logs all the requests it's making.
 
-Three versions of this lambda (PROD, UAT, DEV) exist in AWS, each of which maps to thge equivalent environment in the SalesForce cloud. We can use the DEV version for testing. 
+Two versions of this lambda (PROD, CODE) exist in AWS, each of which maps to the equivalent environment in the SalesForce cloud. We can use the CODE version for testing. 
 
 The lambda relies on SalesForce usernames/passwords which have been stored in AWS as encrypted environment variables.
 
@@ -40,9 +40,9 @@ An Amazon DynamoDB trigger that creates a view of data associated with a particu
 
 The code writes updates from the Promotions table to the PromoCode-View table. 
 
-During development work, we can test by creating a test promotion in the Promo Tool (this repo's frontend) in its DEV page and check that it gets written to PromoCode-View-DEV table.
+During development work, we can test by creating a test promotion in the Promo Tool (this repo's frontend) in its CODE page and check that it gets written to PromoCode-View-CODE table.
 
-Three versions of this lambda (PROD, UAT, DEV) exist in AWS. We can use the DEV version for testing. Only the PROD will rebuild automatically when a PR branch merges into `main`.
+Two versions of this lambda (PROD, CODE) exist in AWS. We can use the CODE version for testing. Only the PROD will rebuild automatically when a PR branch merges into `main`.
 
 ### MembershipSub-Reconstruct-PromoCode-View
 This lambda appears to be for rebuilding the MembershipSub-PromoCode-View table. The intention is for it to be run manually if that is ever required - https://github.com/guardian/memsub-promotions/blob/7009715e905aa68de3b5c939ccc54f97b13e3c68/lambdas/src/MembershipSub-Reconstruct-PromoCode-View.js#L4
@@ -56,4 +56,4 @@ Because these are lambdas, we cannot develop and test on local devices. Instead 
 
 The deploy is called MemSub::Membership Admin::Promotions Tool Lambda
 
-Note that only the PROD versions of the lambdas will automatically rebuild. UAT and DEV versions need to be updated manually in the AWS lambdas console
+Note that only the PROD versions of the lambdas will automatically rebuild. The CODE version needs to be updated manually in the AWS lambdas console

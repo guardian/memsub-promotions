@@ -49,7 +49,7 @@ function deleteBackupsOlderThanXDays(TableName, retentionDays) {
 
 exports.handler = (event, context, callback) => {
 
-    const TOUCHPOINT_BACKEND = /PROD$/.test(context.functionName) ? 'PROD' : 'UAT';
+    const TOUCHPOINT_BACKEND = /PROD$/.test(context.functionName) ? 'PROD' : 'CODE';
     const RETENTION_DAYS = 14; // a number < 1 will delete everything except the backup `createTodaysBackup` just created
 
     const tablesToBackup = [
