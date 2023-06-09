@@ -9,7 +9,7 @@ on:
       - main
 
 jobs:
-  admin-console:
+  memsub-promotions:
     if: >-
       (github.actor != 'dependabot[bot]') &&
         (github.event.pull_request.head.repo.owner.login == 'guardian' ||
