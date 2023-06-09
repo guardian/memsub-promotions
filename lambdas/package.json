@@ -2,10 +2,6 @@
   "name": "MembershipSub-Promotions-PromoCode-View",
   "version": "0.0.1",
   "description": "A lambda to create a view of the Promotions and Campaigns table keyed by the promo code.",
-  "isAwsLambda": true,
-  "cloudformation": false,
-  "projectName": "MemSub::Membership Admin::Promotions Tool Lambda",
-  "riffraffFile": "riff-raff.yaml",
   "buildDir": "dist",
   "devDependencies": {
     "babel-cli": "^6.24.1",
