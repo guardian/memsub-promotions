@@ -1,0 +1,79 @@
+name: Build memsub-promotions-lambdas
+
+on:
+  pull_request:
+    branches:
+      - "**"
+  push:
+    branches:
+      - main
+
+jobs:
+  memsub-promotions-lambdas:
+    if: >-
+      (github.actor != 'dependabot[bot]') &&
+        (github.event.pull_request.head.repo.owner.login == 'guardian' ||
+          github.event_name == 'push')
+    # Required by actions-assume-aws-role
+    permissions:
+      id-token: write
+      contents: read
+
+    name: memsub-promotions-lambdas
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Use Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version-file: './lambdas/.nvmrc'
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          role-to-assume: ${{ secrets.GU_RIFF_RAFF_ROLE_ARN }}
+          aws-region: eu-west-1
+
+      - name: Test + build
+        working-directory: ./lambdas
+        run: |
+          npm install -g yarn
+          yarn install
+          yarn compile
+          
+          cp package.json dist
+          pushd dist
+          yarn dist
+          zip -r MembershipSub-Promotions-PromoCode-View ./*
+          popd
+
+      - name: riff-raff
+        uses: guardian/actions-riff-raff@v2
+        with:
+          app: memsub-promotions-lambdas
+          buildNumberOffset: 500
+          config: |
+            stacks:
+              - membership
+            regions:
+              - eu-west-1
+            allowedStages:
+              - CODE
+              - PROD
+            deployments:
+              MembershipSub-Promotions-PromoCode-View:
+                type: aws-lambda
+                parameters:
+                  prefixStack: false
+                  fileName: MembershipSub-Promotions-PromoCode-View.zip
+                  bucket: gu-promotions-tool-dist
+                  functionNames:
+                    - MembershipSub-Promotions-to-PromoCode-View-
+                    - MembershipSub-PromoCode-View-Dynamo-to-Data-Lake-
+                    - MembershipSub-PromoCode-View-Dynamo-to-Salesforce-
+                    - MembershipSub-Promotions-Scheduled-Dynamo-Backup-
+          contentDirectories: |
+            MembershipSub-Promotions-PromoCode-View:
+              - lambdas/dist/MembershipSub-Promotions-PromoCode-View.zip
