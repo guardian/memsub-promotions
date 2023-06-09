@@ -60,4 +60,4 @@ jobs:
           export LAST_TEAMCITY_BUILD=700
           export GITHUB_RUN_NUMBER=$(( $GITHUB_RUN_NUMBER + $LAST_TEAMCITY_BUILD ))
 
-          sbt clean fast-test play-artifact
+          sbt clean riffRaffUpload
