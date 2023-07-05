@@ -65,5 +65,9 @@ module.exports = {
                 secure: false,
             },
         },
-    }
+    },
+
+    stats: {
+      errorDetails: true,
+   },
 };
