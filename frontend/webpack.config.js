@@ -56,9 +56,6 @@ module.exports = {
     devtool: 'source-map',
 
     devServer: {
-        contentBase: path.resolve(__dirname, '../public'),
-        publicPath: '/assets/',
-        disableHostCheck: true,
         proxy: {
             '**': {
                 target: 'http://promo.thegulocal.com:9500',
