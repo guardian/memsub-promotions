@@ -9,7 +9,7 @@
     "build-prod": "webpack --mode=production --bail",
     "build-dev": "webpack --mode=development --bail",
     "compile": "yarn clean && yarn build-prod",
-    "devrun": "webpack-dev-server --port 9501 --host promo.thegulocal.com"
+    "devrun": "webpack-dev-server --mode=development --port 9501 --host promo.thegulocal.com"
   },
   "babel": {
     "presets": [
