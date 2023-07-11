@@ -46,7 +46,8 @@ module.exports = {
         path: path.resolve(__dirname, '../public/'),
         chunkFilename:  'webpack/[chunkhash].js',
         filename: "javascripts/[name].js",
-        sourceMapFilename: "[file].map"
+        sourceMapFilename: "[file].map",
+        publicPath: "/assets/",
     },
 
     entry: {
