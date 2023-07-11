@@ -47,7 +47,6 @@ module.exports = {
         chunkFilename:  'webpack/[chunkhash].js',
         filename: "javascripts/[name].js",
         sourceMapFilename: "[file].map",
-        publicPath: "/assets/",
     },
 
     entry: {
@@ -63,6 +62,9 @@ module.exports = {
                 secure: false,
             },
         },
+        devMiddleware: {
+            publicPath: "/assets/"
+        }
     },
 
     stats: {
