@@ -148,7 +148,7 @@ Resources:
       Handler: MembershipSub-Promotions-to-PromoCode-View-Lambda.handler
       MemorySize: 128
       Role: !GetAtt [MembershipSubPromoCodeViewLambdaRole, Arn]
-      Runtime: nodejs12.x
+      Runtime: nodejs18.x
       Timeout: 60
   PromoCodeViewLambdaFunctionPROD:
     Type: AWS::Lambda::Function
@@ -162,7 +162,7 @@ Resources:
       Handler: MembershipSub-Promotions-to-PromoCode-View-Lambda.handler
       MemorySize: 128
       Role: !GetAtt [MembershipSubPromoCodeViewLambdaRole, Arn]
-      Runtime: nodejs12.x
+      Runtime: nodejs18.x
       Timeout: 60
   PromoCodeViewLambdaEventSourceCODE:
     Type: AWS::Lambda::EventSourceMapping
@@ -192,7 +192,7 @@ Resources:
       Handler: MembershipSub-PromoCode-View-Dynamo-to-Data-Lake.handler
       MemorySize: 128
       Role: !GetAtt [MembershipSubPromoCodeViewETLRole, Arn]
-      Runtime: nodejs12.x
+      Runtime: nodejs18.x
       Timeout: 60
 
   PromoCodeViewSalesforceLambdaFunctionCODE:
@@ -206,7 +206,7 @@ Resources:
       Handler: MembershipSub-PromoCode-View-Dynamo-to-Salesforce.handler
       MemorySize: 128
       Role: !GetAtt [MembershipSubPromoCodeViewETLRole, Arn]
-      Runtime: nodejs12.x
+      Runtime: nodejs18.x
       Timeout: 60
 
   PromoCodeViewSalesforceLambdaFunctionPROD:
@@ -220,7 +220,7 @@ Resources:
       Handler: MembershipSub-PromoCode-View-Dynamo-to-Salesforce.handler
       MemorySize: 128
       Role: !GetAtt [MembershipSubPromoCodeViewETLRole, Arn]
-      Runtime: nodejs12.x
+      Runtime: nodejs18.x
       Timeout: 60
 
   ScheduledBackupLambdaPROD:
@@ -234,7 +234,7 @@ Resources:
       Handler: MembershipSub-Promotions-Scheduled-Dynamo-Backup.handler
       MemorySize: 128
       Role: !GetAtt [MembershipSubPromotionsDataBackupLambdaRole, Arn]
-      Runtime: nodejs12.x
+      Runtime: nodejs18.x
       Timeout: 60
   BackupSchedule:
     Type: AWS::Events::Rule

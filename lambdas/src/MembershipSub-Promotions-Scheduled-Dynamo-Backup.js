@@ -1,13 +1,12 @@
-const AWS = require('aws-sdk');
+import { DynamoDB } from "@aws-sdk/client-dynamodb";
 
-const ddb = new AWS.DynamoDB();
+const ddb = new DynamoDB();
 
 function createTodaysBackup(TableName) {
     return ddb.createBackup({
         'BackupName': `${TableName}-Scheduled-Backup`,
         TableName
     })
-        .promise()
         .then(possiblyJustCreatedBackup => {
             console.log(`Created backup of table ${TableName}: ${possiblyJustCreatedBackup.BackupDetails.BackupArn}`);
             return possiblyJustCreatedBackup.BackupDetails.BackupArn;
@@ -18,13 +17,13 @@ function deleteBackupsOlderThanXDays(TableName, retentionDays) {
     return (latestBackupARN) => {
         const unixtime = Math.floor(Date.now() / 1000);
         const retentionSeconds = (retentionDays * 60 * 60 * 24);
-        const TimeRangeUpperBound = unixtime - retentionSeconds;
+        const timeRangeCutoffTimestamp = unixtime - retentionSeconds;
+        const TimeRangeUpperBound = new Date(timeRangeCutoffTimestamp * 1000);
 
         return ddb.listBackups({
             TableName,
             TimeRangeUpperBound
         })
-            .promise()
             .then(oldBackups => {
 
                 const backupsToDelete = oldBackups.BackupSummaries.map(backupSummary => backupSummary.BackupArn).filter(backupArn => latestBackupARN !== backupArn)
@@ -33,7 +32,7 @@ function deleteBackupsOlderThanXDays(TableName, retentionDays) {
 
                 const deletionPromises = backupsToDelete.map(BackupArn => {
                     console.log(`Attempting to delete backup: ${BackupArn}`);
-                    return ddb.deleteBackup({ BackupArn }).promise();
+                    return ddb.deleteBackup({ BackupArn });
                 });
 
                 return Promise.all(deletionPromises).then(results => {
@@ -44,10 +43,10 @@ function deleteBackupsOlderThanXDays(TableName, retentionDays) {
                     return `Successfully${latestBackupARN ? ' created new backup and' : ''} deleted ${results.length} backups for table: ${TableName}`;
                 })
             });
-    }
+    };
 }
 
-exports.handler = (event, context, callback) => {
+export const handler = (event, context, callback) => {
 
     const TOUCHPOINT_BACKEND = /PROD$/.test(context.functionName) ? 'PROD' : 'CODE';
     const RETENTION_DAYS = 14; // a number < 1 will delete everything except the backup `createTodaysBackup` just created

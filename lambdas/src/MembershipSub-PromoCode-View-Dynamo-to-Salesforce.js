@@ -3,10 +3,7 @@
 const AWS = require('aws-sdk');
 const s3 = new AWS.S3();
 
-const https = require('https');
-const querystring = require('querystring');
-
-const docClient = new AWS.DynamoDB.DocumentClient();
+const docClient = DynamoDBDocument.from(new DynamoDB());
 
 function enquote(anArray) {
     return `"${anArray.join('","')}"`;
