@@ -46,7 +46,7 @@ module.exports = {
         path: path.resolve(__dirname, '../public/'),
         chunkFilename:  'webpack/[chunkhash].js',
         filename: "javascripts/[name].js",
-        sourceMapFilename: "[file].map"
+        sourceMapFilename: "[file].map",
     },
 
     entry: {
@@ -56,14 +56,18 @@ module.exports = {
     devtool: 'source-map',
 
     devServer: {
-        contentBase: path.resolve(__dirname, '../public'),
-        publicPath: '/assets/',
-        disableHostCheck: true,
         proxy: {
             '**': {
                 target: 'http://promo.thegulocal.com:9500',
                 secure: false,
             },
         },
-    }
+        devMiddleware: {
+            publicPath: "/assets/"
+        }
+    },
+
+    stats: {
+      errorDetails: true,
+   },
 };
