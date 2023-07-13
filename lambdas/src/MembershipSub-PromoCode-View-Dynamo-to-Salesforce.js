@@ -41,7 +41,7 @@ function login(config) {
     }
     const body = querystring.stringify(loginData);
     const options = {
-        hostname: process.env.salesforce_url,
+        hostname: config.salesforce_url,
         port: 443,
         path: '/services/oauth2/token',
         method: 'POST',
