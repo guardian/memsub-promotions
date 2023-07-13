@@ -130,6 +130,12 @@ Resources:
             - s3:PutObjectAcl
             Resource:
             - arn:aws:s3:::ophan-raw-membership-promo-code-view/*
+          - Effect: Allow
+            Action:
+            - s3:GetObject
+            Resource:
+            - arn:aws:s3:::gu-reader-revenue-private/membership/promotions-tool/*
+
   PromoCodeViewLambdaFunctionCODE:
     Type: AWS::Lambda::Function
     Properties:
@@ -220,6 +226,29 @@ Resources:
       AliasName: !Sub alias/MembershipSub-Promotions-Salesforce-Lambda-kms-key
       TargetKeyId: !Ref 'SalesforceLambdaKMSKey'
 
+  PromoCodeViewSalesforceLambdaCODERole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - lambda.amazonaws.com
+            Action:
+              - sts:AssumeRole
+      Path: /
+      Policies:
+        - PolicyName: PromoCodeViewSalesforceLambdaCODES3Policy
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action:
+                  - s3:GetObject
+                Resource:
+                  - arn:aws:s3:::gu-reader-revenue-private/membership/promotions-tool/CODE/*
+
   PromoCodeViewSalesforceLambdaFunctionCODE:
     Type: AWS::Lambda::Function
     Properties:
@@ -234,13 +263,7 @@ Resources:
       Runtime: nodejs12.x
       Timeout: 60
       KmsKeyArn: !GetAtt SalesforceLambdaKMSKey.Arn
-      Environment:
-        Variables:
-          client_id: ''
-          client_secret: ''
-          password: ''
-          salesforce_url: 'test.salesforce.com'
-          username: ''
+
   PromoCodeViewSalesforceLambdaFunctionPROD:
     Type: AWS::Lambda::Function
     Properties:
@@ -255,13 +278,7 @@ Resources:
       Runtime: nodejs12.x
       Timeout: 60
       KmsKeyArn: !GetAtt SalesforceLambdaKMSKey.Arn
-      Environment:
-        Variables:
-          client_id: ''
-          client_secret: ''
-          password: ''
-          salesforce_url: ''
-          username: ''
+
   ScheduledBackupLambdaPROD:
     Type: AWS::Lambda::Function
     Properties:
