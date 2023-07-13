@@ -195,37 +195,6 @@ Resources:
       Runtime: nodejs12.x
       Timeout: 60
 
-  SalesforceLambdaKMSKey:
-    Type: AWS::KMS::Key
-    Properties:
-      Description: !Sub Used by the MembershipSub-Promotions Salesforce Lambda to encrypt and decrypt any environment variables
-      KeyPolicy:
-        Version: '2012-10-17'
-        Id: !Sub MembershipSub-Promotions-Salesforce-Lambda-kms-key-policy
-        Statement:
-        - Sid: Enable IAM User Permissions
-          Effect: Allow
-          Principal:
-            AWS: !Sub arn:aws:iam::${AWS::AccountId}:root
-          Action: kms:*
-          Resource: "*"
-        - Sid: Allow use of the key
-          Effect: Allow
-          Principal:
-            AWS: !GetAtt [MembershipSubPromoCodeViewETLRole, Arn]
-          Action:
-          - kms:Encrypt
-          - kms:Decrypt
-          - kms:ReEncrypt*
-          - kms:GenerateDataKey*
-          - kms:DescribeKey
-          Resource: "*"
-  SalesforceLambdaKMSKeyAlias:
-    Type: AWS::KMS::Alias
-    Properties:
-      AliasName: !Sub alias/MembershipSub-Promotions-Salesforce-Lambda-kms-key
-      TargetKeyId: !Ref 'SalesforceLambdaKMSKey'
-
   PromoCodeViewSalesforceLambdaFunctionCODE:
     Type: AWS::Lambda::Function
     Properties:
@@ -239,7 +208,6 @@ Resources:
       Role: !GetAtt [MembershipSubPromoCodeViewETLRole, Arn]
       Runtime: nodejs12.x
       Timeout: 60
-      KmsKeyArn: !GetAtt SalesforceLambdaKMSKey.Arn
 
   PromoCodeViewSalesforceLambdaFunctionPROD:
     Type: AWS::Lambda::Function
@@ -254,7 +222,6 @@ Resources:
       Role: !GetAtt [MembershipSubPromoCodeViewETLRole, Arn]
       Runtime: nodejs12.x
       Timeout: 60
-      KmsKeyArn: !GetAtt SalesforceLambdaKMSKey.Arn
 
   ScheduledBackupLambdaPROD:
     Type: AWS::Lambda::Function
@@ -269,7 +236,6 @@ Resources:
       Role: !GetAtt [MembershipSubPromotionsDataBackupLambdaRole, Arn]
       Runtime: nodejs12.x
       Timeout: 60
-      KmsKeyArn: !GetAtt SalesforceLambdaKMSKey.Arn
   BackupSchedule:
     Type: AWS::Events::Rule
     Properties:
