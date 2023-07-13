@@ -1,7 +1,9 @@
 'use strict';
 
-const AWS = require('aws-sdk');
-const docClient = new AWS.DynamoDB.DocumentClient();
+import { DynamoDBDocument } from "@aws-sdk/lib-dynamodb";
+import { DynamoDB } from "@aws-sdk/client-dynamodb";
+
+const docClient = DynamoDBDocument.from(new DynamoDB());
 const campaignDetailsByCampaignCode = {};
 const putRequestsByPromoCode = {};
 
@@ -87,7 +89,6 @@ function batchWriteRequestsForCodes(promoCodes, callback, TOUCHPOINT_BACKEND) {
     docClient.batchWrite({
         RequestItems: RequestItemsObj
     })
-    .promise()
     .then(_ => {
         promoCodes.forEach((key) => delete putRequestsByPromoCode[key]);
         console.log(`Updated ${putRequestsAsArray.length} of ${promoCodesToUpdate.length} promo code views.`);
@@ -105,14 +106,13 @@ function attemptToComplete(callback) {
     callback(null, `Updated all ${promoCodesToUpdate.length} promo code views.`);
 }
 
-exports.handler = (event, context, callback) => {
+export const handler = (event, context, callback) => {
 
     const TOUCHPOINT_BACKEND = /PROD$/.test(context.functionName) ? 'PROD' : 'CODE';
 
     docClient.scan({
         TableName: 'MembershipSub-Campaigns-' + TOUCHPOINT_BACKEND
     })
-    .promise()
     .then((data) => {
         console.log(`Gotten all ${data.Items.length} ${TOUCHPOINT_BACKEND} Campaigns`);
         data.Items.forEach((campaign) =>

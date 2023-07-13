@@ -1,14 +1,17 @@
 'use strict';
 
-const AWS = require('aws-sdk');
-const docClient = new AWS.DynamoDB.DocumentClient();
-const s3 = new AWS.S3();
+import { DynamoDBDocument } from "@aws-sdk/lib-dynamodb";
+import { DynamoDB } from "@aws-sdk/client-dynamodb";
+import { S3 } from "@aws-sdk/client-s3";
+
+const docClient = DynamoDBDocument.from(new DynamoDB());
+const s3 = new S3();
 
 function enquote(anArray) {
     return `"${anArray.join('","')}"`;
 }
 
-exports.handler = (event, context, callback) => {
+export const handler = (event, context, callback) => {
 
     const source = 'PROD'; // Only PROD PromoCode-View data goes to the Data Lake.
 
@@ -28,7 +31,6 @@ exports.handler = (event, context, callback) => {
     const ACL = 'bucket-owner-full-control';
 
     docClient.scan({ TableName })
-    .promise()
     .then(data => {
         const CSVData = [enquote(fieldsToExport)].concat(data.Items.map(record => enquote(fieldsToExport.map(field => record[field]))));
         const Body = CSVData.join('\n');

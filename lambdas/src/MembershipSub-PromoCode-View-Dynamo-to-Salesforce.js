@@ -1,12 +1,14 @@
 'use strict';
 
-const AWS = require('aws-sdk');
-const s3 = new AWS.S3();
+import { DynamoDBDocument } from "@aws-sdk/lib-dynamodb";
+import { DynamoDB } from "@aws-sdk/client-dynamodb";
+import { S3 } from "@aws-sdk/client-s3";
+import * as https from "https";
+import * as querystring from "querystring";
 
-const https = require('https');
-const querystring = require('querystring');
+const s3 = new S3();
 
-const docClient = new AWS.DynamoDB.DocumentClient();
+const docClient = DynamoDBDocument.from(new DynamoDB());
 
 function enquote(anArray) {
     return `"${anArray.join('","')}"`;
@@ -218,33 +220,31 @@ function makeAPICalls(csvData) {
     };
 }
 
-function fetchConfig(stage) {
+async function fetchConfig(stage) {
     const Key = `membership/promotions-tool/${stage}/PromoCode-View-Dynamo-to-Salesforce-lambda.json`;
-    return s3.getObject({
-        Bucket: 'gu-reader-revenue-private',
-        Key,
-    }).promise().then(response => {
-        if (response.Body) {
-            const config = JSON.parse(response.Body.toString());
-            if (config.client_id && config.client_secret && config.password && config.salesforce_url && config.username) {
-                return config;
-            } else {
-                return Promise.reject(`Invalid config from key: ${Key}`);
-            }
+
+    const response = await s3.getObject({ Bucket: 'gu-reader-revenue-private', Key });
+
+    if (response.Body) {
+        const config = JSON.parse(await response.Body.transformToString());
+
+        if (config.client_id && config.client_secret && config.password && config.salesforce_url && config.username) {
+            return config;
         } else {
-            return Promise.reject(`Failed to fetch config with key: ${Key}`);
+            return Promise.reject(`Invalid config from key: ${Key}`);
         }
-    })
+    } else {
+        return Promise.reject(`Failed to fetch config with key: ${Key}`);
+    }
 }
 
-exports.handler = (event, context, callback) => {
+export const handler = (event, context, callback) => {
 
     const TOUCHPOINT_BACKEND = /PROD$/.test(context.functionName) ? 'PROD' : 'CODE';
     const TableName = `MembershipSub-PromoCode-View-${TOUCHPOINT_BACKEND}`;
 
     fetchConfig(TOUCHPOINT_BACKEND).then(config => {
         docClient.scan({ TableName })
-            .promise()
             .then(generateCSVPromise)
             .then(csvData =>
                 login(config)

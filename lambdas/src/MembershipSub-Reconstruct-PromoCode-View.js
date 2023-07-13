@@ -1,12 +1,13 @@
 'use strict';
 
+import { DynamoDB } from "@aws-sdk/client-dynamodb";
+import { DynamoDBDocument } from "@aws-sdk/lib-dynamodb";
+import * as fs from 'fs';
+
 /*
     This file can be uploaded to a Lambda function and used to do a full refresh of the MembershipSub-PromoCode-View-[STAGE] database.
     You just have to run the index.handler function inside a Lambda whose name ends with -PROD or -CODE depending on what stage's MembershipSub-PromoCode-View- table you want to update.
 */
-
-const fs = require('fs');
-const AWS = require('aws-sdk');
 
 Array.prototype.flatMap = function(lambda) {
     return Array.prototype.concat.apply([], this.map(lambda));
@@ -87,8 +88,7 @@ function collateCampaigns(campaigns) {
 }
 
 function rapidWritePutRequestsIntoTable(putRequests) {
-    const DOC = require('dynamodb-doc');
-    const docClient = new DOC.DynamoDB();
+    const docClient = DynamoDBDocument.from(new DynamoDB());
 
     console.log(`Attempting to update ${putRequests.length} promo code views`);
 
@@ -100,7 +100,7 @@ function rapidWritePutRequestsIntoTable(putRequests) {
 }
 
 
-exports.local = (event, context, callback) => {
+export const local = (event, context, callback) => {
     // lambda-local -l MembershipSub-Reconstruct-PromoCode-View.js -h local -e examples/local.js
 
     fs.statSync('campaigns.json');
@@ -117,19 +117,19 @@ exports.local = (event, context, callback) => {
     }
 };
 
-exports.handler = (event, context, callback) => {
+export const handler = (event, context, callback) => {
     /*
         dynamodb-doc is not used here because the builders to collate campaigns and generate put requests
         may need to work off  S3 DynamoDB local backup JSON files (above), which will contain the .S .L .N .M... type prefixes.
         Using the local test  also helps with testing the builders so that you don't have to run the Lambda 100s of times.
     */
 
-    const ddb = new AWS.DynamoDB();
+    const ddb = new DynamoDB();
 
     const source = /PROD$/.test(context.functionName) ? 'PROD' : 'CODE';
 
-    const campaignsP = ddb.scan({ TableName: `MembershipSub-Campaigns-${source}`}).promise();
-    const promotionsP = ddb.scan({ TableName: `MembershipSub-Promotions-${source}`}).promise();
+    const campaignsP = ddb.scan({ TableName: `MembershipSub-Campaigns-${source}`});
+    const promotionsP = ddb.scan({ TableName: `MembershipSub-Promotions-${source}`});
 
     Promise.all([campaignsP, promotionsP])
         .then(results => {
