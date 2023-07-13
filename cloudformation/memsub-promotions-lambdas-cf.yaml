@@ -226,29 +226,6 @@ Resources:
       AliasName: !Sub alias/MembershipSub-Promotions-Salesforce-Lambda-kms-key
       TargetKeyId: !Ref 'SalesforceLambdaKMSKey'
 
-  PromoCodeViewSalesforceLambdaCODERole:
-    Type: AWS::IAM::Role
-    Properties:
-      AssumeRolePolicyDocument:
-        Statement:
-          - Effect: Allow
-            Principal:
-              Service:
-                - lambda.amazonaws.com
-            Action:
-              - sts:AssumeRole
-      Path: /
-      Policies:
-        - PolicyName: PromoCodeViewSalesforceLambdaCODES3Policy
-          PolicyDocument:
-            Version: '2012-10-17'
-            Statement:
-              - Effect: Allow
-                Action:
-                  - s3:GetObject
-                Resource:
-                  - arn:aws:s3:::gu-reader-revenue-private/membership/promotions-tool/CODE/*
-
   PromoCodeViewSalesforceLambdaFunctionCODE:
     Type: AWS::Lambda::Function
     Properties:
