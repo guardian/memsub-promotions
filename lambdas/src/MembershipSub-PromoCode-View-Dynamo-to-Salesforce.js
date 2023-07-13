@@ -1,7 +1,7 @@
 'use strict';
 
 const AWS = require('aws-sdk');
-const KMS = new AWS.KMS();
+const s3 = new AWS.S3();
 
 const https = require('https');
 const querystring = require('querystring');
@@ -19,37 +19,6 @@ function generateCSVPromise(data) {
     return Promise.resolve(CSVData.join('\n'));
 }
 
-function getLoginDataFromEnvironment() {
-    const loginData = { 'grant_type': 'password' }
-    return decryptEnvironmentVariable('client_id')(loginData)
-        .then(decryptEnvironmentVariable('client_secret'))
-        .then(plaintextEnvironmentVariable('username'))
-        .then(decryptEnvironmentVariable('password'));
-}
-
-function plaintextEnvironmentVariable(fieldName) {
-    return function (collection) {
-        collection[fieldName] = process.env[fieldName];
-        return Promise.resolve(collection);
-    };
-}
-
-function decryptEnvironmentVariable(fieldName) {
-    return function (collection) {
-        const encrypted = process.env[fieldName];
-        return new Promise((fulfilled, rejected) => {
-            KMS.decrypt({CiphertextBlob: Buffer.from(encrypted, 'base64')}, (err, data) => {
-                if (err) {
-                    rejected(`Decrypt error: ${err}`);
-                } else {
-                    collection[fieldName] = data.Plaintext.toString('ascii');
-                    fulfilled(collection);
-                }
-            });
-        });
-    };
-}
-
 function makeSalesforceAPIRequest(options, requestBody, onEnd, onReqError) {
     console.log(`Making ${options.method} request to https://${options.hostname}${options.path}`);
     const req = https.request(options, (res) => {
@@ -62,10 +31,17 @@ function makeSalesforceAPIRequest(options, requestBody, onEnd, onReqError) {
     req.end();
 }
 
-function login(loginData) {
+function login(config) {
+    const loginData = {
+        grant_type: 'password',
+        client_id: config.client_id,
+        client_secret: config.client_secret,
+        username: config.username,
+        password: config.password,
+    }
     const body = querystring.stringify(loginData);
     const options = {
-        hostname: process.env.salesforce_url,
+        hostname: config.salesforce_url,
         port: 443,
         path: '/services/oauth2/token',
         method: 'POST',
@@ -242,20 +218,39 @@ function makeAPICalls(csvData) {
     };
 }
 
+function fetchConfig(stage) {
+    const Key = `membership/promotions-tool/${stage}/PromoCode-View-Dynamo-to-Salesforce-lambda.json`;
+    return s3.getObject({
+        Bucket: 'gu-reader-revenue-private',
+        Key,
+    }).promise().then(response => {
+        if (response.Body) {
+            const config = JSON.parse(response.Body.toString());
+            if (config.client_id && config.client_secret && config.password && config.salesforce_url && config.username) {
+                return config;
+            } else {
+                return Promise.reject(`Invalid config from key: ${Key}`);
+            }
+        } else {
+            return Promise.reject(`Failed to fetch config with key: ${Key}`);
+        }
+    })
+}
+
 exports.handler = (event, context, callback) => {
 
     const TOUCHPOINT_BACKEND = /PROD$/.test(context.functionName) ? 'PROD' : 'CODE';
     const TableName = `MembershipSub-PromoCode-View-${TOUCHPOINT_BACKEND}`;
 
-    docClient.scan({ TableName })
-        .promise()
-        .then(generateCSVPromise)
-        .then(csvData =>
-            getLoginDataFromEnvironment()
-                .then(login)
-                .then(makeAPICalls(csvData))
-                .then(successMessage => callback(null, `${successMessage} from table ${TableName}`))
-        )
-        .catch(callback);
-
+    fetchConfig(TOUCHPOINT_BACKEND).then(config => {
+        docClient.scan({ TableName })
+            .promise()
+            .then(generateCSVPromise)
+            .then(csvData =>
+                login(config)
+                    .then(makeAPICalls(csvData))
+                    .then(successMessage => callback(null, `${successMessage} from table ${TableName}`))
+            )
+            .catch(callback);
+    });
 };
