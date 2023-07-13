@@ -1,7 +1,12 @@
 'use strict';
 
-const AWS = require('aws-sdk');
-const s3 = new AWS.S3();
+import { DynamoDBDocument } from "@aws-sdk/lib-dynamodb";
+import { DynamoDB } from "@aws-sdk/client-dynamodb";
+import { S3 } from "@aws-sdk/client-s3";
+import * as https from "https";
+import * as querystring from "querystring";
+
+const s3 = new S3();
 
 const docClient = DynamoDBDocument.from(new DynamoDB());
 
@@ -220,7 +225,7 @@ function fetchConfig(stage) {
     return s3.getObject({
         Bucket: 'gu-reader-revenue-private',
         Key,
-    }).promise().then(response => {
+    }).then(response => {
         if (response.Body) {
             const config = JSON.parse(response.Body.toString());
             if (config.client_id && config.client_secret && config.password && config.salesforce_url && config.username) {
@@ -231,10 +236,10 @@ function fetchConfig(stage) {
         } else {
             return Promise.reject(`Failed to fetch config with key: ${Key}`);
         }
-    })
+    });
 }
 
-exports.handler = (event, context, callback) => {
+export const handler = (event, context, callback) => {
 
     const TOUCHPOINT_BACKEND = /PROD$/.test(context.functionName) ? 'PROD' : 'CODE';
     const TableName = `MembershipSub-PromoCode-View-${TOUCHPOINT_BACKEND}`;
