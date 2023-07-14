@@ -42,7 +42,7 @@ jobs:
           npm install -g yarn
           yarn install
           yarn compile
-          
+
           cp package.json dist
           pushd dist
           yarn dist
@@ -60,9 +60,18 @@ jobs:
             regions:
               - eu-west-1
             allowedStages:
-              - CODE
               - PROD
             deployments:
+              memsub-promotions-lambdas-cloudformation:
+                type: cloud-formation
+                app: MembershipSub-Promotions-PromoCode-View
+                parameters:
+                  cloudFormationStackName: memsub-promotions-lambdas
+                  templateStagePaths:
+                    PROD: memsub-promotions-lambdas-cf.yaml
+                  cloudFormationStackByTags: false
+                  prependStackToCloudFormationStackName: false
+                  appendStageToCloudFormationStackName: false
               MembershipSub-Promotions-PromoCode-View:
                 type: aws-lambda
                 parameters:
@@ -77,3 +86,5 @@ jobs:
           contentDirectories: |
             MembershipSub-Promotions-PromoCode-View:
               - lambdas/dist/MembershipSub-Promotions-PromoCode-View.zip
+            memsub-promotions-lambdas-cloudformation:
+              - cloudformation/memsub-promotions-lambdas-cf.yaml
