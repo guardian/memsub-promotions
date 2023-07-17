@@ -54,6 +54,7 @@ class AppComponents(context: Context) extends BuiltInComponentsFromContext(conte
   lazy val homeController = wire[StaticController]
   lazy val assetController = wire[Assets]
 
+  val prefix: String = "/"
 
   override lazy val router: Router = wire[Routes]
 
