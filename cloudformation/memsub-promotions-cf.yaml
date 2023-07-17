@@ -221,6 +221,7 @@ Resources:
               aws s3 cp s3://gu-reader-revenue-private/${Stack}/${App}/${Stage}/memsub-promotions-keys.conf /etc/gu
               chown promotions-tool /etc/gu/memsub-promotions-keys.conf
               chmod 0600 /etc/gu/memsub-promotions-keys.conf
+              echo "stage=${Stage}" >> /etc/gu/memsub-promotions-keys.conf
 
               /opt/cloudwatch-logs/configure-logs application membership ${Stage} promotions-tool /var/log/promotions-tool/promotions-tool.log
             - {}

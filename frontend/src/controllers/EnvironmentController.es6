@@ -3,15 +3,9 @@ export default class {
     /* @ngInject */
     constructor($state, $rootScope, $scope, environmentService) {
         this.$state = $state;
-        $rootScope.environment = {stage: environmentService.getStage(), campaignGroup: environmentService.getCampaignGroup()};
+        $rootScope.environment = {campaignGroup: environmentService.getCampaignGroup()};
         this.environmentService = environmentService;
         this.$scope = $scope;
-    }
-
-    setStage(stage) {
-        this.$scope.environment.stage = stage;
-        this.environmentService.setStage(stage);
-        this.$state.go('allPromotions.chooseCampaign', {}, {reload: true});
     }
     
     setCampaignGroup(campaignGroup) {
