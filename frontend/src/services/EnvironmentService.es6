@@ -1,23 +1,5 @@
 const CAMPAIGN_GROUP = 'campaign_group';
 const DEFAULT_CAMPAIGN_GROUP = 'digitalpack';
-const STAGE = 'stage';
-const DEFAULT_STAGE = 'PROD';   // Must match the default router in AppLoader.scala
-const PRODUCT_DOMAINS = {
-    'CODE': {
-        'membership': 'mem.thegulocal.com',
-        'digitalpack': 'sub.thegulocal.com',
-        'newspaper': 'sub.thegulocal.com',
-        'weekly': 'sub.thegulocal.com',
-        'grid': 'media.gutools.co.uk'
-    },
-    'PROD': {
-        'membership': 'membership.theguardian.com',
-        'digitalpack': 'subscribe.theguardian.com',
-        'newspaper': 'subscribe.theguardian.com',
-        'weekly': 'subscribe.theguardian.com',
-        'grid': 'media.gutools.co.uk'
-    }
-};
 
 function getOrDefault($cookies, key, def) {
     let fromCookies = $cookies.get(key);
@@ -29,10 +11,6 @@ export default class {
     /* @ngInject */
     constructor($cookies) {
         this.$cookies = $cookies;
-    }
-    
-    setStage(newStage) {
-        this.$cookies.put(STAGE, newStage)
     }
 
     setCampaignGroup(campaignGroup) {
@@ -54,14 +32,10 @@ export default class {
     }
 
     getGridUrl() {
-        return PRODUCT_DOMAINS[this.getStage()]['grid'] || '';
+        return window.guardian.urls['grid'] || '';
     }
 
     getCampaignGroupDomain() {
-        return PRODUCT_DOMAINS[this.getStage()][this.getCampaignGroup()] || '';
-    }
-
-    getStage() {
-        return getOrDefault(this.$cookies, STAGE, DEFAULT_STAGE)
+        return window.guardian.urls[this.getCampaignGroup()] || '';
     }
 }

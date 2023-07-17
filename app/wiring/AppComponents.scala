@@ -4,25 +4,32 @@ import com.gu.googleauth.AuthAction
 import com.gu.memsub.auth.common.MemSub.Google.googleAuthConfigFor
 import com.gu.memsub.promo.{Campaign, DynamoTables}
 import com.gu.memsub.promo.Promotion.AnyPromotion
-import play.api.BuiltInComponents
+import play.api.BuiltInComponentsFromContext
 import com.typesafe.config.{Config, ConfigFactory}
 import com.softwaremill.macwire._
-import conf.{CatalogService, PaperPlans, PaperProducts, WeeklyPlans}
+import com.typesafe.scalalogging.LazyLogging
+import conf.{CatalogService, PaperProducts, WeeklyPlans}
 import controllers._
+import play.api.ApplicationLoader.Context
 import play.api.libs.ws.ahc.AhcWSComponents
-import play.api.mvc.{AnyContent, ControllerComponents}
+import play.api.mvc.{AnyContent, EssentialFilter}
 import play.api.routing.Router
+import play.filters.HttpFiltersComponents
+import play.filters.csrf.CSRFFilter
+import play.filters.hosts.AllowedHostsFilter
 import wiring.AppComponents.Stage
 import router.Routes
 
-import scala.concurrent.ExecutionContext
+class AppComponents(context: Context) extends BuiltInComponentsFromContext(context) with AhcWSComponents with AssetsComponents with HttpFiltersComponents {
 
-class AppComponents(private val stage: Stage, c: BuiltInComponents with AhcWSComponents, controllerComponents: ControllerComponents, assetsComponents: AssetsComponents) {
-
-  import c._
-  import assetsComponents.assetsMetadata
+  override def httpFilters: Seq[EssentialFilter] =
+    super.httpFilters.filterNot { filter =>
+      filter.getClass == classOf[AllowedHostsFilter] || filter.getClass == classOf[CSRFFilter]
+    }
 
   lazy val config = ConfigFactory.load()
+  lazy val stage = AppComponents.getStage(config)
+
   lazy val paperPlans = wireWith[Config, Stage, PaperProducts](PaperProducts.fromConfig)
 
   lazy val promoService = com.gu.memsub.services.JsonDynamoService.forTable[AnyPromotion](DynamoTables.promotions(config, stage.name))
@@ -48,15 +55,25 @@ class AppComponents(private val stage: Stage, c: BuiltInComponents with AhcWSCom
   lazy val assetController = wire[Assets]
 
 
-  val prefix: String = "/"
-  lazy val router: Router = wire[Routes]
+  override lazy val router: Router = wire[Routes]
 
 }
 
-object AppComponents {
+object AppComponents extends LazyLogging {
   def ratePlanPath(stage: Stage): String = s"touchpoint.backend.environments.${stage.name}.zuora.ratePlanIds"
 
   sealed trait Stage { def name: String }
   case object CODE extends Stage { override def name = "CODE" }
   case object PROD extends Stage { override def name = "PROD" }
+
+  // Throws exception if stage is missing or invalid
+  def getStage(config: Config): Stage = {
+    val stage = config.getString("stage") match {
+      case "DEV" => CODE
+      case "CODE" => CODE
+      case "PROD" => PROD
+    }
+    logger.info(s"Stage: $stage")
+    stage
+  }
 }

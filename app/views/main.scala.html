@@ -1,10 +1,12 @@
+@import wiring.AppComponents.{ Stage, PROD }
+
 @*
  * This template is called from the `index` template. This template
  * handles the rendering of the page header and body tags. It takes
  * two arguments, a `String` for the title of the page and an `Html`
  * object to insert into the body of the page.
  *@
-@(title: String)(content: Html)
+@(title: String, stage: Stage)(content: Html)
 
 <!DOCTYPE html>
 <html lang="en">
@@ -15,13 +17,32 @@
         <link rel="shortcut icon" type="image/png" href="@routes.Assets.versioned("images/favicon.png")">
         <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
         <script src="@routes.Assets.versioned("javascripts/main.js")" type="text/javascript"></script>
+        <script type="text/javascript">
+            window.guardian = {
+                'urls': {
+                    @if(stage == PROD) {
+                        'membership': 'membership.theguardian.com',
+                        'digitalpack': 'subscribe.theguardian.com',
+                        'newspaper': 'subscribe.theguardian.com',
+                        'weekly': 'subscribe.theguardian.com',
+                        'grid': 'media.gutools.co.uk'
+                    } else {
+                        'membership': 'mem.thegulocal.com',
+                        'digitalpack': 'sub.thegulocal.com',
+                        'newspaper': 'sub.thegulocal.com',
+                        'weekly': 'sub.thegulocal.com',
+                        'grid': 'media.gutools.co.uk'
+                    }
+                }
+            };
+        </script>
     </head>
     <body ng-app="Promotions" layout="column">
-      <md-toolbar ng-class="[environment.campaignGroup, environment.stage.toLowerCase()]">
+      <md-toolbar ng-class="[environment.campaignGroup, @{stage.name.toLowerCase}]">
         <div class="md-toolbar-tools">
           <span environment-menu></span>
           <h2 class="md-clickable">
-            <span ui-sref="allPromotions.chooseCampaign">Guardian {{environment.campaignGroup}} Promotions ({{environment.stage}})</span>
+            <span ui-sref="allPromotions.chooseCampaign">Guardian {{environment.campaignGroup}} Promotions (@{stage.name})</span>
           </h2>
           <span flex></span>
         </div>
