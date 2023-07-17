@@ -53,7 +53,16 @@ object EndDateCondition {
   implicit val reads: Reads[EndDateCondition] = ZuoraEnum.getReads(values, "invalid end date condition value")
 }
 
-sealed trait ZBillingPeriod extends ZuoraEnum
+sealed trait ZBillingPeriod extends ZuoraEnum {
+  def toBillingPeriod: BillingPeriod = this match {
+    case ZYear => Year
+    case ZTwoYears => TwoYears
+    case ZThreeYears => ThreeYears
+    case ZMonth => Month
+    case ZQuarter => Quarter
+    case  _ => throw new IllegalArgumentException("Zuora billing period not supported")
+  }
+}
 
 case object ZYear extends ZBillingPeriod {
   override val id = "Annual"
@@ -223,7 +232,7 @@ object CatalogPlan {
   type Contributor = CatalogPlan[Product.Contribution, PaidCharge[Contributor.type, Month.type], Current]
 
   type Digipack[+B <: BillingPeriod] = CatalogPlan[Product.ZDigipack, PaidCharge[Digipack.type, B], Current]
-  type SupporterPlus[+B <: BillingPeriod] = CatalogPlan[Product.SupporterPlus, PaidCharge[SupporterPlus.type, B], Current]
+  type SupporterPlus[+B <: BillingPeriod] = CatalogPlan[Product.SupporterPlus, SupporterPlusCharges, Current]
   type Delivery = CatalogPlan[Product.Delivery, PaperCharges, Current]
   type Voucher = CatalogPlan[Product.Voucher, PaperCharges, Current]
   type DigitalVoucher = CatalogPlan[Product.DigitalVoucher, PaperCharges, Current]
@@ -334,8 +343,6 @@ case class Catalog(
   lazy val allSubs: List[List[CatalogPlan.Paid]] =
     List(digipack.plans, supporterPlus.plans, voucher.list.toList, digitalVoucher.list.toList, delivery.list.toList) ++ weekly.plans
 
-  lazy val allMembership: List[CatalogPlan[Product.Membership, ChargeList with SingleBenefit[MemberTier], Current]] =
-    List(friend, staff) ++ supporter.plans ++ partner.plans ++ patron.plans
 }
 
 /**
@@ -394,6 +401,15 @@ case class PaperCharges(dayPrices: Map[PaperDay, PricingSummary], digipack: Opti
   override def billingPeriod: BillingPeriod = BillingPeriod.Month
   def chargedDays = dayPrices.filterNot(_._2.isFree).keySet // Non-subscribed-to papers are priced as Zero on multi-day subs
   val subRatePlanChargeId = SubscriptionRatePlanChargeId("")
+}
+
+/** Supporter Plus V2 has two rate plan charges, one for the subscription element and one for the additional contribution.
+  */
+case class SupporterPlusCharges(billingPeriod: BillingPeriod, pricingSummaries: List[PricingSummary]) extends PaidChargeList {
+
+  val subRatePlanChargeId = SubscriptionRatePlanChargeId("")
+  override def price: PricingSummary = pricingSummaries.reduce(_ |+| _)
+  override def benefits: NonEmptyList[Benefit] = NonEmptyList(SupporterPlus)
 }
 
 /**
