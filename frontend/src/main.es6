@@ -28,7 +28,6 @@ import previewPromotion from 'directives/PreviewPromotion'
 import gridImageSelector from 'directives/GridImageSelector'
 
 //config
-import dateConfig from 'config/DateConfig'
 import urlConfig from 'config/UrlConfig'
 
 // services
@@ -88,7 +87,6 @@ module.service('promotionService', PromotionService)
       .directive('availableCountries', availableCountries)
       .directive('gridImageSelector', gridImageSelector)
       .directive('previewPromotion', previewPromotion)
-      .config(dateConfig)
       .config(urlConfig)
 ;
 
