@@ -1,6 +1,6 @@
 <div layout="column" flex layout-align="top left">
     <h5>Availability</h5>
-    <div>
+    <div layout="row">
         <md-checkbox ng-model="selectedCountryGroups[group.id]" aria-label="{{group.name}}" ng-repeat="group in countryGroups" ng-change="ctrl.applyCountryGroups(selectedCountryGroups)">
             {{group.name}}
         </md-checkbox>
