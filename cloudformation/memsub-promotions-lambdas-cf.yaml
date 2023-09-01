@@ -132,9 +132,9 @@ Resources:
             - arn:aws:s3:::ophan-raw-membership-promo-code-view/*
           - Effect: Allow
             Action:
-            - s3:GetObject
+            - secretsmanager:GetSecretValue
             Resource:
-            - arn:aws:s3:::gu-reader-revenue-private/membership/promotions-tool/*
+            - arn:aws:secretsmanager:eu-west-1:865473395570:secret:CODE/Salesforce/User/PromoCodeLambda*
 
   PromoCodeViewLambdaFunctionCODE:
     Type: AWS::Lambda::Function
