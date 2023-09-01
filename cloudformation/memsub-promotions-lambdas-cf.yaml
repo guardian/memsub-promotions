@@ -135,6 +135,7 @@ Resources:
             - secretsmanager:GetSecretValue
             Resource:
             - arn:aws:secretsmanager:eu-west-1:865473395570:secret:CODE/Salesforce/User/PromoCodeLambda*
+            - arn:aws:secretsmanager:eu-west-1:865473395570:secret:PROD/Salesforce/User/PromoCodeLambda*
 
   PromoCodeViewLambdaFunctionCODE:
     Type: AWS::Lambda::Function
