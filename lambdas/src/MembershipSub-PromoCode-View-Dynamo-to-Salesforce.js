@@ -231,7 +231,9 @@ async function fetchConfig(stage) {
     return client.send(new GetSecretValueCommand({
         SecretId,
     })).then(response => {
-        return JSON.parse(response.SecretString)
+        const config = JSON.parse(response.SecretString)
+        console.log('Fetched config from Secrets Manager');
+        return config;
     }).catch(err => {
         return Promise.reject(`Failed to fetch config with ID: ${SecretId}. Error was: ${err}`);
     });
