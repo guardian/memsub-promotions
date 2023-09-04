@@ -2,11 +2,12 @@
 
 import { DynamoDBDocument } from "@aws-sdk/lib-dynamodb";
 import { DynamoDB } from "@aws-sdk/client-dynamodb";
-import { S3 } from "@aws-sdk/client-s3";
+import {
+    SecretsManagerClient,
+    GetSecretValueCommand,
+} from "@aws-sdk/client-secrets-manager";
 import * as https from "https";
 import * as querystring from "querystring";
-
-const s3 = new S3();
 
 const docClient = DynamoDBDocument.from(new DynamoDB());
 
@@ -221,21 +222,21 @@ function makeAPICalls(csvData) {
 }
 
 async function fetchConfig(stage) {
-    const Key = `membership/promotions-tool/${stage}/PromoCode-View-Dynamo-to-Salesforce-lambda.json`;
+    const client = new SecretsManagerClient({
+        region: "eu-west-1",
+    });
 
-    const response = await s3.getObject({ Bucket: 'gu-reader-revenue-private', Key });
+    const SecretId = `${stage}/Salesforce/User/PromoCodeLambda`;
 
-    if (response.Body) {
-        const config = JSON.parse(await response.Body.transformToString());
-
-        if (config.client_id && config.client_secret && config.password && config.salesforce_url && config.username) {
-            return config;
-        } else {
-            return Promise.reject(`Invalid config from key: ${Key}`);
-        }
-    } else {
-        return Promise.reject(`Failed to fetch config with key: ${Key}`);
-    }
+    return client.send(new GetSecretValueCommand({
+        SecretId,
+    })).then(response => {
+        const config = JSON.parse(response.SecretString)
+        console.log('Fetched config from Secrets Manager');
+        return config;
+    }).catch(err => {
+        return Promise.reject(`Failed to fetch config with ID: ${SecretId}. Error was: ${err}`);
+    });
 }
 
 export const handler = (event, context, callback) => {
