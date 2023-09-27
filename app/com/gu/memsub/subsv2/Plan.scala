@@ -234,6 +234,7 @@ object CatalogPlan {
   type Digipack[+B <: BillingPeriod] = CatalogPlan[Product.ZDigipack, PaidCharge[Digipack.type, B], Current]
   type SupporterPlus[+B <: BillingPeriod] = CatalogPlan[Product.SupporterPlus, SupporterPlusCharges, Current]
   type Delivery = CatalogPlan[Product.Delivery, PaperCharges, Current]
+  type NationalDelivery = CatalogPlan[Product.NationalDelivery, PaperCharges, Current]
   type Voucher = CatalogPlan[Product.Voucher, PaperCharges, Current]
   type DigitalVoucher = CatalogPlan[Product.DigitalVoucher, PaperCharges, Current]
   type AnyPlan = CatalogPlan[Product, ChargeList, Current]
@@ -331,6 +332,7 @@ case class Catalog(
   voucher: NonEmptyList[CatalogPlan.Voucher],
   digitalVoucher: NonEmptyList[CatalogPlan.DigitalVoucher],
   delivery: NonEmptyList[CatalogPlan.Delivery],
+  nationalDelivery: NonEmptyList[CatalogPlan.NationalDelivery],
   weekly: WeeklyPlans,
   map: Map[ProductRatePlanId, CatalogZuoraPlan]
 ) {
@@ -341,7 +343,7 @@ case class Catalog(
     supporter.plans ++ partner.plans ++ patron.plans ++ allSubs.flatten
 
   lazy val allSubs: List[List[CatalogPlan.Paid]] =
-    List(digipack.plans, supporterPlus.plans, voucher.list.toList, digitalVoucher.list.toList, delivery.list.toList) ++ weekly.plans
+    List(digipack.plans, supporterPlus.plans, voucher.list.toList, digitalVoucher.list.toList, delivery.list.toList, nationalDelivery.list.toList) ++ weekly.plans
 
 }
 
@@ -513,6 +515,7 @@ object SubscriptionPlan {
   type Digipack = PaidSubscriptionPlan[Product.ZDigipack, PaidCharge[Benefit.Digipack.type, BillingPeriod]]
   type SupporterPlus = PaidSubscriptionPlan[Product.SupporterPlus, PaidCharge[Benefit.SupporterPlus.type, BillingPeriod]]
   type Delivery = PaidSubscriptionPlan[Product.Delivery, PaperCharges]
+  type NationalDelivery = PaidSubscriptionPlan[Product.NationalDelivery, PaperCharges]
   type Voucher = PaidSubscriptionPlan[Product.Voucher, PaperCharges]
   type DigitalVoucher = PaidSubscriptionPlan[Product.DigitalVoucher, PaperCharges]
   type DailyPaper = PaidSubscriptionPlan[Product.Paper, PaperCharges]

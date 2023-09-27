@@ -97,6 +97,7 @@ class CatalogService[M[_] : Monad](productIds: ProductIds, fetchCatalog: M[Strin
     voucher <- many[Voucher](plans, "Paper voucher")
     digitalVoucher <- many[DigitalVoucher](plans, "Paper digital voucher")
     delivery <- many[Delivery](plans, "Paper delivery")
+    nationalDelivery <- many[NationalDelivery](plans, "Paper - National Delivery")
     weeklyZoneA <- (
       one[WeeklyZoneA[SixWeeks.type]](plans, "Weekly Zone A Six weeks", FrontendId.SixWeeks) |@|
         one[WeeklyZoneA[Quarter.type]](plans, "Weekly Zone A quarter", FrontendId.Quarterly) |@|
@@ -132,7 +133,7 @@ class CatalogService[M[_] : Monad](productIds: ProductIds, fetchCatalog: M[Strin
     weekly = WeeklyPlans(weeklyZoneA, weeklyZoneB, weeklyZoneC, weeklyDomestic, weeklyRestOfWorld)
 
     map <- Validation.s[NonEmptyList[String]](plans.map(p => p.id -> p).toMap)
-  } yield Catalog(friend, staff, supporter, partner, patron, digipack, supporterPlus, contributor, voucher, digitalVoucher, delivery, weekly, map)
+  } yield Catalog(friend, staff, supporter, partner, patron, digipack, supporterPlus, contributor, voucher, digitalVoucher, delivery, nationalDelivery, weekly, map)
 
 
   lazy val catalog: M[NonEmptyList[String] \/ Catalog] = (for {

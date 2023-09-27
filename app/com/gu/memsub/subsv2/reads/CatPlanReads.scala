@@ -40,6 +40,7 @@ object CatPlanReads {
   implicit val v: CatPlanReads[Voucher] = findProduct(_.voucher.point[List], Voucher)
   implicit val digitalVoucherReads: CatPlanReads[DigitalVoucher] = findProduct(_.digitalVoucher.point[List], DigitalVoucher)
   implicit val d: CatPlanReads[Delivery] = findProduct(_.delivery.point[List], Delivery)
+  implicit val nD: CatPlanReads[NationalDelivery] = findProduct(_.nationalDelivery.point[List], NationalDelivery)
   implicit val y: CatPlanReads[Contribution] = findProduct(_.contributor.point[List], Contribution)
   implicit val s: CatPlanReads[SupporterPlus] = findProduct(_.supporterPlus.point[List], SupporterPlus)
   implicit val z: CatPlanReads[ZDigipack] = findProduct(_.digipack.point[List], Digipack)
