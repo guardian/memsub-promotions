@@ -6,7 +6,8 @@ import wiring.AppComponents.Stage
 case class PaperProducts(
   digitalVoucher: PaperPlans,
   voucher: PaperPlans,
-  delivery: PaperPlans
+  delivery: PaperPlans,
+  nationalDelivery: NationalDeliveryPaperPlans
 )
 
 case class PaperPlans(
@@ -20,6 +21,12 @@ case class PaperPlans(
   sixdayplus: ProductRatePlanId,
   everyday: ProductRatePlanId,
   everydayplus: ProductRatePlanId
+)
+
+case class NationalDeliveryPaperPlans(
+  weekend: ProductRatePlanId,
+  sixday: ProductRatePlanId,
+  everyday: ProductRatePlanId,
 )
 
 object PaperProducts {
@@ -38,12 +45,17 @@ object PaperProducts {
   )
 
   def fromConfig(config: Config, stage: Stage): PaperProducts = {
-    val c = config.getConfig(s"touchpoint.backend.environments.${stage.name}")
+    val stageConfig = config.getConfig(s"touchpoint.backend.environments.${stage.name}")
 
     PaperProducts(
-      digitalVoucher = plansFor(c, "digitalVoucher"),
-      voucher = plansFor(c, "voucher"),
-      delivery = plansFor(c, "delivery")
+      digitalVoucher = plansFor(stageConfig, "digitalVoucher"),
+      voucher = plansFor(stageConfig, "voucher"),
+      delivery = plansFor(stageConfig, "delivery"),
+      nationalDelivery = NationalDeliveryPaperPlans(
+        weekend = ProductRatePlanId(stageConfig.getString("nationalDelivery.weekend")),
+        sixday = ProductRatePlanId(stageConfig.getString("nationalDelivery.sixday")),
+        everyday = ProductRatePlanId(stageConfig.getString("nationalDelivery.everyday")),
+      )
     )
   }
 }
