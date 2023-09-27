@@ -16,3 +16,7 @@ lambdas/target
 lambdas/tools
 project/project/
 /nginx/Brewfile.lock.json
+/.metals/
+/.bloop/
+/project/.bloop/
+/project/metals.sbt
