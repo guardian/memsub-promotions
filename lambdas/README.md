@@ -8,15 +8,6 @@ We can also list just the Lambdas in AWS using this link: https://eu-west-1.cons
 
 We can view the DynamoDB tables at this link (search on ‘prom’): https://eu-west-1.console.aws.amazon.com/dynamodbv2/home?region=eu-west-1#tables 
 
-
-### MembershipSub-PromoCode-View-Dynamo-to-Data-Lake
-A Lambda function to backup the PromoCode-View Dynamo table to the Data Lake.
-
-The code dumps data to a csv in S3 https://github.com/guardian/memsub-promotions/blob/main/lambdas/src/MembershipSub-PromoCode-View-Dynamo-to-Data-Lake.js#L16
-It runs on a daily schedule; for dev work we can run it manually and check that the csv gets updated. Always download the csv file from S3 before doing any dev/testing work - that way if anything does go wrong we can revert the code and reload the original file back into S3 to minimise damage.
-
-A single version (PROD) of this lambda exists in AWS, and will rebuild automatically when a PR branch merges into `main`.
-
 ### MembershipSub-PromoCode-View-Dynamo-to-Salesforce
 A Lambda function to replicate the MembershipSub-PromoCode-View-CODE Dynamo table to Salesforce.
 
