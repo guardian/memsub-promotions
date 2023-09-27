@@ -80,7 +80,6 @@ jobs:
                   bucket: gu-promotions-tool-dist
                   functionNames:
                     - MembershipSub-Promotions-to-PromoCode-View-
-                    - MembershipSub-PromoCode-View-Dynamo-to-Data-Lake-
                     - MembershipSub-PromoCode-View-Dynamo-to-Salesforce-
                     - MembershipSub-Promotions-Scheduled-Dynamo-Backup-
           contentDirectories: |
