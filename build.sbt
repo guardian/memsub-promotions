@@ -75,6 +75,11 @@ libraryDependencies ++= Seq(
   "org.scalatestplus.play" %% "scalatestplus-play" % "5.1.0" % Test
 )
 
+dependencyOverrides ++= Seq(
+  // Fixes: https://security.snyk.io/vuln/SNYK-JAVA-CHQOSLOGBACK-6094942
+  "ch.qos.logback" % "logback-classic" % "1.2.13"
+)
+
 resolvers ++= Seq(
   "Guardian Github Releases" at "https://guardian.github.io/maven/repo-releases",
   "Guardian Github Snapshots" at "https://guardian.github.com/maven/repo-snapshots",
