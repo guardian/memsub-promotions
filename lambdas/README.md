@@ -19,13 +19,6 @@ The lambda relies on SalesForce usernames/passwords which have been stored in AW
 
 Only the PROD will rebuild automatically when a PR branch merges into `main`.
 
-### MembershipSub-Promotions-Scheduled-Dynamo-Backup
-A Lambda function to trigger the backup of the Campaigns and Promotions table and delete any old backups (retention days is defined in the code).
-
-For dev work, we can manually run it in AWS and check it worked from the Dynamo page in the AWS console.
-
-A single version (PROD) of this lambda exists in AWS, and will rebuild automatically when a PR branch merges into `main`.
-
 ### MembershipSub-Promotions-to-PromoCode-View
 An Amazon DynamoDB trigger that creates a view of data associated with a particular promo code for the data pipeline to collect.
 
