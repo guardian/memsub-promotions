@@ -81,7 +81,8 @@ jobs:
                   functionNames:
                     - MembershipSub-Promotions-to-PromoCode-View-
                     - MembershipSub-PromoCode-View-Dynamo-to-Salesforce-
-                    - MembershipSub-Promotions-Scheduled-Dynamo-Backup-
+                dependencies:
+                  - memsub-promotions-lambdas-cloudformation
           contentDirectories: |
             MembershipSub-Promotions-PromoCode-View:
               - lambdas/dist/MembershipSub-Promotions-PromoCode-View.zip
