@@ -144,7 +144,7 @@ case object Bottom extends HeroImageAlignment
 case object Centre extends HeroImageAlignment
 case class HeroImage(image: ResponsiveImageGroup, alignment: HeroImageAlignment)
 
-case class MembershipLandingPage(
+case class SupporterPlusLandingPage(
   title: Option[String],
   subtitle: Option[String],
   description: Option[String],
@@ -223,7 +223,7 @@ object CovariantIdObject {
 object Promotion {
 
   type AnyPromotion = Promotion[PromotionType[PromoContext], Option, LandingPage]
-  type PromoWithMembershipLandingPage = Promotion[PromotionType[PromoContext], CovariantId, MembershipLandingPage]
+  type PromoWithSupporterPlusLandingPage = Promotion[PromotionType[PromoContext], CovariantId, SupporterPlusLandingPage]
   type PromoWithDigitalPackLandingPage = Promotion[PromotionType[PromoContext], CovariantId, DigitalPackLandingPage]
   type PromoWithNewspaperLandingPage = Promotion[PromotionType[PromoContext], CovariantId, NewspaperLandingPage]
   type PromoWithWeeklyLandingPage = Promotion[PromotionType[PromoContext], CovariantId, WeeklyLandingPage]
@@ -273,7 +273,7 @@ object Promotion {
     def asDigitalPack: PromoOpt[DigitalPackLandingPage] = in.landingPage.collect { case f: DigitalPackLandingPage => in.copy[A, CovariantId, DigitalPackLandingPage](landingPage = (f)) }
     def asNewspaper: PromoOpt[NewspaperLandingPage] = in.landingPage.collect { case f: NewspaperLandingPage => in.copy[A, CovariantId, NewspaperLandingPage](landingPage = (f)) }
     def asWeekly: PromoOpt[WeeklyLandingPage] = in.landingPage.collect { case f: WeeklyLandingPage => in.copy[A, CovariantId, WeeklyLandingPage](landingPage = (f)) }
-    def asMembership: PromoOpt[MembershipLandingPage] = in.landingPage.collect { case f: MembershipLandingPage => in.copy[A, CovariantId, MembershipLandingPage](landingPage = (f)) }
+    def asSupporterPlus: PromoOpt[SupporterPlusLandingPage] = in.landingPage.collect { case f: SupporterPlusLandingPage => in.copy[A, CovariantId, SupporterPlusLandingPage](landingPage = (f)) }
   }
 
   def asAnyPromotion[T <: PromotionType[PromoContext]](in: Promotion[T, CovariantId, LandingPage]): AnyPromotion =

@@ -9,9 +9,8 @@ import com.gu.memsub.promo.Promotion.AnyPromotion
 import io.lemonlabs.uri.Uri
 import org.joda.time.{DateTime, Days}
 import play.api.libs.functional.syntax._
-
 import play.api.libs.json._
-import com.gu.memsub.promo.CampaignGroup.{DigitalPack, GuardianWeekly, Newspaper}
+import com.gu.memsub.promo.CampaignGroup.{DigitalPack, GuardianWeekly, Newspaper, SupporterPlus}
 
 object Formatters {
 
@@ -119,6 +118,7 @@ object Formatters {
       new Reads[LandingPage] {
         // Supports the legacy serialisations of productFamily key as the identifier of a LandingPage type
         override def reads(json: JsValue): JsResult[LandingPage] = (json \ "productFamily").toOption orElse (json \ "type").toOption match {
+          case Some(JsString(SupporterPlus.id))  => Json.reads[SupporterPlusLandingPage].reads(json)
           case Some(JsString(DigitalPack.id))  => Json.reads[DigitalPackLandingPage].reads(json)
           case Some(JsString(Newspaper.id))  => Json.reads[NewspaperLandingPage].reads(json)
           case Some(JsString(GuardianWeekly.id)) => Json.reads[WeeklyLandingPage].reads(json)
@@ -128,6 +128,7 @@ object Formatters {
       new OWrites[LandingPage] {
         def writes(in: LandingPage): JsObject = {
           in match {
+            case slp: SupporterPlusLandingPage => Json.writes[SupporterPlusLandingPage].writes(slp) ++ Json.obj("type" -> SupporterPlus.id)
             case dlp: DigitalPackLandingPage => Json.writes[DigitalPackLandingPage].writes(dlp) ++ Json.obj("type" -> DigitalPack.id)
             case nlp: NewspaperLandingPage => Json.writes[NewspaperLandingPage].writes(nlp) ++ Json.obj("type" -> Newspaper.id)
             case wlp: WeeklyLandingPage => Json.writes[WeeklyLandingPage].writes(wlp) ++ Json.obj("type" -> GuardianWeekly.id)
@@ -136,6 +137,7 @@ object Formatters {
       }
     )
 
+    implicit val supporterPlusLandingPageFormat = Json.format[SupporterPlusLandingPage]
     implicit val digitalpackLandingPageFormat = Json.format[DigitalPackLandingPage]
     implicit val newspaperLandingPageFormat = Json.format[NewspaperLandingPage]
 
