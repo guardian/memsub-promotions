@@ -1,13 +1,12 @@
 package controllers
 import actions.GoogleAuthAction.GoogleAuthenticatedAction
 import com.gu.memsub.promo.Formatters.Common._
-import com.gu.config.{DigitalPackRatePlanIds, MembershipRatePlanIds}
 import com.gu.i18n._
 import play.api.libs.json._
 import play.api.mvc.Action
 import play.api.mvc.Results._
 
-class CountryController(googleAuthAction: GoogleAuthenticatedAction, membershipIds: MembershipRatePlanIds, digipackIds: DigitalPackRatePlanIds) {
+class CountryController(googleAuthAction: GoogleAuthenticatedAction) {
 
   def all = googleAuthAction {
 

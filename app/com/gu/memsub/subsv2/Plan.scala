@@ -312,11 +312,6 @@ case class WeeklyPlans(
 }
 
 case class Catalog(
-  friend: CatalogPlan.Friend,
-  staff: CatalogPlan.Staff,
-  supporter: PaidMembershipPlans[Supporter.type],
-  partner: PaidMembershipPlans[Partner.type],
-  patron: PaidMembershipPlans[Patron.type],
   digipack: DigipackPlans,
   supporterPlus: SupporterPlusPlans,
   contributor: CatalogPlan.Contributor,
@@ -330,8 +325,7 @@ case class Catalog(
   lazy val productMap: Map[ProductRatePlanChargeId, Benefit] =
     map.values.flatMap(p => p.benefits).toMap
 
-  lazy val paid: Seq[CatalogPlan.Paid] =
-    supporter.plans ++ partner.plans ++ patron.plans ++ allSubs.flatten
+  lazy val paid: Seq[CatalogPlan.Paid] = allSubs.flatten
 
   lazy val allSubs: List[List[CatalogPlan.Paid]] =
     List(digipack.plans, supporterPlus.plans, voucher.list.toList, digitalVoucher.list.toList, delivery.list.toList, nationalDelivery.list.toList) ++ weekly.plans
