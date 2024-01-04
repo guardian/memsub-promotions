@@ -11,22 +11,18 @@ object ProductFamily {
 
   def fromId(id: String): Option[ProductFamily] = id match {
     case Subscriptions.id => Some(Subscriptions)
-    case Membership.id => Some(Membership)
     case Contributions.id => Some(Contributions)
     case _ => None
   }
 
   type Subscriptions = Subscriptions.type
-  type Membership = Membership.type
   type Contributions = Contributions.type
 }
 
 case object Subscriptions extends ProductFamily {
   override val id = "digitalpack"
 }
-case object Membership extends ProductFamily {
-  override val id = "membership"
-}
+
 case object Contributions extends ProductFamily {
   override val id = "contributions"
 }
@@ -48,10 +44,6 @@ object Product {
   sealed trait Paper extends ContentSubscription
   sealed trait Weekly extends Paper
 
-
-  case object Membership extends Product {
-    val name = "membership"
-  }
   case object GuardianPatron extends Product {
     val name = "guardianpatron"
   }
@@ -97,7 +89,6 @@ object Product {
   def fromId(id: String): Option[Product] = id match {
     case Digipack.name => Some(Digipack)
     case SupporterPlus.name => Some(SupporterPlus)
-    case Membership.name => Some(Membership)
     case Delivery.name => Some(Delivery)
     case NationalDelivery.name => Some(NationalDelivery)
     case Voucher.name => Some(Voucher)
@@ -110,7 +101,6 @@ object Product {
     case _ => None
   }
 
-  type Membership = Membership.type
   type GuardianPatron = GuardianPatron.type
   type ZDigipack = Digipack.type
   type SupporterPlus = SupporterPlus.type

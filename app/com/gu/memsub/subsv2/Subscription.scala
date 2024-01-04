@@ -64,7 +64,6 @@ case class Subscription[+P <: SubscriptionPlan.AnyPlan](
   def asWeekly = as[Product.Weekly, PaidCharge[Weekly.type, BillingPeriod]/* TODO should check the benefit and billing period*/, SubscriptionPlan.WeeklyPlan]
   def asDigipack = as[Product.ZDigipack, PaidChargeList, SubscriptionPlan.Digipack]
   def asContribution = as[Product.Contribution, PaidChargeList, SubscriptionPlan.Contributor]
-  def asMembership = as[Product.Membership, ChargeList, SubscriptionPlan.Member]
 }
 
 /*

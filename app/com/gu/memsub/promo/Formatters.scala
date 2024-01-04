@@ -1,8 +1,6 @@
 package com.gu.memsub.promo
 
-import java.util
 import java.util.UUID
-import com.amazonaws.services.dynamodbv2.document.Item
 import com.gu.i18n.Country
 import com.gu.i18n.CountryGroup.{unapply => _, _}
 import com.gu.memsub.Subscription.ProductRatePlanId
@@ -12,14 +10,8 @@ import io.lemonlabs.uri.Uri
 import org.joda.time.{DateTime, Days}
 import play.api.libs.functional.syntax._
 
-import scala.collection.JavaConverters._
 import play.api.libs.json._
-
-import scala.util.Try
-import com.gu.memsub.images.GridDeserializer._
-import com.gu.memsub.promo.CampaignGroup.{DigitalPack, GuardianWeekly, Membership, Newspaper}
-
-import scala.collection.immutable.Map
+import com.gu.memsub.promo.CampaignGroup.{DigitalPack, GuardianWeekly, Newspaper}
 
 object Formatters {
 
@@ -127,7 +119,6 @@ object Formatters {
       new Reads[LandingPage] {
         // Supports the legacy serialisations of productFamily key as the identifier of a LandingPage type
         override def reads(json: JsValue): JsResult[LandingPage] = (json \ "productFamily").toOption orElse (json \ "type").toOption match {
-          case Some(JsString(Membership.id)) => Json.reads[MembershipLandingPage].reads(json)
           case Some(JsString(DigitalPack.id))  => Json.reads[DigitalPackLandingPage].reads(json)
           case Some(JsString(Newspaper.id))  => Json.reads[NewspaperLandingPage].reads(json)
           case Some(JsString(GuardianWeekly.id)) => Json.reads[WeeklyLandingPage].reads(json)
@@ -137,7 +128,6 @@ object Formatters {
       new OWrites[LandingPage] {
         def writes(in: LandingPage): JsObject = {
           in match {
-            case mlp: MembershipLandingPage => Json.writes[MembershipLandingPage].writes(mlp) ++ Json.obj("type" -> Membership.id)
             case dlp: DigitalPackLandingPage => Json.writes[DigitalPackLandingPage].writes(dlp) ++ Json.obj("type" -> DigitalPack.id)
             case nlp: NewspaperLandingPage => Json.writes[NewspaperLandingPage].writes(nlp) ++ Json.obj("type" -> Newspaper.id)
             case wlp: WeeklyLandingPage => Json.writes[WeeklyLandingPage].writes(wlp) ++ Json.obj("type" -> GuardianWeekly.id)
@@ -146,7 +136,6 @@ object Formatters {
       }
     )
 
-    implicit val membershipLandingPageFormat: Format[MembershipLandingPage] = Json.format[MembershipLandingPage]
     implicit val digitalpackLandingPageFormat = Json.format[DigitalPackLandingPage]
     implicit val newspaperLandingPageFormat = Json.format[NewspaperLandingPage]
 
