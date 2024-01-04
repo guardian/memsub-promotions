@@ -32,7 +32,7 @@ sealed trait CampaignGroup {
 object CampaignGroup {
 
   case object SupporterPlus extends CampaignGroup {
-    override val id = "supporterplus"
+    override val id = "supporterPlus"
   }
   case object DigitalPack extends CampaignGroup {
     override val id = "digitalpack"
