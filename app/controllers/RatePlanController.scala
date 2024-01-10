@@ -1,7 +1,7 @@
 package controllers
 
 import actions.GoogleAuthAction.GoogleAuthenticatedAction
-import com.gu.config.{DigitalPackRatePlanIds, MembershipRatePlanIds}
+import com.gu.config.DigitalPackRatePlanIds
 import com.gu.i18n.Currency
 import com.gu.i18n.Currency.{AUD, CAD, EUR, GBP, USD}
 import com.gu.memsub.Price
@@ -23,7 +23,6 @@ case class EnhancedRatePlan(ratePlanId: ProductRatePlanId, ratePlanName: String,
 class RatePlanController(
     googleAuthAction: GoogleAuthenticatedAction,
     paperPlans: PaperProducts,
-    membershipIds: MembershipRatePlanIds,
     digipackIds: DigitalPackRatePlanIds,
     weeklyPlans: WeeklyPlans,
     catalogService: CatalogService[Future]

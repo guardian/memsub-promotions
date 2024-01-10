@@ -31,9 +31,6 @@ sealed trait CampaignGroup {
 }
 object CampaignGroup {
 
-  case object Membership extends CampaignGroup {
-    override val id = "membership"
-  }
   case object DigitalPack extends CampaignGroup {
     override val id = "digitalpack"
   }
@@ -46,7 +43,6 @@ object CampaignGroup {
 
   def fromId(id: String): Option[CampaignGroup] = id match {
     case DigitalPack.id => Some(DigitalPack)
-    case Membership.id => Some(Membership)
     case Newspaper.id => Some(Newspaper)
     case GuardianWeekly.id => Some(GuardianWeekly)
     case _ => None
@@ -144,15 +140,6 @@ case object Bottom extends HeroImageAlignment
 case object Centre extends HeroImageAlignment
 case class HeroImage(image: ResponsiveImageGroup, alignment: HeroImageAlignment)
 
-case class MembershipLandingPage(
-  title: Option[String],
-  subtitle: Option[String],
-  description: Option[String],
-  roundelHtml: Option[String],
-  heroImage: Option[HeroImage],
-  image: Option[ResponsiveImageGroup]
-) extends LandingPage
-
 case class DigitalPackLandingPage(
   title: Option[String],
   description: Option[String],
@@ -223,7 +210,6 @@ object CovariantIdObject {
 object Promotion {
 
   type AnyPromotion = Promotion[PromotionType[PromoContext], Option, LandingPage]
-  type PromoWithMembershipLandingPage = Promotion[PromotionType[PromoContext], CovariantId, MembershipLandingPage]
   type PromoWithDigitalPackLandingPage = Promotion[PromotionType[PromoContext], CovariantId, DigitalPackLandingPage]
   type PromoWithNewspaperLandingPage = Promotion[PromotionType[PromoContext], CovariantId, NewspaperLandingPage]
   type PromoWithWeeklyLandingPage = Promotion[PromotionType[PromoContext], CovariantId, WeeklyLandingPage]
@@ -273,7 +259,6 @@ object Promotion {
     def asDigitalPack: PromoOpt[DigitalPackLandingPage] = in.landingPage.collect { case f: DigitalPackLandingPage => in.copy[A, CovariantId, DigitalPackLandingPage](landingPage = (f)) }
     def asNewspaper: PromoOpt[NewspaperLandingPage] = in.landingPage.collect { case f: NewspaperLandingPage => in.copy[A, CovariantId, NewspaperLandingPage](landingPage = (f)) }
     def asWeekly: PromoOpt[WeeklyLandingPage] = in.landingPage.collect { case f: WeeklyLandingPage => in.copy[A, CovariantId, WeeklyLandingPage](landingPage = (f)) }
-    def asMembership: PromoOpt[MembershipLandingPage] = in.landingPage.collect { case f: MembershipLandingPage => in.copy[A, CovariantId, MembershipLandingPage](landingPage = (f)) }
   }
 
   def asAnyPromotion[T <: PromotionType[PromoContext]](in: Promotion[T, CovariantId, LandingPage]): AnyPromotion =

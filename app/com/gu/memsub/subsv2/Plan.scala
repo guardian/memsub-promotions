@@ -210,16 +210,6 @@ object FrontendId {
 
 object CatalogPlan {
 
-  type Member = CatalogPlan[Product.Membership, ChargeList with SingleBenefit[MemberTier], Current]
-  type FreeMember = CatalogPlan[Product.Membership, FreeCharge[FreeMemberTier], Current]
-  type Friend = CatalogPlan[Product.Membership, FreeCharge[Friend.type], Current]
-  type Staff = CatalogPlan[Product.Membership, FreeCharge[Staff.type], Current]
-
-  type PaidMember[+B <: BillingPeriod] = CatalogPlan[Product.Membership, PaidCharge[PaidMemberTier, B], Current]
-  type Supporter[+B <: BillingPeriod] = CatalogPlan[Product.Membership, PaidCharge[Supporter.type, B], Current]
-  type Partner[+B <: BillingPeriod] = CatalogPlan[Product.Membership, PaidCharge[Partner.type, B], Current]
-  type Patron[+B <: BillingPeriod] = CatalogPlan[Product.Membership, PaidCharge[Patron.type, B], Current]
-
   type Contributor = CatalogPlan[Product.Contribution, PaidCharge[Contributor.type, Month.type], Current]
 
   type Digipack[+B <: BillingPeriod] = CatalogPlan[Product.ZDigipack, PaidCharge[Digipack.type, B], Current]
@@ -248,10 +238,6 @@ object CatalogPlan {
 
 
 case class PlansWithIntroductory[+B](plans: List[B], associations: List[(B, B)])
-
-case class PaidMembershipPlans[+B <: Benefit](month: CatalogPlan[Product.Membership, PaidCharge[B, Month.type], Current], year: CatalogPlan[Product.Membership, PaidCharge[B, Year.type], Current]) {
-  lazy val plans = List(month, year)
-}
 
 case class DigipackPlans(month: CatalogPlan.Digipack[Month.type], quarter: CatalogPlan.Digipack[Quarter.type], year: CatalogPlan.Digipack[Year.type]) {
   lazy val plans = List(month, quarter, year)
@@ -312,11 +298,6 @@ case class WeeklyPlans(
 }
 
 case class Catalog(
-  friend: CatalogPlan.Friend,
-  staff: CatalogPlan.Staff,
-  supporter: PaidMembershipPlans[Supporter.type],
-  partner: PaidMembershipPlans[Partner.type],
-  patron: PaidMembershipPlans[Patron.type],
   digipack: DigipackPlans,
   supporterPlus: SupporterPlusPlans,
   contributor: CatalogPlan.Contributor,
@@ -330,8 +311,7 @@ case class Catalog(
   lazy val productMap: Map[ProductRatePlanChargeId, Benefit] =
     map.values.flatMap(p => p.benefits).toMap
 
-  lazy val paid: Seq[CatalogPlan.Paid] =
-    supporter.plans ++ partner.plans ++ patron.plans ++ allSubs.flatten
+  lazy val paid: Seq[CatalogPlan.Paid] = allSubs.flatten
 
   lazy val allSubs: List[List[CatalogPlan.Paid]] =
     List(digipack.plans, supporterPlus.plans, voucher.list.toList, digitalVoucher.list.toList, delivery.list.toList, nationalDelivery.list.toList) ++ weekly.plans
@@ -491,16 +471,6 @@ object SubscriptionPlan {
   type AnyPlan = SubscriptionPlan[Product, ChargeList]
   type Paid = PaidSubscriptionPlan[Product, PaidChargeList]
   type Free = FreeSubscriptionPlan[Product, FreeChargeList]
-
-  type Member = SubscriptionPlan[Product.Membership, ChargeList with SingleBenefit[MemberTier]]
-  type PaidMember = PaidSubscriptionPlan[Product.Membership, PaidCharge[Benefit.PaidMemberTier, BillingPeriod]]
-  type FreeMember = FreeSubscriptionPlan[Product.Membership, FreeCharge[Benefit.FreeMemberTier]]
-
-  type Staff = FreeSubscriptionPlan[Product.Membership, FreeCharge[Benefit.Staff.type]]
-  type Friend = FreeSubscriptionPlan[Product.Membership, FreeCharge[Benefit.Friend.type]]
-  type Supporter = PaidSubscriptionPlan[Product.Membership, PaidCharge[Benefit.Supporter.type, BillingPeriod]]
-  type Partner = PaidSubscriptionPlan[Product.Membership, PaidCharge[Benefit.Partner.type, BillingPeriod]]
-  type Patron = PaidSubscriptionPlan[Product.Membership, PaidCharge[Benefit.Patron.type, BillingPeriod]]
 
   type ContentSubscription = PaidSubscriptionPlan[Product.ContentSubscription, PaidChargeList]
   type Digipack = PaidSubscriptionPlan[Product.ZDigipack, PaidCharge[Benefit.Digipack.type, BillingPeriod]]

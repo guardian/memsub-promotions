@@ -11,22 +11,18 @@ object ProductFamily {
 
   def fromId(id: String): Option[ProductFamily] = id match {
     case Subscriptions.id => Some(Subscriptions)
-    case Membership.id => Some(Membership)
     case Contributions.id => Some(Contributions)
     case _ => None
   }
 
   type Subscriptions = Subscriptions.type
-  type Membership = Membership.type
   type Contributions = Contributions.type
 }
 
 case object Subscriptions extends ProductFamily {
   override val id = "digitalpack"
 }
-case object Membership extends ProductFamily {
-  override val id = "membership"
-}
+
 case object Contributions extends ProductFamily {
   override val id = "contributions"
 }
@@ -48,10 +44,6 @@ object Product {
   sealed trait Paper extends ContentSubscription
   sealed trait Weekly extends Paper
 
-
-  case object Membership extends Product {
-    val name = "membership"
-  }
   case object GuardianPatron extends Product {
     val name = "guardianpatron"
   }
@@ -97,7 +89,6 @@ object Product {
   def fromId(id: String): Option[Product] = id match {
     case Digipack.name => Some(Digipack)
     case SupporterPlus.name => Some(SupporterPlus)
-    case Membership.name => Some(Membership)
     case Delivery.name => Some(Delivery)
     case NationalDelivery.name => Some(NationalDelivery)
     case Voucher.name => Some(Voucher)
@@ -110,7 +101,6 @@ object Product {
     case _ => None
   }
 
-  type Membership = Membership.type
   type GuardianPatron = GuardianPatron.type
   type ZDigipack = Digipack.type
   type SupporterPlus = SupporterPlus.type
@@ -136,8 +126,6 @@ object Benefit {
 
   def fromId(id: String): Option[Benefit] =
     PaperDay.fromId(id) orElse
-    FreeMemberTier.fromId(id) orElse
-    PaidMemberTier.fromId(id) orElse
     (id == SupporterPlus.id).option(SupporterPlus) orElse
     (id == Digipack.id).option(Digipack) orElse
     (id == Adjustment.id).option(Adjustment) orElse
@@ -145,11 +133,6 @@ object Benefit {
     (id == Weekly.id).option(Weekly)
 
 
-  sealed trait MemberTier extends Benefit
-  sealed trait FreeMemberTier extends MemberTier
-  sealed trait PaidMemberTier extends MemberTier {
-    override val isPhysical: Boolean = true
-  }
   sealed trait PaperDay extends Benefit {
     override val isPhysical: Boolean = true
     val dayOfTheWeekIndex: Int
@@ -168,49 +151,11 @@ object Benefit {
     }
   }
 
-  object FreeMemberTier {
-    def fromId(id: String): Option[FreeMemberTier] = id match {
-      case Friend.id => Friend.some
-      case Staff.id => Staff.some
-      case _ => None
-    }
-  }
 
-  object PaidMemberTier {
-    def fromId(id: String): Option[PaidMemberTier] = id match {
-      case Supporter.id => Supporter.some
-      case Partner.id => Partner.some
-      case Patron.id => Patron.some
-      case _ => None
-    }
-  }
-
-
-  object Friend extends FreeMemberTier {
-    override val id = "Friend"
-    override val isPhysical: Boolean = false
-  }
 
   object Contributor extends Benefit {
     override val id = "Contributor"
     override val isPhysical: Boolean = false
-  }
-
-  object Staff extends FreeMemberTier {
-    override val id = "Staff"
-    override val isPhysical: Boolean = true
-  }
-
-  object Supporter extends PaidMemberTier {
-    override val id = "Supporter"
-  }
-
-  object Partner extends PaidMemberTier {
-    override val id = "Partner"
-  }
-
-  object Patron extends PaidMemberTier {
-    override val id = "Patron"
   }
 
   // This is the new non-membership version of a patron

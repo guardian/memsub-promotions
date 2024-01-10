@@ -1,5 +1,5 @@
 package wiring
-import com.gu.config.{DigitalPackRatePlanIds, MembershipRatePlanIds}
+import com.gu.config.DigitalPackRatePlanIds
 import com.gu.googleauth.AuthAction
 import com.gu.memsub.auth.common.MemSub.Google.googleAuthConfigFor
 import com.gu.memsub.promo.{Campaign, DynamoTables}
@@ -37,7 +37,6 @@ class AppComponents(context: Context) extends BuiltInComponentsFromContext(conte
 
   lazy val catalog = CatalogService.fromConfig(config,stage.name)
 
-  lazy val membershipRatePlanIds = MembershipRatePlanIds.fromConfig(config.getConfig(AppComponents.ratePlanPath(stage) + ".membership"))
   lazy val digipackRatePlanIds = DigitalPackRatePlanIds.fromConfig(config.getConfig(AppComponents.ratePlanPath(stage) + ".digitalpack"))
   lazy val weeklyRatePlanIds = WeeklyPlans.fromConfig(config, stage)
 

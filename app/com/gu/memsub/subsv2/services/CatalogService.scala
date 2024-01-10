@@ -3,7 +3,6 @@ package com.gu.memsub.subsv2.services
 import com.amazonaws.services.s3.AmazonS3
 import com.amazonaws.services.s3.model.GetObjectRequest
 import com.gu.aws.AwsS3
-import com.gu.memsub.Benefit.{Partner, Patron, Supporter}
 import com.gu.memsub.BillingPeriod._
 import com.gu.memsub.Subscription.ProductRatePlanId
 import com.gu.memsub._
@@ -70,20 +69,6 @@ class CatalogService[M[_] : Monad](productIds: ProductIds, fetchCatalog: M[Strin
   } yield catalogPlans).run
 
   def validatePlans(plans: List[CatalogZuoraPlan]): Validation[NonEmptyList[String], Catalog] = for {
-    friend <- one[Friend](plans, "Friend", FrontendId.Free)
-    staff <- one[Staff](plans, "Staff", FrontendId.Free)
-    supporter <- (
-      one[Supporter[Month.type]](plans, "Supporter month", FrontendId.Monthly) |@|
-        one[Supporter[Year.type]](plans, "Supporter year", FrontendId.Yearly)
-      ) (PaidMembershipPlans[Supporter.type])
-    partner <- (
-      one[Partner[Month.type]](plans, "Partner month", FrontendId.Monthly) |@|
-        one[Partner[Year.type]](plans, "Partner year", FrontendId.Yearly)
-      ) (PaidMembershipPlans[Partner.type])
-    patron <- (
-      one[Patron[Month.type]](plans, "Patron month", FrontendId.Monthly) |@|
-        one[Patron[Year.type]](plans, "Patron year", FrontendId.Yearly)
-      ) (PaidMembershipPlans[Patron.type])
     digipack <- (
       one[Digipack[Month.type]](plans, "Digipack month", FrontendId.Monthly) |@|
         one[Digipack[Quarter.type]](plans, "Digipack quarter", FrontendId.Quarterly) |@|
@@ -133,7 +118,7 @@ class CatalogService[M[_] : Monad](productIds: ProductIds, fetchCatalog: M[Strin
     weekly = WeeklyPlans(weeklyZoneA, weeklyZoneB, weeklyZoneC, weeklyDomestic, weeklyRestOfWorld)
 
     map <- Validation.s[NonEmptyList[String]](plans.map(p => p.id -> p).toMap)
-  } yield Catalog(friend, staff, supporter, partner, patron, digipack, supporterPlus, contributor, voucher, digitalVoucher, delivery, nationalDelivery, weekly, map)
+  } yield Catalog(digipack, supporterPlus, contributor, voucher, digitalVoucher, delivery, nationalDelivery, weekly, map)
 
 
   lazy val catalog: M[NonEmptyList[String] \/ Catalog] = (for {
