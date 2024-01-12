@@ -7,6 +7,7 @@ import com.gu.i18n.Currency.{AUD, CAD, EUR, GBP, USD}
 import com.gu.memsub.Price
 import com.gu.memsub.Subscription.ProductRatePlanId
 import com.gu.memsub.promo.CampaignGroup.{DigitalPack, GuardianWeekly, Newspaper}
+import com.gu.memsub.subsv2.Catalog
 import com.gu.memsub.subsv2.services.CatalogService
 import com.typesafe.scalalogging.LazyLogging
 import conf.{PaperProducts, WeeklyPlans}
@@ -38,8 +39,8 @@ class RatePlanController(
     case _ => 5
   }
 
-  def enhance(ratePlan: RatePlan): EnhancedRatePlan = {
-    val plan = find(ratePlan.ratePlanId)
+  def enhance(ratePlan: RatePlan, catalog: Catalog): EnhancedRatePlan = {
+    val plan = find(ratePlan.ratePlanId, catalog)
     EnhancedRatePlan(
       ratePlan.ratePlanId,
       ratePlan.ratePlanName,
@@ -51,19 +52,19 @@ class RatePlanController(
   }
 
 
-  lazy val catalog = catalogService.unsafeCatalog
-
-  def find(productRatePlanId: ProductRatePlanId) = {
+  def find(productRatePlanId: ProductRatePlanId, catalog: Catalog) = {
     catalog.paid.find(_.id == productRatePlanId)
   }
 
   def all = googleAuthAction {
+    val catalog = catalogService.unsafeCatalog
+
     Ok(Json.obj(
       DigitalPack.id -> Json.toJson(Seq(
         RatePlan(digipackIds.digitalPackMonthly, "Digital Pack monthly"),
         RatePlan(digipackIds.digitalPackQuaterly, "Digital Pack quarterly"),
         RatePlan(digipackIds.digitalPackYearly, "Digital Pack yearly")
-      ).map(enhance)),
+      ).map(ratePlan => enhance(ratePlan, catalog))),
       Newspaper.id -> Json.toJson(Seq(
         RatePlan(paperPlans.delivery.saturday, "Home Delivery Saturday"),
         RatePlan(paperPlans.delivery.saturdayplus, "Home Delivery Saturday+"),
@@ -95,7 +96,7 @@ class RatePlanController(
         RatePlan(paperPlans.digitalVoucher.sixdayplus, "Subscription Card Sixday+"),
         RatePlan(paperPlans.digitalVoucher.everyday, "Subscription Card Everyday"),
         RatePlan(paperPlans.digitalVoucher.everydayplus, "Subscription Card Everyday+")
-      ).map(enhance)),
+      ).map(ratePlan => enhance(ratePlan, catalog))),
       GuardianWeekly.id -> Json.toJson(
         (
         Seq(
@@ -113,7 +114,7 @@ class RatePlanController(
           ++ weeklyPlans.domestic.threeMonth.map(id => RatePlan(id, "Domestic 3 month fixed"))
           ++ weeklyPlans.row.threeMonth.map(id => RatePlan(id, "ROW 3 month fixed"))
         )
-        .map(enhance)
+        .map(ratePlan => enhance(ratePlan, catalog))
       )
     ))
   }
