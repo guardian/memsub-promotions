@@ -51,6 +51,7 @@ scalaVersion := "2.13.10"
 scalacOptions ++= Seq("-feature")
 
 val jacksonVersion = "2.13.3"
+val awsVersion = "1.12.649"
 
 libraryDependencies ++= Seq(
   jdbc,
@@ -63,12 +64,12 @@ libraryDependencies ++= Seq(
   // Use the latest version of jackson
   "com.fasterxml.jackson.core" % "jackson-databind" % jacksonVersion,
   "com.fasterxml.jackson.module" %% "jackson-module-scala" % jacksonVersion,
-  "com.amazonaws" % "aws-java-sdk-s3" % "1.12.429",
+  "com.amazonaws" % "aws-java-sdk-s3" % awsVersion,
+  "com.amazonaws" % "aws-java-sdk-dynamodb" % awsVersion,
   "org.scalaz" %% "scalaz-core" % "7.3.7",
   "com.github.nscala-time" %% "nscala-time" % "2.32.0",
   "com.gu" %% "support-internationalisation" % "0.16",
   "io.lemonlabs" %% "scala-uri" % "2.2.0",
-  "com.amazonaws" % "aws-java-sdk-dynamodb" % "1.12.429",
   "com.squareup.okhttp3" % "okhttp" % "4.10.0",
   "com.typesafe.play" %% "play-json-joda" % "2.9.4",
   "org.scalatestplus.play" %% "scalatestplus-play" % "5.1.0" % Test
