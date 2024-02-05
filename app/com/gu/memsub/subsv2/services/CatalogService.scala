@@ -22,7 +22,7 @@ import scalaz.syntax.apply.ToApplyOps
 
 object FetchCatalog {
   def fromS3[M[_] : Monad](zuoraEnvironment: String, s3Client: AmazonS3 = AwsS3.client): M[String \/ JsValue] = {
-    val catalogRequest = new GetObjectRequest(s"gu-zuora-catalog/PROD/Zuora-${zuoraEnvironment}", "catalog.json")
+    val catalogRequest = new GetObjectRequest("gu-zuora-catalog", s"PROD/Zuora-$zuoraEnvironment/catalog.json")
     AwsS3.fetchJson(s3Client, catalogRequest).point[M]
   }
 
