@@ -195,13 +195,15 @@ object FrontendId {
   case object OneYear extends FrontendId { val name = "OneYear" }
   case object ThreeMonths extends FrontendId { val name = "ThreeMonths" }
   case object Monthly extends FrontendId { val name = "Monthly" }
+  case object MonthlyV2 extends FrontendId { val name = "MonthlyV2" }
   case object Quarterly extends FrontendId { val name = "Quarterly" }
   case object Yearly extends FrontendId { val name = "Yearly" }
+  case object YearlyV2 extends FrontendId { val name = "YearlyV2" }
   case object Introductory extends FrontendId { val name = "Introductory" }
   case object Free extends FrontendId { val name = "Free" }
   case object SixWeeks extends FrontendId { val name = "SixWeeks" }
 
-  val all = List(OneYear, ThreeMonths, Monthly, Quarterly, Yearly, Introductory, Free, SixWeeks)
+  val all = List(OneYear, ThreeMonths, Monthly, MonthlyV2, Quarterly, Yearly, YearlyV2, Introductory, Free, SixWeeks)
 
   def get(jsonString: String): Option[FrontendId] =
     all.find(_.name == jsonString)
