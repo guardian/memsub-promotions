@@ -4,7 +4,7 @@ import com.amazonaws.auth.profile.ProfileCredentialsProvider
 import com.amazonaws.auth.{AWSCredentialsProviderChain, InstanceProfileCredentialsProvider}
 import com.amazonaws.services.s3.model.S3ObjectId
 import com.google.auth.oauth2.ServiceAccountCredentials
-import com.gu.googleauth.{AntiForgeryChecker, GoogleAuthConfig, GoogleGroupChecker, GoogleServiceAccount}
+import com.gu.googleauth.{AntiForgeryChecker, GoogleAuthConfig, GoogleGroupChecker}
 import com.typesafe.config.Config
 import play.api.http.HttpConfiguration
 
