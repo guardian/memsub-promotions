@@ -1,5 +1,5 @@
 // The Play plugin
-addSbtPlugin("com.typesafe.play" % "sbt-plugin" % "2.8.16")
+addSbtPlugin("org.playframework" % "sbt-plugin" % "3.0.2")
 
 // web plugins
 
@@ -19,7 +19,7 @@ addSbtPlugin("org.irundaia.sbt" % "sbt-sassify" % "1.4.12")
 
 addSbtPlugin("com.eed3si9n" % "sbt-buildinfo" % "0.9.0")
 
-addSbtPlugin("com.typesafe.sbt" % "sbt-native-packager" % "1.3.4")
+addSbtPlugin("com.github.sbt" % "sbt-native-packager" % "1.9.16")
 
 addSbtPlugin("com.gu" % "sbt-riffraff-artifact" % "1.1.18")
 
