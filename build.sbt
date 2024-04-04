@@ -69,7 +69,7 @@ libraryDependencies ++= Seq(
   "org.scalaz" %% "scalaz-core" % "7.3.7",
   "com.github.nscala-time" %% "nscala-time" % "2.32.0",
   "com.gu" %% "support-internationalisation" % "0.16",
-  "io.lemonlabs" %% "scala-uri" % "2.2.0",
+  "io.lemonlabs" %% "scala-uri" % "4.0.3",
   "com.squareup.okhttp3" % "okhttp" % "4.10.0",
   "com.typesafe.play" %% "play-json-joda" % "2.10.4",
   "org.scalatestplus.play" %% "scalatestplus-play" % "7.0.1" % Test
