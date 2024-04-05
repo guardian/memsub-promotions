@@ -57,7 +57,7 @@ libraryDependencies ++= Seq(
   jdbc,
   ehcache,
   ws,
-  "com.gu.play-googleauth" %% "play-v28" % "2.2.6",
+  "com.gu.play-googleauth" %% "play-v30" % "4.0.0",
   "com.softwaremill.macwire" %% "macros" % "2.5.0" % "provided",
   "com.softwaremill.macwire" %% "util" % "2.5.0",
   "com.softwaremill.macwire" %% "proxy" % "2.5.0",
@@ -69,15 +69,10 @@ libraryDependencies ++= Seq(
   "org.scalaz" %% "scalaz-core" % "7.3.7",
   "com.github.nscala-time" %% "nscala-time" % "2.32.0",
   "com.gu" %% "support-internationalisation" % "0.16",
-  "io.lemonlabs" %% "scala-uri" % "2.2.0",
+  "io.lemonlabs" %% "scala-uri" % "4.0.3",
   "com.squareup.okhttp3" % "okhttp" % "4.10.0",
-  "com.typesafe.play" %% "play-json-joda" % "2.9.4",
-  "org.scalatestplus.play" %% "scalatestplus-play" % "5.1.0" % Test
-)
-
-dependencyOverrides ++= Seq(
-  // Fixes: https://security.snyk.io/vuln/SNYK-JAVA-CHQOSLOGBACK-6094942
-  "ch.qos.logback" % "logback-classic" % "1.2.13"
+  "com.typesafe.play" %% "play-json-joda" % "2.10.4",
+  "org.scalatestplus.play" %% "scalatestplus-play" % "7.0.1" % Test
 )
 
 resolvers ++= Seq(
