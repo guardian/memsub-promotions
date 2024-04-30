@@ -1,6 +1,8 @@
 # Subscription promotions tool
 
 ## URLs
+Note - you need to be in the 'Subscriptions Promotion tool' google group to access these urls, otherwise you will get a redirect loop.
+
 [CODE](https://promo.code.memsub-promotions.gutools.co.uk)
 
 [PROD](https://memsub-promotions.gutools.co.uk/)
