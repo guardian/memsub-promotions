@@ -1210,6 +1210,11 @@
   dependencies:
     "@types/node" "*"
 
+"@uirouter/core@6.0.8":
+  version "6.0.8"
+  resolved "https://registry.yarnpkg.com/@uirouter/core/-/core-6.0.8.tgz#a1e919a4743be729751aafc4ce353d0dc0ffd26c"
+  integrity sha512-Gc/BAW47i4L54p8dqYCJJZuv2s3tqlXQ0fvl6Zp2xrblELPVfxmjnc0eurx3XwfQdaqm3T6uls6tQKkof/4QMw==
+
 "@webassemblyjs/ast@1.11.6", "@webassemblyjs/ast@^1.11.5":
   version "1.11.6"
   resolved "https://registry.yarnpkg.com/@webassemblyjs/ast/-/ast-1.11.6.tgz#db046555d3c413f8966ca50a95176a0e2c642e24"
@@ -1463,19 +1468,19 @@ angular-sanitize@1.5.11:
   resolved "https://registry.yarnpkg.com/angular-sanitize/-/angular-sanitize-1.5.11.tgz#ebfb3f343e543f9b2ef050fb4c2e9ee048d1772f"
   integrity sha512-9yVOr8YOefo0/4q+ImqNdGcbfGzelQIoHW0OoaoU/U5wpRZNn5IqlkdLW9udieSiprYzuXeqiS1V7ZiHurYisw==
 
-angular-ui-router@^0.4.0:
-  version "0.4.3"
-  resolved "https://registry.yarnpkg.com/angular-ui-router/-/angular-ui-router-0.4.3.tgz#6c29546fe50b8d2f74614dcb8660d6fc40d6e167"
-  integrity sha512-EGBG7G7ArFVkJPM+ZIgPKuMYuT16UQrr3zj3BEiXHKwxss867bGt3u7QD9g4BxR+K2qQOSWok6JGvgTWXAko3A==
+angular-ui-router@^1.0.30:
+  version "1.0.30"
+  resolved "https://registry.yarnpkg.com/angular-ui-router/-/angular-ui-router-1.0.30.tgz#de8a07fa1620fc5a979ee8448d0ded159792436f"
+  integrity sha512-8xMpxbOtCJbRnGR1fhbyZ5BhFXr3zs1L2ytXQiBACTJjot309QNFFCaWx0lDM2eVXp8qte4idigU9gwWdspmtQ==
   dependencies:
-    angular "^1.0.8"
+    "@uirouter/core" "6.0.8"
 
 angular-uuid@^0.0.2:
   version "0.0.2"
   resolved "https://registry.yarnpkg.com/angular-uuid/-/angular-uuid-0.0.2.tgz#1c266736917d3c354d7baadd88d15e7356ea18b8"
   integrity sha512-1oI9wQj1bGqCt1buGD1ycLt76uyG9rIHM7QNhtWFuG+V5Cy/x7ahCkXwAsk9d1rpYf9yQMRzI1JLfjvxmoEK/Q==
 
-angular@^1.0.8, angular@^1.7.2:
+angular@^1.7.2:
   version "1.8.3"
   resolved "https://registry.yarnpkg.com/angular/-/angular-1.8.3.tgz#851ad75d5163c105a7e329555ef70c90aa706894"
   integrity sha512-5qjkWIQQVsHj4Sb5TcEs4WZWpFeVFHXwxEBHUhrny41D8UrBAd6T/6nPPAsLngJCReIOqi95W3mxdveveutpZw==
