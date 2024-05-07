@@ -36,7 +36,7 @@
     "angular-uuid": "^0.0.2",
     "babel-loader": "^8.0.5",
     "babel-plugin-angularjs-annotate": "^0.10.0",
-    "babel-polyfill": "6.23.0",
+    "babel-polyfill": "6.26.0",
     "css-loader": "^3.4.1",
     "grunt": "1.0.1",
     "material-design-lite": "1.1.3",
