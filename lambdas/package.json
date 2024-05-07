@@ -5,9 +5,9 @@
   "buildDir": "dist",
   "type": "module",
   "devDependencies": {
-    "babel-cli": "^6.24.1",
-    "babel-core": "^6.24.1",
-    "babel-preset-env": "^1.4.0"
+    "@babel/cli": "^7.23.2",
+    "@babel/core": "^7.23.2",
+    "@babel/preset-env": "^7.23.2"
   },
   "scripts": {
     "dist": "yarn install --production --modules-folder dist/node_modules",
