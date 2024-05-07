@@ -1486,10 +1486,10 @@ angular-ui-router@^1.0.30:
   dependencies:
     "@uirouter/core" "6.0.8"
 
-angular-uuid@^0.0.2:
-  version "0.0.2"
-  resolved "https://registry.yarnpkg.com/angular-uuid/-/angular-uuid-0.0.2.tgz#1c266736917d3c354d7baadd88d15e7356ea18b8"
-  integrity sha512-1oI9wQj1bGqCt1buGD1ycLt76uyG9rIHM7QNhtWFuG+V5Cy/x7ahCkXwAsk9d1rpYf9yQMRzI1JLfjvxmoEK/Q==
+angular-uuid@^0.0.4:
+  version "0.0.4"
+  resolved "https://registry.yarnpkg.com/angular-uuid/-/angular-uuid-0.0.4.tgz#87a860ca1d36ae389f7ec60fd04366edc0e3584d"
+  integrity sha512-4dHBWMB56blHrh25cPS+SFDhWIwmvqyPfqCPwYX32rBwwVQloKPmhZ7+HIpmAGj95ViKAstEHDJcOf452zUnsg==
 
 angular@^1.7.2:
   version "1.8.3"
