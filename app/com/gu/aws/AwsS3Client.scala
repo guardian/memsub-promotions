@@ -1,5 +1,6 @@
 package com.gu.aws
 
+import com.amazonaws.regions.Regions
 import com.amazonaws.services.s3.model.{GetObjectRequest, S3ObjectInputStream}
 import com.amazonaws.services.s3.{AmazonS3, AmazonS3Client}
 import com.gu.monitoring.SafeLogger
@@ -13,9 +14,11 @@ import scala.util.{Failure, Success, Try}
 
 object AwsS3 extends StrictLogging {
 
-  lazy val client = AmazonS3Client.builder.withCredentials(CredentialsProvider).build()
+  lazy val client = AmazonS3Client.builder.withCredentials(CredentialsProvider).withRegion(Regions.EU_WEST_1).build()
 
-  def fetchObject(s3Client: AmazonS3, request: GetObjectRequest): Try[S3ObjectInputStream] = Try(s3Client.getObject(request).getObjectContent)
+  def fetchObject(s3Client: AmazonS3, request: GetObjectRequest): Try[S3ObjectInputStream] = Try(
+    s3Client.getObject(request).getObjectContent,
+  )
 
   def fetchJson(s3Client: AmazonS3, request: GetObjectRequest): String \/ JsValue = {
     logger.info(s"Getting file from S3. Bucket: ${request.getBucketName} | Key: ${request.getKey}")
