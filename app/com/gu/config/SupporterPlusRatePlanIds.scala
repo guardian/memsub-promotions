@@ -26,9 +26,9 @@ object SupporterPlusRatePlanIds {
     SupporterPlusRatePlanIds(
       ProductRatePlanId(config.getString("yearly")),
       ProductRatePlanId(config.getString("monthly")),
-      ProductRatePlanId(config.getString(("guardianWeeklyRestOfWorldMonthly"))),
-      ProductRatePlanId(config.getString(("guardianWeeklyRestOfWorldAnnual"))),
-      ProductRatePlanId(config.getString(("guardianWeeklyDomesticAnnual"))),
-      ProductRatePlanId(config.getString(("guardianWeeklyDomesticMonthly"))),
+      ProductRatePlanId(config.getString("guardianWeeklyRestOfWorldMonthly")),
+      ProductRatePlanId(config.getString("guardianWeeklyRestOfWorldAnnual")),
+      ProductRatePlanId(config.getString("guardianWeeklyDomesticAnnual")),
+      ProductRatePlanId(config.getString("guardianWeeklyDomesticMonthly")),
     )
 }
