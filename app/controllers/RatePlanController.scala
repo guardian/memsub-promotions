@@ -65,71 +65,83 @@ class RatePlanController(
   }
 
   def all = googleAuthAction {
-    Ok(Json.obj(
-      SupporterPlus.id -> Json.toJson(Seq(
-          RatePlan(supporterPlusIds.yearly, "Annual"),
-          RatePlan(supporterPlusIds.monthly, "Monthly"),
-      ).map(enhance)),
-      DigitalPack.id -> Json.toJson(Seq(
-        RatePlan(digipackIds.digitalPackMonthly, "Digital Pack monthly"),
-        RatePlan(digipackIds.digitalPackQuaterly, "Digital Pack quarterly"),
-        RatePlan(digipackIds.digitalPackYearly, "Digital Pack yearly")
-      ).map(enhance)),
-      Newspaper.id -> Json.toJson(Seq(
-        RatePlan(paperPlans.delivery.saturday, "Home Delivery Saturday"),
-        RatePlan(paperPlans.delivery.saturdayplus, "Home Delivery Saturday+"),
-        RatePlan(paperPlans.delivery.sunday, "Home Delivery Sunday"),
-        RatePlan(paperPlans.delivery.sundayplus, "Home Delivery Sunday+"),
-        RatePlan(paperPlans.delivery.weekend, "Home Delivery Weekend"),
-        RatePlan(paperPlans.delivery.weekendplus, "Home Delivery Weekend+"),
-        RatePlan(paperPlans.delivery.sixday, "Home Delivery Sixday"),
-        RatePlan(paperPlans.delivery.sixdayplus, "Home Delivery Sixday+"),
-        RatePlan(paperPlans.delivery.everyday, "Home Delivery Everyday"),
-        RatePlan(paperPlans.delivery.everydayplus, "Home Delivery Everyday+"),
-        RatePlan(paperPlans.nationalDelivery.weekend, "National Delivery Weekend"),
-        RatePlan(paperPlans.nationalDelivery.sixday, "National Delivery Sixday"),
-        RatePlan(paperPlans.nationalDelivery.everyday, "National Delivery Everyday"),
-        RatePlan(paperPlans.voucher.saturday, "Voucher Saturday"),
-        RatePlan(paperPlans.voucher.saturdayplus, "Voucher Saturday+"),
-        RatePlan(paperPlans.voucher.sunday, "Voucher Sunday"),
-        RatePlan(paperPlans.voucher.sundayplus, "Voucher Sunday+"),
-        RatePlan(paperPlans.voucher.weekend, "Voucher Weekend"),
-        RatePlan(paperPlans.voucher.weekendplus, "Voucher Weekend+"),
-        RatePlan(paperPlans.voucher.sixday, "Voucher Sixday"),
-        RatePlan(paperPlans.voucher.sixdayplus, "Voucher Sixday+"),
-        RatePlan(paperPlans.voucher.everyday, "Voucher Everyday"),
-        RatePlan(paperPlans.voucher.everydayplus, "Voucher Everyday+"),
-        RatePlan(paperPlans.digitalVoucher.saturday, "Subscription Card Saturday"),
-        RatePlan(paperPlans.digitalVoucher.saturdayplus, "Subscription Card Saturday+"),
-        RatePlan(paperPlans.digitalVoucher.sunday, "Subscription Card Sunday"),
-        RatePlan(paperPlans.digitalVoucher.sundayplus, "Subscription Card Sunday+"),
-        RatePlan(paperPlans.digitalVoucher.weekend, "Subscription Card Weekend"),
-        RatePlan(paperPlans.digitalVoucher.weekendplus, "Subscription Card Weekend+"),
-        RatePlan(paperPlans.digitalVoucher.sixday, "Subscription Card Sixday"),
-        RatePlan(paperPlans.digitalVoucher.sixdayplus, "Subscription Card Sixday+"),
-        RatePlan(paperPlans.digitalVoucher.everyday, "Subscription Card Everyday"),
-        RatePlan(paperPlans.digitalVoucher.everydayplus, "Subscription Card Everyday+")
-      ).map(enhance)),
-      GuardianWeekly.id -> Json.toJson(
-        (
-        Seq(
-          RatePlan(weeklyPlans.domestic.yearly, "Domestic Annual"),
-          RatePlan(weeklyPlans.row.yearly, "ROW Annual"),
-          RatePlan(weeklyPlans.domestic.quarterly, "Domestic Quarterly"),
-          RatePlan(weeklyPlans.row.quarterly, "ROW Quarterly"),
-          RatePlan(weeklyPlans.domestic.monthly, "Domestic Monthly"),
-          RatePlan(weeklyPlans.row.monthly, "ROW Monthly")
-        )
-          ++ weeklyPlans.domestic.six.map(id => RatePlan(id, "Domestic 6-for-6"))
-          ++ weeklyPlans.row.six.map(id => RatePlan(id, "ROW 6-for-6"))
-          ++ weeklyPlans.domestic.oneYear.map(id => RatePlan(id, "Domestic 1 year fixed"))
-          ++ weeklyPlans.row.oneYear.map(id => RatePlan(id, "ROW 1 year fixed"))
-          ++ weeklyPlans.domestic.threeMonth.map(id => RatePlan(id, "Domestic 3 month fixed"))
-          ++ weeklyPlans.row.threeMonth.map(id => RatePlan(id, "ROW 3 month fixed"))
-        )
-        .map(enhance)
-      )
-    ))
+    Ok(
+      Json.obj(
+        SupporterPlus.id -> Json.toJson(
+          Seq(
+            RatePlan(supporterPlusIds.yearly, "Annual"),
+            RatePlan(supporterPlusIds.monthly, "Monthly"),
+            RatePlan(supporterPlusIds.guardianWeeklyRestOfWorldMonthly, "Guardian Weekly Rest Of World Monthly"),
+            RatePlan(supporterPlusIds.guardianWeeklyRestOfWorldAnnual, "Guardian Weekly Rest Of World Annual"),
+            RatePlan(supporterPlusIds.guardianWeeklyDomesticAnnual, "Guardian Weekly Domestic Annual"),
+            RatePlan(supporterPlusIds.guardianWeeklyDomesticMonthly, "Guardian Weekly Domestic Monthly"),
+          ).map(enhance),
+        ),
+        DigitalPack.id -> Json.toJson(
+          Seq(
+            RatePlan(digipackIds.digitalPackMonthly, "Digital Pack monthly"),
+            RatePlan(digipackIds.digitalPackQuaterly, "Digital Pack quarterly"),
+            RatePlan(digipackIds.digitalPackYearly, "Digital Pack yearly"),
+          ).map(enhance),
+        ),
+        Newspaper.id -> Json.toJson(
+          Seq(
+            RatePlan(paperPlans.delivery.saturday, "Home Delivery Saturday"),
+            RatePlan(paperPlans.delivery.saturdayplus, "Home Delivery Saturday+"),
+            RatePlan(paperPlans.delivery.sunday, "Home Delivery Sunday"),
+            RatePlan(paperPlans.delivery.sundayplus, "Home Delivery Sunday+"),
+            RatePlan(paperPlans.delivery.weekend, "Home Delivery Weekend"),
+            RatePlan(paperPlans.delivery.weekendplus, "Home Delivery Weekend+"),
+            RatePlan(paperPlans.delivery.sixday, "Home Delivery Sixday"),
+            RatePlan(paperPlans.delivery.sixdayplus, "Home Delivery Sixday+"),
+            RatePlan(paperPlans.delivery.everyday, "Home Delivery Everyday"),
+            RatePlan(paperPlans.delivery.everydayplus, "Home Delivery Everyday+"),
+            RatePlan(paperPlans.nationalDelivery.weekend, "National Delivery Weekend"),
+            RatePlan(paperPlans.nationalDelivery.sixday, "National Delivery Sixday"),
+            RatePlan(paperPlans.nationalDelivery.everyday, "National Delivery Everyday"),
+            RatePlan(paperPlans.voucher.saturday, "Voucher Saturday"),
+            RatePlan(paperPlans.voucher.saturdayplus, "Voucher Saturday+"),
+            RatePlan(paperPlans.voucher.sunday, "Voucher Sunday"),
+            RatePlan(paperPlans.voucher.sundayplus, "Voucher Sunday+"),
+            RatePlan(paperPlans.voucher.weekend, "Voucher Weekend"),
+            RatePlan(paperPlans.voucher.weekendplus, "Voucher Weekend+"),
+            RatePlan(paperPlans.voucher.sixday, "Voucher Sixday"),
+            RatePlan(paperPlans.voucher.sixdayplus, "Voucher Sixday+"),
+            RatePlan(paperPlans.voucher.everyday, "Voucher Everyday"),
+            RatePlan(paperPlans.voucher.everydayplus, "Voucher Everyday+"),
+            RatePlan(paperPlans.digitalVoucher.saturday, "Subscription Card Saturday"),
+            RatePlan(paperPlans.digitalVoucher.saturdayplus, "Subscription Card Saturday+"),
+            RatePlan(paperPlans.digitalVoucher.sunday, "Subscription Card Sunday"),
+            RatePlan(paperPlans.digitalVoucher.sundayplus, "Subscription Card Sunday+"),
+            RatePlan(paperPlans.digitalVoucher.weekend, "Subscription Card Weekend"),
+            RatePlan(paperPlans.digitalVoucher.weekendplus, "Subscription Card Weekend+"),
+            RatePlan(paperPlans.digitalVoucher.sixday, "Subscription Card Sixday"),
+            RatePlan(paperPlans.digitalVoucher.sixdayplus, "Subscription Card Sixday+"),
+            RatePlan(paperPlans.digitalVoucher.everyday, "Subscription Card Everyday"),
+            RatePlan(paperPlans.digitalVoucher.everydayplus, "Subscription Card Everyday+"),
+          ).map(enhance),
+        ),
+        GuardianWeekly.id -> Json.toJson(
+          (
+            Seq(
+              RatePlan(weeklyPlans.domestic.yearly, "Domestic Annual"),
+              RatePlan(weeklyPlans.row.yearly, "ROW Annual"),
+              RatePlan(weeklyPlans.domestic.quarterly, "Domestic Quarterly"),
+              RatePlan(weeklyPlans.row.quarterly, "ROW Quarterly"),
+              RatePlan(weeklyPlans.domestic.monthly, "Domestic Monthly"),
+              RatePlan(weeklyPlans.row.monthly, "ROW Monthly"),
+            )
+              ++ weeklyPlans.domestic.six.map(id => RatePlan(id, "Domestic 6-for-6"))
+              ++ weeklyPlans.row.six.map(id => RatePlan(id, "ROW 6-for-6"))
+              ++ weeklyPlans.domestic.oneYear.map(id => RatePlan(id, "Domestic 1 year fixed"))
+              ++ weeklyPlans.row.oneYear.map(id => RatePlan(id, "ROW 1 year fixed"))
+              ++ weeklyPlans.domestic.threeMonth.map(id => RatePlan(id, "Domestic 3 month fixed"))
+              ++ weeklyPlans.row.threeMonth.map(id => RatePlan(id, "ROW 3 month fixed"))
+          )
+            .map(enhance),
+        ),
+      ),
+    )
   }
 }
 
