@@ -20,3 +20,4 @@ project/project/
 /.bloop/
 /project/.bloop/
 /project/metals.sbt
+.vscode
