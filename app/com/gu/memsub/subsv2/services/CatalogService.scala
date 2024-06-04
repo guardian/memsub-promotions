@@ -76,7 +76,11 @@ class CatalogService[M[_] : Monad](productIds: ProductIds, fetchCatalog: M[Strin
       ) (DigipackPlans)
     supporterPlus <- (
       one[SupporterPlus[Month.type]](plans, "Supporter Plus month", FrontendId.Monthly) |@|
-        one[SupporterPlus[Year.type]](plans, "Supporter Plus year", FrontendId.Yearly)
+        one[SupporterPlus[Year.type]](plans, "Supporter Plus year", FrontendId.Yearly) |@|
+        one[SupporterPlus[Month.type]](plans, "Guardian Weekly Rest Of World Monthly", FrontendId.ThirdTierMonthlyROW) |@|
+        one[SupporterPlus[Year.type]](plans, "Guardian Weekly Rest Of World Annual", FrontendId.ThirdTierAnnualROW) |@|
+        one[SupporterPlus[Year.type]](plans, "Guardian Weekly Domestic Annual", FrontendId.ThirdTierAnnualDomestic) |@|
+        one[SupporterPlus[Month.type]](plans, "Guardian Weekly Domestic Monthly", FrontendId.ThirdTierMonthlyDomestic)
       ) (SupporterPlusPlans)
     contributor <- one[Contributor](plans, "Contributor month", FrontendId.Monthly)
     voucher <- many[Voucher](plans, "Paper voucher")
