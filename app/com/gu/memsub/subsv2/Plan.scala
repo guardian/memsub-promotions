@@ -200,8 +200,25 @@ object FrontendId {
   case object Introductory extends FrontendId { val name = "Introductory" }
   case object Free extends FrontendId { val name = "Free" }
   case object SixWeeks extends FrontendId { val name = "SixWeeks" }
+  case object ThirdTierMonthlyROW extends FrontendId { val name = "ThirdTierMonthlyROW" }
+  case object ThirdTierAnnualROW extends FrontendId { val name = "ThirdTierAnnualROW" }
+  case object ThirdTierAnnualDomestic extends FrontendId { val name = "ThirdTierAnnualDomestic" }
+  case object ThirdTierMonthlyDomestic extends FrontendId { val name = "ThirdTierMonthlyDomestic" }
 
-  val all = List(OneYear, ThreeMonths, Monthly, Quarterly, Yearly, Introductory, Free, SixWeeks)
+  val all = List(
+    OneYear,
+    ThreeMonths,
+    Monthly,
+    Quarterly,
+    Yearly,
+    Introductory,
+    Free,
+    SixWeeks,
+    ThirdTierMonthlyROW,
+    ThirdTierAnnualROW,
+    ThirdTierAnnualDomestic,
+    ThirdTierMonthlyDomestic,
+  )
 
   def get(jsonString: String): Option[FrontendId] =
     all.find(_.name == jsonString)
@@ -243,8 +260,22 @@ case class DigipackPlans(month: CatalogPlan.Digipack[Month.type], quarter: Catal
   lazy val plans = List(month, quarter, year)
 }
 
-case class SupporterPlusPlans(month: CatalogPlan.SupporterPlus[Month.type], year: CatalogPlan.SupporterPlus[Year.type]) {
-  lazy val plans = List(month, year)
+case class SupporterPlusPlans(
+  month: CatalogPlan.SupporterPlus[Month.type],
+  year: CatalogPlan.SupporterPlus[Year.type],
+  guardianWeeklyRestOfWorldMonthly: CatalogPlan.SupporterPlus[Month.type],
+  guardianWeeklyRestOfWorldAnnual: CatalogPlan.SupporterPlus[Year.type],
+  guardianWeeklyDomesticAnnual: CatalogPlan.SupporterPlus[Year.type],
+  guardianWeeklyDomesticMonthly: CatalogPlan.SupporterPlus[Month.type],
+) {
+  lazy val plans = List(
+    month,
+    year,
+    guardianWeeklyRestOfWorldMonthly,
+    guardianWeeklyRestOfWorldAnnual,
+    guardianWeeklyDomesticAnnual,
+    guardianWeeklyDomesticMonthly
+  )
 }
 
 case class WeeklyZoneBPlans(quarter: CatalogPlan.WeeklyZoneB[Quarter.type], year: CatalogPlan.WeeklyZoneB[Year.type], oneYear: CatalogPlan.WeeklyZoneB[OneYear.type]) {

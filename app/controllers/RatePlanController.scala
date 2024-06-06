@@ -69,6 +69,10 @@ class RatePlanController(
       SupporterPlus.id -> Json.toJson(Seq(
           RatePlan(supporterPlusIds.yearly, "Annual"),
           RatePlan(supporterPlusIds.monthly, "Monthly"),
+          RatePlan(supporterPlusIds.guardianWeeklyRestOfWorldMonthly, "Guardian Weekly Rest Of World Monthly"),
+          RatePlan(supporterPlusIds.guardianWeeklyRestOfWorldAnnual, "Guardian Weekly Rest Of World Annual"),
+          RatePlan(supporterPlusIds.guardianWeeklyDomesticAnnual, "Guardian Weekly Domestic Annual"),
+          RatePlan(supporterPlusIds.guardianWeeklyDomesticMonthly, "Guardian Weekly Domestic Monthly"),
       ).map(enhance)),
       DigitalPack.id -> Json.toJson(Seq(
         RatePlan(digipackIds.digitalPackMonthly, "Digital Pack monthly"),
