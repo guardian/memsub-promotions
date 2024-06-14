@@ -43,6 +43,7 @@ object CatPlanReads {
   implicit val nD: CatPlanReads[NationalDelivery] = findProduct(_.nationalDelivery.point[List], NationalDelivery)
   implicit val y: CatPlanReads[Contribution] = findProduct(_.contributor.point[List], Contribution)
   implicit val s: CatPlanReads[SupporterPlus] = findProduct(_.supporterPlus.point[List], SupporterPlus)
+  implicit val t: CatPlanReads[TierThree] = findProduct(_.tierThree.point[List], TierThree)
   implicit val z: CatPlanReads[ZDigipack] = findProduct(_.digipack.point[List], Digipack)
 
   implicit val currentReads: CatPlanReads[Current] = new CatPlanReads[Current] {

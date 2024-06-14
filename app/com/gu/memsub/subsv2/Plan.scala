@@ -231,6 +231,7 @@ object CatalogPlan {
 
   type Digipack[+B <: BillingPeriod] = CatalogPlan[Product.ZDigipack, PaidCharge[Digipack.type, B], Current]
   type SupporterPlus[+B <: BillingPeriod] = CatalogPlan[Product.SupporterPlus, SupporterPlusCharges, Current]
+  type TierThree[+B <: BillingPeriod] = CatalogPlan[Product.TierThree, TierThreeCharges, Current]
   type Delivery = CatalogPlan[Product.Delivery, PaperCharges, Current]
   type NationalDelivery = CatalogPlan[Product.NationalDelivery, PaperCharges, Current]
   type Voucher = CatalogPlan[Product.Voucher, PaperCharges, Current]
@@ -263,18 +264,24 @@ case class DigipackPlans(month: CatalogPlan.Digipack[Month.type], quarter: Catal
 case class SupporterPlusPlans(
   month: CatalogPlan.SupporterPlus[Month.type],
   year: CatalogPlan.SupporterPlus[Year.type],
-  guardianWeeklyRestOfWorldMonthly: CatalogPlan.SupporterPlus[Month.type],
-  guardianWeeklyRestOfWorldAnnual: CatalogPlan.SupporterPlus[Year.type],
-  guardianWeeklyDomesticAnnual: CatalogPlan.SupporterPlus[Year.type],
-  guardianWeeklyDomesticMonthly: CatalogPlan.SupporterPlus[Month.type],
 ) {
   lazy val plans = List(
     month,
     year,
-    guardianWeeklyRestOfWorldMonthly,
-    guardianWeeklyRestOfWorldAnnual,
-    guardianWeeklyDomesticAnnual,
-    guardianWeeklyDomesticMonthly
+  )
+}
+
+case class TierThreePlans(
+  domesticMonthy: CatalogPlan.TierThree[Month.type],
+  domesticAnnual: CatalogPlan.TierThree[Year.type],
+  restOfWorldMonthy: CatalogPlan.TierThree[Month.type],
+  restOfWorldAnnual: CatalogPlan.TierThree[Year.type],
+) {
+  lazy val plans = List(
+    domesticMonthy,
+    domesticAnnual,
+    restOfWorldMonthy,
+    restOfWorldAnnual,
   )
 }
 
@@ -331,6 +338,7 @@ case class WeeklyPlans(
 case class Catalog(
   digipack: DigipackPlans,
   supporterPlus: SupporterPlusPlans,
+  tierThree: TierThreePlans,
   contributor: CatalogPlan.Contributor,
   voucher: NonEmptyList[CatalogPlan.Voucher],
   digitalVoucher: NonEmptyList[CatalogPlan.DigitalVoucher],
@@ -345,8 +353,7 @@ case class Catalog(
   lazy val paid: Seq[CatalogPlan.Paid] = allSubs.flatten
 
   lazy val allSubs: List[List[CatalogPlan.Paid]] =
-    List(digipack.plans, supporterPlus.plans, voucher.list.toList, digitalVoucher.list.toList, delivery.list.toList, nationalDelivery.list.toList) ++ weekly.plans
-
+    List(digipack.plans, supporterPlus.plans, tierThree.plans, voucher.list.toList, digitalVoucher.list.toList, delivery.list.toList, nationalDelivery.list.toList) ++ weekly.plans
 }
 
 /**
@@ -414,6 +421,15 @@ case class SupporterPlusCharges(billingPeriod: BillingPeriod, pricingSummaries: 
   val subRatePlanChargeId = SubscriptionRatePlanChargeId("")
   override def price: PricingSummary = pricingSummaries.reduce(_ |+| _)
   override def benefits: NonEmptyList[Benefit] = NonEmptyList(SupporterPlus)
+}
+
+/** Tier Three
+  */
+case class TierThreeCharges(billingPeriod: BillingPeriod, pricingSummaries: List[PricingSummary]) extends PaidChargeList {
+
+  val subRatePlanChargeId = SubscriptionRatePlanChargeId("")
+  override def price: PricingSummary = pricingSummaries.reduce(_ |+| _)
+  override def benefits: NonEmptyList[Benefit] = NonEmptyList(TierThree)
 }
 
 /**
@@ -506,6 +522,7 @@ object SubscriptionPlan {
   type ContentSubscription = PaidSubscriptionPlan[Product.ContentSubscription, PaidChargeList]
   type Digipack = PaidSubscriptionPlan[Product.ZDigipack, PaidCharge[Benefit.Digipack.type, BillingPeriod]]
   type SupporterPlus = PaidSubscriptionPlan[Product.SupporterPlus, PaidCharge[Benefit.SupporterPlus.type, BillingPeriod]]
+  type TierThree = PaidSubscriptionPlan[Product.TierThree, PaidCharge[Benefit.TierThree.type, BillingPeriod]]
   type Delivery = PaidSubscriptionPlan[Product.Delivery, PaperCharges]
   type NationalDelivery = PaidSubscriptionPlan[Product.NationalDelivery, PaperCharges]
   type Voucher = PaidSubscriptionPlan[Product.Voucher, PaperCharges]

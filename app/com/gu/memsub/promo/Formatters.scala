@@ -10,7 +10,7 @@ import io.lemonlabs.uri.Uri
 import org.joda.time.{DateTime, Days}
 import play.api.libs.functional.syntax._
 import play.api.libs.json._
-import com.gu.memsub.promo.CampaignGroup.{DigitalPack, GuardianWeekly, Newspaper, SupporterPlus}
+import com.gu.memsub.promo.CampaignGroup.{DigitalPack, GuardianWeekly, Newspaper, SupporterPlus, TierThree}
 
 object Formatters {
 
@@ -119,6 +119,7 @@ object Formatters {
         // Supports the legacy serialisations of productFamily key as the identifier of a LandingPage type
         override def reads(json: JsValue): JsResult[LandingPage] = (json \ "productFamily").toOption orElse (json \ "type").toOption match {
           case Some(JsString(SupporterPlus.id))  => Json.reads[SupporterPlusLandingPage].reads(json)
+          case Some(JsString(TierThree.id))  => Json.reads[TierThreeLandingPage].reads(json)
           case Some(JsString(DigitalPack.id))  => Json.reads[DigitalPackLandingPage].reads(json)
           case Some(JsString(Newspaper.id))  => Json.reads[NewspaperLandingPage].reads(json)
           case Some(JsString(GuardianWeekly.id)) => Json.reads[WeeklyLandingPage].reads(json)
@@ -129,6 +130,7 @@ object Formatters {
         def writes(in: LandingPage): JsObject = {
           in match {
             case slp: SupporterPlusLandingPage => Json.writes[SupporterPlusLandingPage].writes(slp) ++ Json.obj("type" -> SupporterPlus.id)
+            case tlp: TierThreeLandingPage => Json.writes[TierThreeLandingPage].writes(tlp) ++ Json.obj("type" -> TierThree.id)
             case dlp: DigitalPackLandingPage => Json.writes[DigitalPackLandingPage].writes(dlp) ++ Json.obj("type" -> DigitalPack.id)
             case nlp: NewspaperLandingPage => Json.writes[NewspaperLandingPage].writes(nlp) ++ Json.obj("type" -> Newspaper.id)
             case wlp: WeeklyLandingPage => Json.writes[WeeklyLandingPage].writes(wlp) ++ Json.obj("type" -> GuardianWeekly.id)
@@ -138,6 +140,7 @@ object Formatters {
     )
 
     implicit val supporterPlusLandingPageFormat = Json.format[SupporterPlusLandingPage]
+    implicit val tierThreeLandingPageLandingPageFormat = Json.format[TierThreeLandingPage]
     implicit val digitalpackLandingPageFormat = Json.format[DigitalPackLandingPage]
     implicit val newspaperLandingPageFormat = Json.format[NewspaperLandingPage]
 

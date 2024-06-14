@@ -76,12 +76,14 @@ class CatalogService[M[_] : Monad](productIds: ProductIds, fetchCatalog: M[Strin
       ) (DigipackPlans)
     supporterPlus <- (
       one[SupporterPlus[Month.type]](plans, "Supporter Plus month", FrontendId.Monthly) |@|
-        one[SupporterPlus[Year.type]](plans, "Supporter Plus year", FrontendId.Yearly) |@|
-        one[SupporterPlus[Month.type]](plans, "Guardian Weekly Rest Of World Monthly", FrontendId.ThirdTierMonthlyROW) |@|
-        one[SupporterPlus[Year.type]](plans, "Guardian Weekly Rest Of World Annual", FrontendId.ThirdTierAnnualROW) |@|
-        one[SupporterPlus[Year.type]](plans, "Guardian Weekly Domestic Annual", FrontendId.ThirdTierAnnualDomestic) |@|
-        one[SupporterPlus[Month.type]](plans, "Guardian Weekly Domestic Monthly", FrontendId.ThirdTierMonthlyDomestic)
+        one[SupporterPlus[Year.type]](plans, "Supporter Plus year", FrontendId.Yearly)
       ) (SupporterPlusPlans)
+    tierThree <- (
+      one[TierThree[Month.type]](plans, "Supporter Plus & Guardian Weekly Domestic - Monthly", FrontendId.ThirdTierMonthlyDomestic) |@|
+        one[TierThree[Year.type]](plans, "Supporter Plus & Guardian Weekly ROW - Annual", FrontendId.ThirdTierAnnualDomestic) |@|
+        one[TierThree[Month.type]](plans, "Supporter Plus & Guardian Weekly ROW - Monthly", FrontendId.ThirdTierMonthlyROW) |@|
+        one[TierThree[Year.type]](plans, "Supporter Plus & Guardian Weekly Domestic - Annual", FrontendId.ThirdTierAnnualROW)
+      ) (TierThreePlans)
     contributor <- one[Contributor](plans, "Contributor month", FrontendId.Monthly)
     voucher <- many[Voucher](plans, "Paper voucher")
     digitalVoucher <- many[DigitalVoucher](plans, "Paper digital voucher")
@@ -122,7 +124,7 @@ class CatalogService[M[_] : Monad](productIds: ProductIds, fetchCatalog: M[Strin
     weekly = WeeklyPlans(weeklyZoneA, weeklyZoneB, weeklyZoneC, weeklyDomestic, weeklyRestOfWorld)
 
     map <- Validation.s[NonEmptyList[String]](plans.map(p => p.id -> p).toMap)
-  } yield Catalog(digipack, supporterPlus, contributor, voucher, digitalVoucher, delivery, nationalDelivery, weekly, map)
+  } yield Catalog(digipack, supporterPlus, tierThree, contributor, voucher, digitalVoucher, delivery, nationalDelivery, weekly, map)
 
 
   lazy val catalog: M[NonEmptyList[String] \/ Catalog] = (for {
