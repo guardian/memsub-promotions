@@ -2,6 +2,7 @@ package com.gu.memsub
 
 import scalaz.syntax.std.option._
 import scalaz.syntax.std.boolean._
+import com.gu.memsub.Product.TierThree
 
 sealed trait ProductFamily {
   val id: String
@@ -50,6 +51,9 @@ object Product {
   case object SupporterPlus extends ContentSubscription {
     val name = "supporterPlus"
   }
+  case object TierThree extends ContentSubscription {
+    val name = "tierThree"
+  }
   case object Digipack extends ContentSubscription {
     val name = "digitalpack"
   }
@@ -89,6 +93,7 @@ object Product {
   def fromId(id: String): Option[Product] = id match {
     case Digipack.name => Some(Digipack)
     case SupporterPlus.name => Some(SupporterPlus)
+    case TierThree.name => Some(TierThree)
     case Delivery.name => Some(Delivery)
     case NationalDelivery.name => Some(NationalDelivery)
     case Voucher.name => Some(Voucher)
@@ -104,6 +109,7 @@ object Product {
   type GuardianPatron = GuardianPatron.type
   type ZDigipack = Digipack.type
   type SupporterPlus = SupporterPlus.type
+  type TierThree = TierThree.type
   type Delivery = Delivery.type
   type NationalDelivery = NationalDelivery.type
   type Voucher = Voucher.type
@@ -127,6 +133,7 @@ object Benefit {
   def fromId(id: String): Option[Benefit] =
     PaperDay.fromId(id) orElse
     (id == SupporterPlus.id).option(SupporterPlus) orElse
+    (id == TierThree.id).option(TierThree) orElse
     (id == Digipack.id).option(Digipack) orElse
     (id == Adjustment.id).option(Adjustment) orElse
     (id == Contributor.id).option(Contributor) orElse
@@ -172,6 +179,11 @@ object Benefit {
   object SupporterPlus extends Benefit {
     override val id = "Supporter Plus"
     override val isPhysical: Boolean = false
+  }
+
+  object TierThree extends Benefit {
+    override val id = "tierThree"
+    override val isPhysical: Boolean = true
   }
 
   object Weekly extends Benefit {

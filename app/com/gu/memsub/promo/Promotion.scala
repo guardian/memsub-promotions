@@ -34,6 +34,9 @@ object CampaignGroup {
   case object SupporterPlus extends CampaignGroup {
     override val id = "supporterPlus"
   }
+  case object TierThree extends CampaignGroup {
+    override val id = "tierThree"
+  }
   case object DigitalPack extends CampaignGroup {
     override val id = "digitalpack"
   }
@@ -47,6 +50,7 @@ object CampaignGroup {
   def fromId(id: String): Option[CampaignGroup] = id match {
     case DigitalPack.id => Some(DigitalPack)
     case SupporterPlus.id => Some(SupporterPlus)
+    case TierThree.id => Some(TierThree)
     case Newspaper.id => Some(Newspaper)
     case GuardianWeekly.id => Some(GuardianWeekly)
     case _ => None
@@ -145,6 +149,15 @@ case object Centre extends HeroImageAlignment
 case class HeroImage(image: ResponsiveImageGroup, alignment: HeroImageAlignment)
 
 case class SupporterPlusLandingPage(
+  title: Option[String],
+  subtitle: Option[String],
+  description: Option[String],
+  roundelHtml: Option[String],
+  heroImage: Option[HeroImage],
+  image: Option[ResponsiveImageGroup]
+) extends LandingPage
+
+case class TierThreeLandingPage(
   title: Option[String],
   subtitle: Option[String],
   description: Option[String],
@@ -274,6 +287,7 @@ object Promotion {
     def asNewspaper: PromoOpt[NewspaperLandingPage] = in.landingPage.collect { case f: NewspaperLandingPage => in.copy[A, CovariantId, NewspaperLandingPage](landingPage = (f)) }
     def asWeekly: PromoOpt[WeeklyLandingPage] = in.landingPage.collect { case f: WeeklyLandingPage => in.copy[A, CovariantId, WeeklyLandingPage](landingPage = (f)) }
     def asSupporterPlus: PromoOpt[SupporterPlusLandingPage] = in.landingPage.collect { case f: SupporterPlusLandingPage => in.copy[A, CovariantId, SupporterPlusLandingPage](landingPage = (f)) }
+    def asTierThree: PromoOpt[TierThreeLandingPage] = in.landingPage.collect { case f: TierThreeLandingPage => in.copy[A, CovariantId, TierThreeLandingPage](landingPage = (f)) }
   }
 
   def asAnyPromotion[T <: PromotionType[PromoContext]](in: Promotion[T, CovariantId, LandingPage]): AnyPromotion =

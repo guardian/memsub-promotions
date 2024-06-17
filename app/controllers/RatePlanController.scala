@@ -1,7 +1,7 @@
 package controllers
 
 import actions.GoogleAuthAction.GoogleAuthenticatedAction
-import com.gu.config.{DigitalPackRatePlanIds, SupporterPlusRatePlanIds}
+import com.gu.config.{DigitalPackRatePlanIds, SupporterPlusRatePlanIds, TierThreeRatePlanIds}
 import com.gu.i18n.Currency
 import com.gu.i18n.Currency.{AUD, CAD, EUR, GBP, USD}
 import com.gu.memsub.Price
@@ -15,6 +15,7 @@ import play.api.libs.json._
 import play.api.mvc.Results._
 
 import scala.concurrent.Future
+import com.gu.memsub.Benefit.TierThree
 
 case class RatePlan(ratePlanId: ProductRatePlanId, ratePlanName: String)
 
@@ -32,6 +33,7 @@ class RatePlanController(
     paperPlans: PaperProducts,
     digipackIds: DigitalPackRatePlanIds,
     supporterPlusIds: SupporterPlusRatePlanIds,
+    tierThreeIds: TierThreeRatePlanIds,
     weeklyPlans: WeeklyPlans,
     catalogService: CatalogService[Future],
 ) {
@@ -69,10 +71,12 @@ class RatePlanController(
       SupporterPlus.id -> Json.toJson(Seq(
           RatePlan(supporterPlusIds.yearly, "Annual"),
           RatePlan(supporterPlusIds.monthly, "Monthly"),
-          RatePlan(supporterPlusIds.guardianWeeklyRestOfWorldMonthly, "Guardian Weekly Rest Of World Monthly"),
-          RatePlan(supporterPlusIds.guardianWeeklyRestOfWorldAnnual, "Guardian Weekly Rest Of World Annual"),
-          RatePlan(supporterPlusIds.guardianWeeklyDomesticAnnual, "Guardian Weekly Domestic Annual"),
-          RatePlan(supporterPlusIds.guardianWeeklyDomesticMonthly, "Guardian Weekly Domestic Monthly"),
+      ).map(enhance)),
+      TierThree.id -> Json.toJson(Seq(
+          RatePlan(tierThreeIds.domesticAnnual, "Domestic Annual"),
+          RatePlan(tierThreeIds.domesticMonthly, "Domestic Monthly"),
+          RatePlan(tierThreeIds.restOfWorldMonthly, "RestOfWorld Monthly"),
+          RatePlan(tierThreeIds.restOfWorldAnnual, "RestOfWorld Annual"),
       ).map(enhance)),
       DigitalPack.id -> Json.toJson(Seq(
         RatePlan(digipackIds.digitalPackMonthly, "Digital Pack monthly"),

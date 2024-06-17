@@ -60,6 +60,7 @@ object ChargeListReads {
     weeklyRestOfWorld: ProductId,
     digipack: ProductId,
     supporterPlus: ProductId,
+    tierThree: ProductId,
     voucher: ProductId,
     digitalVoucher: ProductId,
     delivery: ProductId,
@@ -138,7 +139,8 @@ object ChargeListReads {
     def read(cat: PlanChargeMap, charges: List[ZuoraCharge]): ValidationNel[String, PaidChargeList] = {
       readPaperChargeList.read(cat, charges).map(identity[PaidChargeList]) orElse2
         readPaidCharge[Benefit, BillingPeriod](readAnyProduct, anyBpReads).read(cat, charges) orElse2
-        readSupporterPlusV2ChargeList.read(cat, charges)
+        readSupporterPlusV2ChargeList.read(cat, charges) orElse2
+        readTierThreeChargeList.read(cat, charges)
     }.withTrace("readPaidChargeList")
   }
 
@@ -203,6 +205,36 @@ object ChargeListReads {
 
     override def read(cat: PlanChargeMap, charges: List[ZuoraCharge]): ValidationNel[String, SupporterPlusCharges] = {
       (getBillingPeriod(charges) |@| getPricingSummaries(charges)).apply(SupporterPlusCharges)
+    }
+  }
+
+  implicit def readTierThreeChargeList: ChargeListReads[TierThreeCharges] = new ChargeListReads[TierThreeCharges] {
+
+    def validateBillingPeriod(zBillingPeriod: ZBillingPeriod): ValidationNel[String, BillingPeriod] = zBillingPeriod match {
+      case ZMonth => Validation.success[NonEmptyList[String], BillingPeriod](Month)
+      case ZYear => Validation.success[NonEmptyList[String], BillingPeriod](Year)
+      case _ => Validation.failureNel(s"Tier three must have a Monthly or Annual billing period, not $zBillingPeriod")
+    }
+
+    def getBillingPeriod(charges: List[ZuoraCharge]): ValidationNel[String, BillingPeriod] = {
+      val billingPeriods = charges.flatMap(_.billingPeriod).distinct
+      
+      billingPeriods match {
+        case Nil => Validation.failureNel("No billing period found")
+        case b :: Nil => validateBillingPeriod(b)
+        case _ => Validation.failureNel("Too many billing periods found")
+      }
+    }
+
+    def getPricingSummaries(charges: List[ZuoraCharge]): ValidationNel[String, List[PricingSummary]] = {
+      val pricingSummaries = charges.map(_.pricing)
+      Validation
+        .success[NonEmptyList[String], List[PricingSummary]](pricingSummaries)
+        .ensure("No pricing summaries found".wrapNel)(_.nonEmpty)
+    }
+
+    override def read(cat: PlanChargeMap, charges: List[ZuoraCharge]): ValidationNel[String, TierThreeCharges] = {
+      (getBillingPeriod(charges) |@| getPricingSummaries(charges)).apply(TierThreeCharges)
     }
   }
 
