@@ -79,10 +79,10 @@ class CatalogService[M[_] : Monad](productIds: ProductIds, fetchCatalog: M[Strin
         one[SupporterPlus[Year.type]](plans, "Supporter Plus year", FrontendId.Yearly)
       ) (SupporterPlusPlans)
     tierThree <- (
-      one[TierThree[Month.type]](plans, "Supporter Plus & Guardian Weekly Domestic - Monthly", FrontendId.ThirdTierMonthlyDomestic) |@|
-        one[TierThree[Year.type]](plans, "Supporter Plus & Guardian Weekly ROW - Annual", FrontendId.ThirdTierAnnualDomestic) |@|
-        one[TierThree[Month.type]](plans, "Supporter Plus & Guardian Weekly ROW - Monthly", FrontendId.ThirdTierMonthlyROW) |@|
-        one[TierThree[Year.type]](plans, "Supporter Plus & Guardian Weekly Domestic - Annual", FrontendId.ThirdTierAnnualROW)
+      one[TierThree[Month.type]](plans, "Supporter Plus & Guardian Weekly Domestic - Monthly", FrontendId.TierThreeMonthlyDomestic) |@|
+        one[TierThree[Year.type]](plans, "Supporter Plus & Guardian Weekly Domestic - Annual", FrontendId.TierThreeAnnualDomestic) |@|
+        one[TierThree[Month.type]](plans, "Supporter Plus & Guardian Weekly ROW - Monthly", FrontendId.TierThreeMonthlyROW) |@|
+        one[TierThree[Year.type]](plans, "Supporter Plus & Guardian Weekly ROW - Annual", FrontendId.TierThreeAnnualROW)
       ) (TierThreePlans)
     contributor <- one[Contributor](plans, "Contributor month", FrontendId.Monthly)
     voucher <- many[Voucher](plans, "Paper voucher")
