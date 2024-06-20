@@ -200,10 +200,10 @@ object FrontendId {
   case object Introductory extends FrontendId { val name = "Introductory" }
   case object Free extends FrontendId { val name = "Free" }
   case object SixWeeks extends FrontendId { val name = "SixWeeks" }
-  case object ThirdTierMonthlyROW extends FrontendId { val name = "ThirdTierMonthlyROW" }
-  case object ThirdTierAnnualROW extends FrontendId { val name = "ThirdTierAnnualROW" }
-  case object ThirdTierAnnualDomestic extends FrontendId { val name = "ThirdTierAnnualDomestic" }
-  case object ThirdTierMonthlyDomestic extends FrontendId { val name = "ThirdTierMonthlyDomestic" }
+  case object TierThreeMonthlyROW extends FrontendId { val name = "TierThreeMonthlyROW" }
+  case object TierThreeAnnualROW extends FrontendId { val name = "TierThreeAnnualROW" }
+  case object TierThreeAnnualDomestic extends FrontendId { val name = "TierThreeAnnualDomestic" }
+  case object TierThreeMonthlyDomestic extends FrontendId { val name = "TierThreeMonthlyDomestic" }
 
   val all = List(
     OneYear,
@@ -214,10 +214,10 @@ object FrontendId {
     Introductory,
     Free,
     SixWeeks,
-    ThirdTierMonthlyROW,
-    ThirdTierAnnualROW,
-    ThirdTierAnnualDomestic,
-    ThirdTierMonthlyDomestic,
+    TierThreeMonthlyROW,
+    TierThreeAnnualROW,
+    TierThreeMonthlyDomestic,
+    TierThreeAnnualDomestic,
   )
 
   def get(jsonString: String): Option[FrontendId] =
