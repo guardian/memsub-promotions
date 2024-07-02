@@ -32,9 +32,6 @@ Parameters:
   AlarmTopicARN:
     Description: ARN of the SNS topic which the no healthy hosts CloudWatch alarm should report to
     Type: String
-  InternalCidrIp:
-    Description: Internal network CIDR IP
-    Type: String
   Stack:
     Description: Application stack
     Type: String
@@ -244,12 +241,8 @@ Resources:
     Type: AWS::EC2::SecurityGroup
     Properties:
       VpcId: !Ref 'VpcId'
-      GroupDescription: Open up HTTP ingress from the load balancer, and SSH ingress from the office
+      GroupDescription: Open up HTTP ingress from the load balancer
       SecurityGroupIngress:
-      - IpProtocol: tcp
-        FromPort: '22'
-        ToPort: '22'
-        CidrIp: !Ref 'InternalCidrIp'
       - IpProtocol: tcp
         FromPort: '9000'
         ToPort: '9000'
