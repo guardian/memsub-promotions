@@ -7,6 +7,10 @@ case class TierThreeRatePlanIds(
     domesticAnnual: ProductRatePlanId,
     restOfWorldMonthly: ProductRatePlanId,
     restOfWorldAnnual: ProductRatePlanId,
+    domesticMonthlyV2: ProductRatePlanId,
+    domesticAnnualV2: ProductRatePlanId,
+    restOfWorldMonthlyV2: ProductRatePlanId,
+    restOfWorldAnnualV2: ProductRatePlanId,
 ) extends ProductFamilyRatePlanIds {
   override val productRatePlanIds: Set[ProductRatePlanId] =
     Set(
@@ -14,6 +18,10 @@ case class TierThreeRatePlanIds(
       domesticAnnual,
       restOfWorldMonthly,
       restOfWorldAnnual,
+      domesticMonthlyV2,
+      domesticAnnualV2,
+      restOfWorldMonthlyV2,
+      restOfWorldAnnualV2,
     )
 }
 
@@ -24,5 +32,9 @@ object TierThreeRatePlanIds {
       ProductRatePlanId(config.getString("domesticAnnual")),
       ProductRatePlanId(config.getString("restOfWorldMonthly")),
       ProductRatePlanId(config.getString("restOfWorldAnnual")),
+      ProductRatePlanId(config.getString("domesticMonthlyV2")),
+      ProductRatePlanId(config.getString("domesticAnnualV2")),
+      ProductRatePlanId(config.getString("restOfWorldMonthlyV2")),
+      ProductRatePlanId(config.getString("restOfWorldAnnualV2")),
     )
 }
