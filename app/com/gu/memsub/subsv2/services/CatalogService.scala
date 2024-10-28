@@ -83,10 +83,10 @@ class CatalogService[M[_] : Monad](productIds: ProductIds, fetchCatalog: M[Strin
         one[TierThree[Year.type]](plans, "Supporter Plus & Guardian Weekly Domestic - Annual", FrontendId.TierThreeAnnualDomestic) |@|
         one[TierThree[Month.type]](plans, "Supporter Plus & Guardian Weekly ROW - Monthly", FrontendId.TierThreeMonthlyROW) |@|
         one[TierThree[Year.type]](plans, "Supporter Plus & Guardian Weekly ROW - Annual", FrontendId.TierThreeAnnualROW) |@|
-        one[TierThree[Month.type]](plans, "Supporter Plus & Guardian Weekly Domestic - Monthly", FrontendId.TierThreeMonthlyDomesticV2) |@|
-        one[TierThree[Year.type]](plans, "Supporter Plus & Guardian Weekly Domestic - Annual", FrontendId.TierThreeAnnualDomesticV2) |@|
-        one[TierThree[Month.type]](plans, "Supporter Plus & Guardian Weekly ROW - Monthly", FrontendId.TierThreeMonthlyROWV2) |@|
-        one[TierThree[Year.type]](plans, "Supporter Plus & Guardian Weekly ROW - Annual", FrontendId.TierThreeAnnualROWV2)
+        one[TierThree[Month.type]](plans, "Supporter Plus, Guardian Weekly Domestic & Archive - Monthly", FrontendId.TierThreeMonthlyDomesticV2) |@|
+        one[TierThree[Year.type]](plans, "Supporter Plus, Guardian Weekly Domestic & Archive - Annual", FrontendId.TierThreeAnnualDomesticV2) |@|
+        one[TierThree[Month.type]](plans, "Supporter Plus, Guardian Weekly ROW & Archive - Monthly", FrontendId.TierThreeMonthlyROWV2) |@|
+        one[TierThree[Year.type]](plans, "Supporter Plus, Guardian Weekly ROW & Archive - Annual", FrontendId.TierThreeAnnualROWV2)
       ) (TierThreePlans)
     contributor <- one[Contributor](plans, "Contributor month", FrontendId.Monthly)
     voucher <- many[Voucher](plans, "Paper voucher")
