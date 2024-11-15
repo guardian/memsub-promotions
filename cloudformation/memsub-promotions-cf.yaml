@@ -204,6 +204,8 @@ Resources:
       - !Ref 'InstanceSecurityGroup'
       - !Ref WazuhSecurityGroup
       InstanceType: t4g.micro
+      MetadataOptions:
+        HttpTokens: required
       AssociatePublicIpAddress: 'False'
       IamInstanceProfile: !Ref 'InstanceProfile'
       UserData:
