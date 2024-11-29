@@ -56,12 +56,11 @@ module.exports = {
     devtool: 'source-map',
 
     devServer: {
-        proxy: {
-            '**': {
-                target: 'http://promo.thegulocal.com:9500',
-                secure: false,
-            },
-        },
+        proxy: [{
+            context: '**',
+            target: 'http://promo.thegulocal.com:9500',
+            secure: false,
+        }],
         devMiddleware: {
             publicPath: "/assets/"
         }
