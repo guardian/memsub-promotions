@@ -1,29 +1,16 @@
 package com.gu.memsub.auth.common
 
-import com.amazonaws.auth.profile.ProfileCredentialsProvider
-import com.amazonaws.auth.{AWSCredentialsProviderChain, InstanceProfileCredentialsProvider}
-import com.amazonaws.services.s3.model.S3ObjectId
+import com.amazonaws.services.s3.model.GetObjectRequest
 import com.google.auth.oauth2.ServiceAccountCredentials
+import com.gu.aws.AwsS3
 import com.gu.googleauth.{AntiForgeryChecker, GoogleAuthConfig, GoogleGroupChecker}
 import com.typesafe.config.Config
 import play.api.http.HttpConfiguration
 
 object MemSub {
 
-  object AWSCredentialsProvider {
-    val Dev = new ProfileCredentialsProvider("membership")
-    val Prod = InstanceProfileCredentialsProvider.getInstance
-    val Chain = new AWSCredentialsProviderChain(Dev, Prod)
-  }
-
   object Google {
     val GuardianAppsDomain = "guardian.co.uk"
-
-    object ServiceAccount {
-      val PrivateKeyLocation = new S3ObjectId("membership-private", "membership_directory_cert.p12")
-
-      lazy val PrivateKey = new S3PrivateKeyService(AWSCredentialsProvider.Chain).loadPrivateKey(PrivateKeyLocation)
-    }
 
     def googleAuthConfigFor(config: Config, httpConfiguration: HttpConfiguration): GoogleAuthConfig = {
       val c = config.getConfig("google.oauth")
@@ -37,12 +24,18 @@ object MemSub {
     }
 
     def googleGroupCheckerFor(config: Config): GoogleGroupChecker = {
-      val con = config.getConfig("google.directory.service_account")
-      new GoogleGroupChecker(con.getString("email"), ServiceAccountCredentials
-        .newBuilder()
-        .setClientEmail(con.getString("id"))
-        .setPrivateKey(ServiceAccount.PrivateKey)
-        .build())
+      val request = new GetObjectRequest("membership-private", "google-auth-service-account-certificate.json")
+      AwsS3.fetchObject(AwsS3.client, request).map { stream =>
+        val googleServiceAccountCredential = ServiceAccountCredentials.fromStream(stream)
+        stream.close()
+
+        val impersonatedUser = config.getString("google.oauth.impersonatedUser")
+
+        new GoogleGroupChecker(
+          impersonatedUser,
+          googleServiceAccountCredential
+        )
+      }.get // created on startup
     }
   }
 
