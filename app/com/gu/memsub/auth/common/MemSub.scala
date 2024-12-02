@@ -1,7 +1,5 @@
 package com.gu.memsub.auth.common
 
-import com.amazonaws.auth.profile.ProfileCredentialsProvider
-import com.amazonaws.auth.{AWSCredentialsProviderChain, InstanceProfileCredentialsProvider}
 import com.amazonaws.services.s3.model.GetObjectRequest
 import com.google.auth.oauth2.ServiceAccountCredentials
 import com.gu.aws.AwsS3
@@ -10,12 +8,6 @@ import com.typesafe.config.Config
 import play.api.http.HttpConfiguration
 
 object MemSub {
-
-  object AWSCredentialsProvider {
-    val Dev = new ProfileCredentialsProvider("membership")
-    val Prod = InstanceProfileCredentialsProvider.getInstance
-    val Chain = new AWSCredentialsProviderChain(Dev, Prod)
-  }
 
   object Google {
     val GuardianAppsDomain = "guardian.co.uk"
