@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
 jobs:
   dependency-graph:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout branch
         id: checkout

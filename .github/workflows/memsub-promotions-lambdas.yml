@@ -20,7 +20,7 @@ jobs:
       contents: read
 
     name: memsub-promotions-lambdas
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout repo
         uses: actions/checkout@v3

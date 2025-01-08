@@ -20,7 +20,7 @@ jobs:
       contents: read
 
     name: memsub-promotions
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout repo
         uses: actions/checkout@v3
@@ -54,6 +54,10 @@ jobs:
             ~/.sbt
             ~/.coursier
           key: sbt
+
+      - name: Install sbt
+        id: sbt
+        uses: sbt/setup-sbt@8a071aa780c993c7a204c785d04d3e8eb64ef272 # v1.1.0
 
       - name: riffraff
         run: |
