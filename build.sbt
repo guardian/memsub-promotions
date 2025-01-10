@@ -76,6 +76,13 @@ dependencyOverrides ++= List(
   "com.fasterxml.jackson.core" % "jackson-core" % "2.17.2"
 )
 
+excludeDependencies ++= Seq(
+  // Exclude htmlunit due to a vulnerability. Brought in via scalatest but we don't need it.
+  // The vulnerability is fixed in htmlunit v3 onwards, but the lib was renamed so we cannot force a newer version
+  // by specifying it in the dependencies.
+  ExclusionRule("net.sourceforge.htmlunit", "htmlunit"),
+)
+
 resolvers ++= Seq(
   "Guardian Github Releases" at "https://guardian.github.io/maven/repo-releases",
   "Guardian Github Snapshots" at "https://guardian.github.com/maven/repo-snapshots",
