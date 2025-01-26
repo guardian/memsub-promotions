@@ -19,6 +19,6 @@
     "@aws-sdk/client-kms": "^3.731.1",
     "@aws-sdk/client-secrets-manager": "^3.726.1",
     "@aws-sdk/lib-dynamodb": "^3.726.1",
-    "@aws-sdk/types": "^3.0.0"
+    "@aws-sdk/types": "^3.734.0"
   }
 }
