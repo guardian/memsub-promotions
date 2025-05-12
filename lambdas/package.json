@@ -15,7 +15,7 @@
     "clean": "rm -rf dist && rm -rf target"
   },
   "dependencies": {
-    "@aws-sdk/client-dynamodb": "^3.788.0",
+    "@aws-sdk/client-dynamodb": "^3.806.0",
     "@aws-sdk/client-kms": "^3.787.0",
     "@aws-sdk/client-secrets-manager": "^3.787.0",
     "@aws-sdk/lib-dynamodb": "^3.789.0",
