@@ -11,6 +11,8 @@ case class Price(amount: Float, currency: Currency) {
     rounded2dp.toBigIntExact.fold(pc2f.format(rounded2dp))(_.toString)
   }
 
+  val pretty = currency.identifier + prettyAmount
+  val prettyWithoutCurrencyPrefix = currency.glyph + prettyAmount
   def +(n: Float): Price = Price(amount + n, currency)
   def -(n: Float): Price = Price(amount - n, currency)
   def *(n: Float): Price = Price(amount * n, currency)
