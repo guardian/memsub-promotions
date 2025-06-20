@@ -132,6 +132,12 @@ module.config(($stateProvider, $urlRouterProvider) => {
         controller: 'promotionFormController',
         controllerAs: 'ctrl'
     })
+    .state('createCampaign', {
+        url: "/campaign/new/",
+        template: campaignForm,
+        controller: 'editCampaignController',
+        controllerAs: 'ctrl'
+    })
     .state('editCampaign', {
         url: "/campaign/:code",
         template: campaignForm,
