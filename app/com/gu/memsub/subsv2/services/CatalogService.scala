@@ -65,7 +65,7 @@ class CatalogService[M[_] : Monad](productIds: ProductIds, fetchCatalog: M[Strin
 
   def joinUp: M[String \/ List[CatalogZuoraPlan]] = (for {
     catalog <- EitherT[String, M, JsValue](fetchCatalog)
-    catalogPlans <- EitherT[String, M, List[CatalogZuoraPlan]](Json.fromJson[List[CatalogZuoraPlan]](catalog).asEither.disjunction.leftMap(_.toString).point[M])
+    catalogPlans <- EitherT[String, M, List[CatalogZuoraPlan]](Json.fromJson[List[CatalogZuoraPlan]](catalog).asEither.toDisjunction.leftMap(_.toString).point[M])
   } yield catalogPlans).run
 
   def validatePlans(plans: List[CatalogZuoraPlan]): Validation[NonEmptyList[String], Catalog] = for {

@@ -1,7 +1,6 @@
 package controllers
 
 import java.util.{TimeZone, UUID}
-
 import actions.GoogleAuthAction._
 import com.gu.memsub.promo.Formatters.Common._
 import com.gu.memsub.promo.Formatters.PromotionFormatters._
@@ -12,9 +11,10 @@ import com.gu.memsub.subsv2.services.CatalogService
 import com.typesafe.scalalogging.LazyLogging
 import org.joda.time.DateTimeZone
 import play.api.libs.json.{JsError, JsPath, Json, JsonValidationError}
-import play.api.mvc.Result
+import play.api.mvc.{Action, AnyContent, Result}
 import play.api.mvc.Results._
 import wiring.AppComponents.Stage
+
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.Try
 
@@ -42,17 +42,17 @@ class PromotionController(
     )
   }
 
-  def all(campaignCode: Option[String]) = googleAuthAction.async {
+  def all(campaignCode: Option[String]): Action[AnyContent] = googleAuthAction.async {
     campaignCode.map(CampaignCode).fold(dynamoService.all)(dynamoService.find).map(promos => Ok(Json.toJson(promos.sortBy(_.name))))
   }
 
-  def get(uuid: Option[String]) = googleAuthAction.async {
+  def get(uuid: Option[String]): Action[AnyContent] = googleAuthAction.async {
     uuid.flatMap(i => Try(UUID.fromString(i)).toOption).map {
       i => dynamoService.find(i).map(_.headOption.fold[Result](NotFound)(promo => Ok(Json.toJson(promo))))
     }.getOrElse[Future[Result]](Future.successful(BadRequest))
   }
 
-  def productRatePlanIdsAreValidForStage(promo: AnyPromotion): Boolean = promo.appliesTo.productRatePlanIds.forall {
+  private def productRatePlanIdsAreValidForStage(promo: AnyPromotion): Boolean = promo.appliesTo.productRatePlanIds.forall {
     productRatePlanId => {
       val productRatePlanIdIsInCatalog = catalogService.unsafeCatalog.paid.exists(_.id == productRatePlanId)
       if (!productRatePlanIdIsInCatalog) {
@@ -62,10 +62,10 @@ class PromotionController(
     }
   }
 
-  def validate = googleAuthAction { request =>
-    val jsonValidationAttempt = for {
-      jsonToTest <- request.body.asJson.toRight[Seq[(JsPath, Seq[JsonValidationError])]](Seq.empty).right
-      promo <- Json.fromJson[AnyPromotion](jsonToTest).asEither.right
+  def validate: Action[AnyContent] = googleAuthAction { request =>
+    val jsonValidationAttempt: Either[collection.Seq[(JsPath, collection.Seq[JsonValidationError])], AnyPromotion] = for {
+      jsonToTest <- request.body.asJson.toRight[Seq[(JsPath, Seq[JsonValidationError])]](Seq.empty)
+      promo <- Json.fromJson[AnyPromotion](jsonToTest).asEither
     } yield promo
 
     jsonValidationAttempt match {
@@ -81,7 +81,7 @@ class PromotionController(
 
   }
 
-  def upsert = googleAuthAction.async { request =>
+  def upsert: Action[AnyContent] = googleAuthAction.async { request =>
     request.body.asJson.map { json =>
       json.validate[AnyPromotion].map { promotion => {
           dynamoService.add(normaliseDateTimes(promotion)).map(_ => Ok(Json.obj("status" -> "ok")))
