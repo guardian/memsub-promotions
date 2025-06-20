@@ -137,7 +137,7 @@ object GetCurrentPlans {
       }
     }
 
-    Sequence(currentPlans.map(_.leftMap(_.map(discard => s"Discarded ${discard.plan.id.get} because it ${discard.why}").list.toList.mkString("\n")).disjunction))
+    Sequence(currentPlans.map(_.leftMap(_.map(discard => s"Discarded ${discard.plan.id.get} because it ${discard.why}").list.toList.mkString("\n")).toDisjunction))
   }
 }
 

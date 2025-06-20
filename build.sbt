@@ -80,7 +80,7 @@ dependencyOverrides ++= List(
 )
 
 excludeDependencies ++= Seq(
-  // Exclude htmlunit due to a vulnerability. Brought in via scalatest but we don't need it.
+  // Exclude htmlunit due to a vulnerability. Brought in via scalatest, but we don't need it.
   // The vulnerability is fixed in htmlunit v3 onwards, but the lib was renamed so we cannot force a newer version
   // by specifying it in the dependencies.
   ExclusionRule("net.sourceforge.htmlunit", "htmlunit"),
