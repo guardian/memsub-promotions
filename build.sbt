@@ -67,7 +67,7 @@ libraryDependencies ++= Seq(
   "com.gu" %% "support-internationalisation" % "0.16",
   "io.lemonlabs" %% "scala-uri" % "4.0.3",
   "com.squareup.okhttp3" % "okhttp" % "4.12.0",
-  "com.typesafe.play" %% "play-json-joda" % "2.10.6",
+  "org.playframework" %% "play-json-joda" % "3.0.4",
   "org.scalatestplus.play" %% "scalatestplus-play" % "7.0.1" % Test
 )
 
