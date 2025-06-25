@@ -1,18 +1,13 @@
 package com.gu.memsub.services
 
-import com.amazonaws.auth.profile.ProfileCredentialsProvider
-import com.amazonaws.auth.{AWSCredentialsProviderChain, EnvironmentVariableCredentialsProvider, InstanceProfileCredentialsProvider}
 import com.amazonaws.regions.Regions
-import com.amazonaws.services.dynamodbv2.{AmazonDynamoDBClient, AmazonDynamoDBClientBuilder}
-import com.amazonaws.services.dynamodbv2.document.spec.{GetItemSpec, QuerySpec, ScanSpec}
+import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClient
+import com.amazonaws.services.dynamodbv2.document.spec.{GetItemSpec, ScanSpec}
 import com.amazonaws.services.dynamodbv2.document._
-import com.amazonaws.services.dynamodbv2.model.TableDescription
 import com.gu.aws.CredentialsProvider
 import play.api.libs.json._
-
-import scala.collection.JavaConverters._
+import scala.jdk.CollectionConverters._
 import scala.concurrent.{ExecutionContext, Future}
-import scala.language.higherKinds
 import scala.util.Try
 import scalaz.Monad
 
@@ -50,13 +45,8 @@ class JsonDynamoService[A, M[_]](table: Table)(implicit m: Monad[M]) {
 object JsonDynamoService {
 
   val itemFormat = Format(
-    new Reads[Item] {
-      def reads(in: JsValue): JsResult[Item] =
-        Try(JsSuccess(Item.fromJSON(in.toString))).getOrElse(JsError(s"unable to deserialise $in"))
-    },
-    new Writes[Item] {
-      def writes(o: Item): JsValue = Json.parse(o.toJSON)
-    }
+    (in: JsValue) => Try(JsSuccess(Item.fromJSON(in.toString))).getOrElse(JsError(s"unable to deserialise $in")),
+    (o: Item) => Json.parse(o.toJSON)
   )
 
   def forTable[A](table: String)(implicit e: ExecutionContext): JsonDynamoService[A, Future] = {

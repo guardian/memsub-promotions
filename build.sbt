@@ -62,22 +62,25 @@ libraryDependencies ++= Seq(
   "com.softwaremill.macwire" %% "proxy" % "2.5.0",
   "com.amazonaws" % "aws-java-sdk-s3" % awsVersion,
   "com.amazonaws" % "aws-java-sdk-dynamodb" % awsVersion,
-  "org.scalaz" %% "scalaz-core" % "7.3.7",
+  "org.scalaz" %% "scalaz-core" % "7.3.8",
   "com.github.nscala-time" %% "nscala-time" % "2.32.0",
   "com.gu" %% "support-internationalisation" % "0.16",
   "io.lemonlabs" %% "scala-uri" % "4.0.3",
-  "com.squareup.okhttp3" % "okhttp" % "4.10.0",
-  "com.typesafe.play" %% "play-json-joda" % "2.10.4",
+  "com.squareup.okhttp3" % "okhttp" % "4.12.0",
+  "com.typesafe.play" %% "play-json-joda" % "2.10.6",
   "org.scalatestplus.play" %% "scalatestplus-play" % "7.0.1" % Test
 )
 
 dependencyOverrides ++= List(
   // Play still uses an old version of jackson-core which has a vulnerability - https://security.snyk.io/vuln/SNYK-JAVA-COMFASTERXMLJACKSONCORE-7569538
-  "com.fasterxml.jackson.core" % "jackson-core" % "2.17.2"
+  "com.fasterxml.jackson.core" % "jackson-core" % "2.19.1",
+  "ch.qos.logback" % "logback-classic" % "1.5.18",
+  "com.squareup.okio" % "okio" % "3.13.0",
+  "commons-io" % "commons-io" % "2.19.0",
 )
 
 excludeDependencies ++= Seq(
-  // Exclude htmlunit due to a vulnerability. Brought in via scalatest but we don't need it.
+  // Exclude htmlunit due to a vulnerability. Brought in via scalatest, but we don't need it.
   // The vulnerability is fixed in htmlunit v3 onwards, but the lib was renamed so we cannot force a newer version
   // by specifying it in the dependencies.
   ExclusionRule("net.sourceforge.htmlunit", "htmlunit"),
