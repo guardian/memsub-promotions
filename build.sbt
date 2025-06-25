@@ -77,6 +77,7 @@ dependencyOverrides ++= List(
   "ch.qos.logback" % "logback-classic" % "1.5.18",
   "com.squareup.okio" % "okio" % "3.13.0",
   "commons-io" % "commons-io" % "2.19.0",
+  "commons-beanutils" % "commons-beanutils" % "1.11.0",
 )
 
 excludeDependencies ++= Seq(
