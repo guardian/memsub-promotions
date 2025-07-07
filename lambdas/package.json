@@ -7,7 +7,7 @@
   "devDependencies": {
     "@babel/cli": "^7.27.0",
     "@babel/core": "^7.27.7",
-    "@babel/preset-env": "^7.27.2"
+    "@babel/preset-env": "^7.28.0"
   },
   "scripts": {
     "dist": "yarn install --production --modules-folder dist/node_modules",
