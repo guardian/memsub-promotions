@@ -5,7 +5,7 @@
   "buildDir": "dist",
   "type": "module",
   "devDependencies": {
-    "@babel/cli": "^7.27.0",
+    "@babel/cli": "^7.28.0",
     "@babel/core": "^7.27.7",
     "@babel/preset-env": "^7.27.2"
   },
