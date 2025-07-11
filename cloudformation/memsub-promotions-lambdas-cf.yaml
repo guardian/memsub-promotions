@@ -123,7 +123,7 @@ Resources:
       Handler: MembershipSub-Promotions-to-PromoCode-View-Lambda.handler
       MemorySize: 128
       Role: !GetAtt [MembershipSubPromoCodeViewLambdaRole, Arn]
-      Runtime: nodejs22.x
+      Runtime: nodejs18.x
       Timeout: 60
   PromoCodeViewLambdaEventSourceCODE:
     Type: AWS::Lambda::EventSourceMapping
@@ -167,7 +167,7 @@ Resources:
       Handler: MembershipSub-PromoCode-View-Dynamo-to-Salesforce.handler
       MemorySize: 128
       Role: !GetAtt [MembershipSubPromoCodeViewETLRole, Arn]
-      Runtime: nodejs22.x
+      Runtime: nodejs18.x
       Timeout: 60
 
   ETLSchedule:
