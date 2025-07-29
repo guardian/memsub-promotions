@@ -76,7 +76,8 @@ class CatalogService[M[_] : Monad](productIds: ProductIds, fetchCatalog: M[Strin
       ) (DigipackPlans)
     supporterPlus <- (
       one[SupporterPlus[Month.type]](plans, "Supporter Plus month", FrontendId.Monthly) |@|
-        one[SupporterPlus[Year.type]](plans, "Supporter Plus year", FrontendId.Yearly)
+        one[SupporterPlus[Year.type]](plans, "Supporter Plus year", FrontendId.Yearly) |@|
+        one[SupporterPlus[OneYear.type]](plans, "Supporter Plus one year student", FrontendId.OneYear)
       ) (SupporterPlusPlans)
     tierThree <- (
       one[TierThree[Month.type]](plans, "Supporter Plus & Guardian Weekly Domestic - Monthly", FrontendId.TierThreeMonthlyDomestic) |@|

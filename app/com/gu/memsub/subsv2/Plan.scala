@@ -280,10 +280,12 @@ case class DigipackPlans(
 case class SupporterPlusPlans(
     month: CatalogPlan.SupporterPlus[Month.type],
     year: CatalogPlan.SupporterPlus[Year.type],
+    oneYearStudent: CatalogPlan.SupporterPlus[OneYear.type],
 ) {
   lazy val plans = List(
     month,
     year,
+    oneYearStudent,
   )
 }
 
