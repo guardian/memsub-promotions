@@ -40,51 +40,51 @@
     "@smithy/util-utf8" "^2.0.0"
     tslib "^2.6.2"
 
-"@aws-sdk/client-dynamodb@^3.908.0":
-  version "3.908.0"
-  resolved "https://registry.yarnpkg.com/@aws-sdk/client-dynamodb/-/client-dynamodb-3.908.0.tgz#7853cbc0970a74d3603208dda5e0c97082949949"
-  integrity sha512-8706EETITZZ5V7kwyxcZvDk1LDDaoUi5uZyh9jv0fyoKZtQHyNjsNHCpRWTW/DN/K/xy5MG1foMrCvdAqs0H5A==
+"@aws-sdk/client-dynamodb@^3.913.0":
+  version "3.913.0"
+  resolved "https://registry.yarnpkg.com/@aws-sdk/client-dynamodb/-/client-dynamodb-3.913.0.tgz#5840bba96c7b68979178d3a3e89db7b2492c9d25"
+  integrity sha512-J9qRCKknNwdUyGJWZUFHhWbYaZZ3r5auY8VxaVtiRc08PhQXTCZd6yFg0dr6uNp3HtHt2inQu5/NQnrJekXp1w==
   dependencies:
     "@aws-crypto/sha256-browser" "5.2.0"
     "@aws-crypto/sha256-js" "5.2.0"
-    "@aws-sdk/core" "3.908.0"
-    "@aws-sdk/credential-provider-node" "3.908.0"
-    "@aws-sdk/middleware-endpoint-discovery" "3.901.0"
-    "@aws-sdk/middleware-host-header" "3.901.0"
-    "@aws-sdk/middleware-logger" "3.901.0"
-    "@aws-sdk/middleware-recursion-detection" "3.901.0"
-    "@aws-sdk/middleware-user-agent" "3.908.0"
-    "@aws-sdk/region-config-resolver" "3.901.0"
-    "@aws-sdk/types" "3.901.0"
-    "@aws-sdk/util-endpoints" "3.901.0"
-    "@aws-sdk/util-user-agent-browser" "3.907.0"
-    "@aws-sdk/util-user-agent-node" "3.908.0"
-    "@smithy/config-resolver" "^4.3.0"
-    "@smithy/core" "^3.15.0"
-    "@smithy/fetch-http-handler" "^5.3.1"
-    "@smithy/hash-node" "^4.2.0"
-    "@smithy/invalid-dependency" "^4.2.0"
-    "@smithy/middleware-content-length" "^4.2.0"
-    "@smithy/middleware-endpoint" "^4.3.1"
-    "@smithy/middleware-retry" "^4.4.1"
-    "@smithy/middleware-serde" "^4.2.0"
-    "@smithy/middleware-stack" "^4.2.0"
-    "@smithy/node-config-provider" "^4.3.0"
-    "@smithy/node-http-handler" "^4.3.0"
-    "@smithy/protocol-http" "^5.3.0"
-    "@smithy/smithy-client" "^4.7.1"
-    "@smithy/types" "^4.6.0"
-    "@smithy/url-parser" "^4.2.0"
+    "@aws-sdk/core" "3.911.0"
+    "@aws-sdk/credential-provider-node" "3.913.0"
+    "@aws-sdk/middleware-endpoint-discovery" "3.910.0"
+    "@aws-sdk/middleware-host-header" "3.910.0"
+    "@aws-sdk/middleware-logger" "3.910.0"
+    "@aws-sdk/middleware-recursion-detection" "3.910.0"
+    "@aws-sdk/middleware-user-agent" "3.911.0"
+    "@aws-sdk/region-config-resolver" "3.910.0"
+    "@aws-sdk/types" "3.910.0"
+    "@aws-sdk/util-endpoints" "3.910.0"
+    "@aws-sdk/util-user-agent-browser" "3.910.0"
+    "@aws-sdk/util-user-agent-node" "3.911.0"
+    "@smithy/config-resolver" "^4.3.2"
+    "@smithy/core" "^3.16.1"
+    "@smithy/fetch-http-handler" "^5.3.3"
+    "@smithy/hash-node" "^4.2.2"
+    "@smithy/invalid-dependency" "^4.2.2"
+    "@smithy/middleware-content-length" "^4.2.2"
+    "@smithy/middleware-endpoint" "^4.3.3"
+    "@smithy/middleware-retry" "^4.4.3"
+    "@smithy/middleware-serde" "^4.2.2"
+    "@smithy/middleware-stack" "^4.2.2"
+    "@smithy/node-config-provider" "^4.3.2"
+    "@smithy/node-http-handler" "^4.4.1"
+    "@smithy/protocol-http" "^5.3.2"
+    "@smithy/smithy-client" "^4.8.1"
+    "@smithy/types" "^4.7.1"
+    "@smithy/url-parser" "^4.2.2"
     "@smithy/util-base64" "^4.3.0"
     "@smithy/util-body-length-browser" "^4.2.0"
     "@smithy/util-body-length-node" "^4.2.1"
-    "@smithy/util-defaults-mode-browser" "^4.3.0"
-    "@smithy/util-defaults-mode-node" "^4.2.1"
-    "@smithy/util-endpoints" "^3.2.0"
-    "@smithy/util-middleware" "^4.2.0"
-    "@smithy/util-retry" "^4.2.0"
+    "@smithy/util-defaults-mode-browser" "^4.3.2"
+    "@smithy/util-defaults-mode-node" "^4.2.3"
+    "@smithy/util-endpoints" "^3.2.2"
+    "@smithy/util-middleware" "^4.2.2"
+    "@smithy/util-retry" "^4.2.2"
     "@smithy/util-utf8" "^4.2.0"
-    "@smithy/util-waiter" "^4.2.0"
+    "@smithy/util-waiter" "^4.2.2"
     "@smithy/uuid" "^1.1.0"
     tslib "^2.6.2"
 
@@ -550,16 +550,16 @@
     "@smithy/types" "^4.6.0"
     tslib "^2.6.2"
 
-"@aws-sdk/middleware-endpoint-discovery@3.901.0":
-  version "3.901.0"
-  resolved "https://registry.yarnpkg.com/@aws-sdk/middleware-endpoint-discovery/-/middleware-endpoint-discovery-3.901.0.tgz#ef1b10b4d187bf7292fab5ae5fbe920c588fb041"
-  integrity sha512-nbqELNamIhsWcDmqa3rB5unNuOEGiNh2pEz663ZEzsa9DTasKvBHqdhVQo6DuWDvnkhAjOMrkM2sB4P45uy1Qw==
+"@aws-sdk/middleware-endpoint-discovery@3.910.0":
+  version "3.910.0"
+  resolved "https://registry.yarnpkg.com/@aws-sdk/middleware-endpoint-discovery/-/middleware-endpoint-discovery-3.910.0.tgz#ad9a2dbb93b809631f81566d62779b38c6ac1893"
+  integrity sha512-KZvTt8lUUhkQptu00iSSdf5+6h6NP3L5tP251/4FRh9XDXMdpIoAAGsmamhVySkUSODDaALMHjXPSK5SJq/RYw==
   dependencies:
     "@aws-sdk/endpoint-cache" "3.893.0"
-    "@aws-sdk/types" "3.901.0"
-    "@smithy/node-config-provider" "^4.3.0"
-    "@smithy/protocol-http" "^5.3.0"
-    "@smithy/types" "^4.6.0"
+    "@aws-sdk/types" "3.910.0"
+    "@smithy/node-config-provider" "^4.3.2"
+    "@smithy/protocol-http" "^5.3.2"
+    "@smithy/types" "^4.7.1"
     tslib "^2.6.2"
 
 "@aws-sdk/middleware-host-header@3.901.0":
@@ -1780,14 +1780,6 @@
   resolved "https://registry.yarnpkg.com/@nicolo-ribaudo/chokidar-2/-/chokidar-2-2.1.8-no-fsevents.3.tgz#323d72dd25103d0c4fbdce89dadf574a787b1f9b"
   integrity sha512-s88O1aVtXftvp5bCPB7WnmXc5IwOZZ7YPuwNPt+GtOOXpPvad1LfbmjYv+qII7zP6RU2QGnqve27dnLycEnyEQ==
 
-"@smithy/abort-controller@^4.2.0":
-  version "4.2.0"
-  resolved "https://registry.yarnpkg.com/@smithy/abort-controller/-/abort-controller-4.2.0.tgz#ced549ad5e74232bdcb3eec990b02b1c6d81003d"
-  integrity sha512-PLUYa+SUKOEZtXFURBu/CNxlsxfaFGxSBPcStL13KpVeVWIfdezWyDqkz7iDLmwnxojXD0s5KzuB5HGHvt4Aeg==
-  dependencies:
-    "@smithy/types" "^4.6.0"
-    tslib "^2.6.2"
-
 "@smithy/abort-controller@^4.2.3":
   version "4.2.3"
   resolved "https://registry.yarnpkg.com/@smithy/abort-controller/-/abort-controller-4.2.3.tgz#4615da3012b580ac3d1f0ee7b57ed7d7880bb29b"
@@ -2238,13 +2230,13 @@
     "@smithy/util-buffer-from" "^4.2.0"
     tslib "^2.6.2"
 
-"@smithy/util-waiter@^4.2.0":
-  version "4.2.0"
-  resolved "https://registry.yarnpkg.com/@smithy/util-waiter/-/util-waiter-4.2.0.tgz#fcf5609143fa745d45424b0463560425b39c34eb"
-  integrity sha512-0Z+nxUU4/4T+SL8BCNN4ztKdQjToNvUYmkF1kXO5T7Yz3Gafzh0HeIG6mrkN8Fz3gn9hSyxuAT+6h4vM+iQSBQ==
+"@smithy/util-waiter@^4.2.2":
+  version "4.2.3"
+  resolved "https://registry.yarnpkg.com/@smithy/util-waiter/-/util-waiter-4.2.3.tgz#4c662009db101bc60aed07815d359e90904caef2"
+  integrity sha512-5+nU///E5sAdD7t3hs4uwvCTWQtTR8JwKwOCSJtBRx0bY1isDo1QwH87vRK86vlFLBTISqoDA2V6xvP6nF1isQ==
   dependencies:
-    "@smithy/abort-controller" "^4.2.0"
-    "@smithy/types" "^4.6.0"
+    "@smithy/abort-controller" "^4.2.3"
+    "@smithy/types" "^4.8.0"
     tslib "^2.6.2"
 
 "@smithy/uuid@^1.1.0":
