@@ -19,6 +19,9 @@ import play.filters.csrf.CSRFFilter
 import play.filters.hosts.AllowedHostsFilter
 import wiring.AppComponents.Stage
 import router.Routes
+import play.api.libs.json._
+import com.gu.memsub.promo.Formatters.PromotionFormatters._
+import com.gu.memsub.promo.Formatters.CampaignFormatters._
 
 class AppComponents(context: Context) extends BuiltInComponentsFromContext(context) with AhcWSComponents with AssetsComponents with HttpFiltersComponents {
 
@@ -62,6 +65,7 @@ class AppComponents(context: Context) extends BuiltInComponentsFromContext(conte
 }
 
 object AppComponents extends LazyLogging {
+
   def ratePlanPath(stage: Stage): String = s"touchpoint.backend.environments.${stage.name}.zuora.ratePlanIds"
 
   sealed trait Stage { def name: String }

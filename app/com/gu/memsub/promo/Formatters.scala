@@ -229,4 +229,5 @@ object Formatters {
         (__ \ "promotionType").format[PromotionType[PromoContext]]
       ) (Promotion.apply[PromotionType[PromoContext], Option, LandingPage], unlift(Promotion.unapply[PromotionType[PromoContext], Option, LandingPage]))
   }
+
 }

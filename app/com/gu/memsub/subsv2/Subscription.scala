@@ -121,7 +121,8 @@ object GetCurrentPlans {
       */
       val ensureStarted = unvalidated.ensure(DiscardedPlan(plan, s"hasn't started as of $dateToCheck").wrapNel)(_)
       val alreadyStarted = plan match {
-        case _: Contributor => ensureStarted(_ => sub.startDate <= date)
+        case plan: PaidSubscriptionPlan[_, _] if plan.product == Product.Contribution =>
+          ensureStarted(_ => sub.startDate <= date)
         case _ => ensureStarted(_.start <= dateToCheck)
       }
       val freePlanCancelled = alreadyStarted.ensure(DiscardedPlan(plan, "has a free plan which has been cancelled").wrapNel)(_)
