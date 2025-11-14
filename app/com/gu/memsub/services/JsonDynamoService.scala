@@ -15,6 +15,7 @@ class JsonDynamoService[A, M[_]](tableName: String, client: DynamoDbClient)(impl
 
   def all(implicit formatter: Reads[A]): M[Seq[A]] = Monad[M].point {
     val scanRequest = ScanRequest.builder().tableName(tableName).build()
+    // TODO - paginate (or be smarter)
     val items = client.scan(scanRequest).items().asScala
     logger.info(s"Got ${items.length} items from Dynamo for table $tableName")
     val jsonItems = items.flatMap(i => Json.fromJson[A](Json.parse(toJson(i))).asOpt).toList
