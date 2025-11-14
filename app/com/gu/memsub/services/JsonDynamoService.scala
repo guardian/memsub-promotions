@@ -29,34 +29,6 @@ class JsonDynamoService[A, M[_]](tableName: String, client: DynamoDbClient)(impl
     ()
   }
 
-  def find[B](b: B)(implicit of: OWrites[B], r: Reads[A]): M[List[A]] = Monad[M].point {
-    val describeRequest = DescribeTableRequest.builder().tableName(tableName).build()
-    val primaryKey = client.describeTable(describeRequest).table().keySchema().get(0).attributeName()
-    val jsonItem = Json.toJson(b)
-
-    val dynamoResult = (jsonItem \ primaryKey).validate[String].asOpt.fold {
-      val item = toAttributeValueMap(jsonItem)
-      val scanRequest = ScanRequest.builder()
-        .tableName(tableName)
-        .scanFilter(item.map { case (k, v) =>
-          k -> Condition.builder()
-            .comparisonOperator(ComparisonOperator.EQ)
-            .attributeValueList(v)
-            .build()
-        }.asJava)
-        .build()
-      client.scan(scanRequest).items().asScala.toSeq
-    } { keyValue =>
-      val getRequest = GetItemRequest.builder()
-        .tableName(tableName)
-        .key(Map(primaryKey -> AttributeValue.builder().s(keyValue).build()).asJava)
-        .build()
-      Option(client.getItem(getRequest).item()).filter(!_.isEmpty).toSeq
-    }
-
-    dynamoResult.flatMap(i => Json.fromJson[A](Json.parse(toJson(i))).asOpt).toList
-  }
-
   private def toAttributeValueMap(json: JsValue): Map[String, AttributeValue] = {
     json.as[JsObject].fields.map {
       case (key, JsString(s)) => key -> AttributeValue.builder().s(s).build()
