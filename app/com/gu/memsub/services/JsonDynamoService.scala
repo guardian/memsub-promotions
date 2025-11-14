@@ -5,17 +5,21 @@ import play.api.libs.json._
 import software.amazon.awssdk.regions.Region
 import software.amazon.awssdk.services.dynamodb.DynamoDbClient
 import software.amazon.awssdk.services.dynamodb.model._
+import com.typesafe.scalalogging.StrictLogging
 
 import scala.concurrent.{ExecutionContext, Future}
 import scala.jdk.CollectionConverters._
 import scalaz.Monad
 
-class JsonDynamoService[A, M[_]](tableName: String, client: DynamoDbClient)(implicit m: Monad[M]) {
+class JsonDynamoService[A, M[_]](tableName: String, client: DynamoDbClient)(implicit m: Monad[M]) extends StrictLogging {
 
   def all(implicit formatter: Reads[A]): M[Seq[A]] = Monad[M].point {
     val scanRequest = ScanRequest.builder().tableName(tableName).build()
     val items = client.scan(scanRequest).items().asScala
-    items.flatMap(i => Json.fromJson[A](Json.parse(toJson(i))).asOpt).toList
+    logger.info(s"Got ${items.length} items from Dynamo for table $tableName")
+    val jsonItems = items.flatMap(i => Json.fromJson[A](Json.parse(toJson(i))).asOpt).toList
+    logger.info(s"Serialized ${jsonItems.length} items.")
+    jsonItems
   }
 
   def add(p: A)(implicit formatter: Writes[A]): M[Unit] = Monad[M].point {
