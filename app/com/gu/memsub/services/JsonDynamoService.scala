@@ -14,11 +14,30 @@ import scalaz.Monad
 class JsonDynamoService[A, M[_]](tableName: String, client: DynamoDbClient)(implicit m: Monad[M]) extends StrictLogging {
 
   def all(implicit formatter: Reads[A]): M[Seq[A]] = Monad[M].point {
-    val scanRequest = ScanRequest.builder().tableName(tableName).build()
-    // TODO - paginate (or be smarter)
-    val items = client.scan(scanRequest).items().asScala
-    logger.info(s"Got ${items.length} items from Dynamo for table $tableName")
-    val jsonItems = items.flatMap(i => Json.fromJson[A](Json.parse(toJson(i))).asOpt).toList
+    /**
+     * Due to the way the promos data is modelled we have to perform a full scan of the table.
+     * This means we need to paginate, keeping track of the lastEvaluatedKey after each batch.
+     */
+    @scala.annotation.tailrec
+    def scan(
+      accumulatedItems: List[java.util.Map[String, AttributeValue]],
+      lastKey: Option[java.util.Map[String, AttributeValue]]
+    ): List[java.util.Map[String, AttributeValue]] = {
+      val scanRequestBuilder = ScanRequest.builder().tableName(tableName)
+      lastKey.foreach(scanRequestBuilder.exclusiveStartKey)
+      val scanResponse = client.scan(scanRequestBuilder.build())
+
+      val newItems = accumulatedItems ++ scanResponse.items().asScala.toList
+      // If lastEvaluatedKey is empty then no more results remaining
+      val nextKey = Option(scanResponse.lastEvaluatedKey()).filter(!_.isEmpty)
+
+      if (nextKey.isDefined) scan(newItems, nextKey)
+      else newItems
+    }
+
+    val allItems = scan(List.empty, None)
+    logger.info(s"Got ${allItems.length} items from Dynamo for table $tableName")
+    val jsonItems = allItems.flatMap(i => Json.fromJson[A](Json.parse(toJson(i))).asOpt)
     logger.info(s"Serialized ${jsonItems.length} items.")
     jsonItems
   }
