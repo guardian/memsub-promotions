@@ -37,7 +37,14 @@ class JsonDynamoService[A, M[_]](tableName: String, client: DynamoDbClient)(impl
 
     val allItems = scan(List.empty, None)
     logger.info(s"Got ${allItems.length} items from Dynamo for table $tableName")
-    val jsonItems = allItems.flatMap(i => Json.fromJson[A](Json.parse(toJson(i))).asOpt)
+    val jsonItems = allItems.map(i => Json.fromJson[A](Json.parse(toJson(i))))
+      .flatMap {
+        case JsSuccess(value, _) => Some(value)
+        case JsError(errors) =>
+          logger.error(s"Error reading DynamoDb data: $errors")
+          None
+      }
+
     logger.info(s"Serialized ${jsonItems.length} items.")
     jsonItems
   }
