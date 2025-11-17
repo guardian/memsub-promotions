@@ -38,13 +38,18 @@ class JsonDynamoService[A, M[_]](tableName: String, client: DynamoDbClient)(impl
 
     val allItems = scan(List.empty, None)
     logger.info(s"Got ${allItems.length} items from Dynamo for table $tableName")
-    val jsonItems = allItems.map(i => Json.fromJson[A](dynamoMapToJson(i)))
-      .flatMap {
-        case JsSuccess(value, _) => Some(value)
-        case JsError(errors) =>
-          logger.error(s"Error reading DynamoDb data: $errors")
-          None
+
+    // deserialize all items and count any failures
+    val (jsonItems, errorCount) = allItems.foldLeft((Vector.empty[A], 0)) { case ((items, errors), item) =>
+      Json.fromJson[A](dynamoMapToJson(item)) match {
+        case JsSuccess(value, _) => (items :+ value, errors)
+        case JsError(_) => (items, errors + 1)
       }
+    }
+
+    if (errorCount > 0) {
+      logger.error(s"Failed to parse $errorCount items from DynamoDB table $tableName")
+    }
 
     logger.info(s"Serialized ${jsonItems.length} items.")
     jsonItems
