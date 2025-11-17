@@ -37,10 +37,9 @@ class JsonDynamoService[A, M[_]](tableName: String, client: DynamoDbClient)(impl
     }
 
     val allItems = scan(List.empty, None)
-    logger.info(s"Got ${allItems.length} items from Dynamo for table $tableName")
 
     // deserialize all items and count any failures
-    val (jsonItems, errorCount) = allItems.foldLeft((Vector.empty[A], 0)) { case ((items, errors), item) =>
+    val (parsedItems, errorCount) = allItems.foldLeft((Vector.empty[A], 0)) { case ((items, errors), item) =>
       Json.fromJson[A](dynamoMapToJson(item)) match {
         case JsSuccess(value, _) => (items :+ value, errors)
         case JsError(_) => (items, errors + 1)
@@ -48,11 +47,11 @@ class JsonDynamoService[A, M[_]](tableName: String, client: DynamoDbClient)(impl
     }
 
     if (errorCount > 0) {
-      logger.error(s"Failed to parse $errorCount items from DynamoDB table $tableName")
+      logger.error(s"Failed to parse $errorCount items from DynamoDB table $tableName.")
     }
 
-    logger.info(s"Serialized ${jsonItems.length} items.")
-    jsonItems
+    logger.info(s"Parsed ${parsedItems.length} items from DynamoDB table $tableName.")
+    parsedItems
   }
 
   def add(p: A)(implicit formatter: Writes[A]): M[Unit] = Monad[M].point {
