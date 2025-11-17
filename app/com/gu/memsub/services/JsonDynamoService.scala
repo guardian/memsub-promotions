@@ -1,6 +1,7 @@
 package com.gu.memsub.services
 
 import com.gu.aws.CredentialsProvider
+import com.gu.memsub.services.JsonDynamoService.{dynamoMapToJson, toAttributeValueMap}
 import play.api.libs.json._
 import software.amazon.awssdk.regions.Region
 import software.amazon.awssdk.services.dynamodb.DynamoDbClient
@@ -59,9 +60,20 @@ class JsonDynamoService[A, M[_]](tableName: String, client: DynamoDbClient)(impl
     client.putItem(putRequest)
     ()
   }
+}
+
+object JsonDynamoService {
+  def forTable[A](table: String)(implicit e: ExecutionContext): JsonDynamoService[A, Future] = {
+    import scalaz.std.scalaFuture._
+    val dynamoDBClient = DynamoDbClient.builder()
+      .credentialsProvider(CredentialsProvider)
+      .region(Region.EU_WEST_1)
+      .build()
+    new JsonDynamoService[A, Future](table, dynamoDBClient)(futureInstance)
+  }
 
   // Transform Play JSON value to DynamoDb attribute value map
-  private def toAttributeValueMap(json: JsValue): Map[String, AttributeValue] = {
+  def toAttributeValueMap(json: JsValue): Map[String, AttributeValue] = {
     def jsonToAttributeValue(json: JsValue): AttributeValue = {
       json match {
         case JsNull =>
@@ -88,7 +100,7 @@ class JsonDynamoService[A, M[_]](tableName: String, client: DynamoDbClient)(impl
   }
 
   // Transform DynamoDb attribute value map to Play JSON value
-  private def dynamoMapToJson(item: java.util.Map[String, AttributeValue]): JsObject = {
+  def dynamoMapToJson(item: java.util.Map[String, AttributeValue]): JsObject = {
     def dynamoToJson(attribute: AttributeValue): JsValue = {
       if (attribute.hasM()) {
         // Map
@@ -120,16 +132,5 @@ class JsonDynamoService[A, M[_]](tableName: String, client: DynamoDbClient)(impl
     }
 
     JsObject(item.asScala.view.mapValues(dynamoToJson).toMap)
-  }
-}
-
-object JsonDynamoService {
-  def forTable[A](table: String)(implicit e: ExecutionContext): JsonDynamoService[A, Future] = {
-    import scalaz.std.scalaFuture._
-    val dynamoDBClient = DynamoDbClient.builder()
-      .credentialsProvider(CredentialsProvider)
-      .region(Region.EU_WEST_1)
-      .build()
-    new JsonDynamoService[A, Future](table, dynamoDBClient)(futureInstance)
   }
 }
