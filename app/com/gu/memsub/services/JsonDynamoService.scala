@@ -5,19 +5,33 @@ import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClient
 import com.amazonaws.services.dynamodbv2.document.spec.{GetItemSpec, ScanSpec}
 import com.amazonaws.services.dynamodbv2.document._
 import com.gu.aws.CredentialsProvider
+import com.typesafe.scalalogging.StrictLogging
 import play.api.libs.json._
+
 import scala.jdk.CollectionConverters._
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.Try
 import scalaz.Monad
 
-class JsonDynamoService[A, M[_]](table: Table)(implicit m: Monad[M]) {
+class JsonDynamoService[A, M[_]](table: Table)(implicit m: Monad[M]) extends StrictLogging {
 
   implicit val itemFormat = JsonDynamoService.itemFormat
 
   def all(implicit formatter: Reads[A]): M[Seq[A]] = Monad[M].point {
     val items: Iterator[Item] = table.scan().iterator().asScala
-    items.flatMap(i => Json.fromJson[A](Json.toJson[Item](i)).asOpt).toList
+    val (results, errorCount) = items.foldLeft((List.empty[A], 0)) { case ((acc, errors), item) =>
+      Json.fromJson[A](Json.toJson[Item](item)) match {
+        case JsSuccess(value, _) => (acc :+ value, errors)
+        case JsError(errs) => (acc, errors + 1)
+      }
+    }
+
+    if (errorCount > 0) {
+      logger.info(s"Failed to parse $errorCount items from DynamoDB table ${table.getTableName}.")
+    }
+    logger.info(s"Parsed ${results.length} items from DynamoDB table ${table.getTableName}.")
+
+    results
   }
 
   def add(p: A)(implicit formatter: Writes[A]): M[Unit] = Monad[M].point {
