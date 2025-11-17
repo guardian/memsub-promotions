@@ -8,12 +8,14 @@ class JsonDynamoServiceSpec extends PlaySpec {
   "JsonDynamoService" should {
     "roud-trip JSON to DynamoDb format" in {
       val originalJson = Json.obj(
-        "id" -> "abc123",
-        "name" -> "Test User",
-        "age" -> 25,
-        "active" -> true,
-        "tags" -> Json.arr("tag1", "tag2"),
-        "metadata" -> Json.obj("key" -> "value")
+        "string" -> "abc123",
+        "number" -> 25,
+        "bool" -> true,
+        "array" -> Json.arr("a", "b"),
+        "obj" -> Json.obj(
+          "key1" -> Json.arr("c", "d"),
+          "key2" -> Json.obj("key" -> "nested"),
+        )
       )
 
       val dynamoMap = JsonDynamoService.toAttributeValueMap(originalJson)
