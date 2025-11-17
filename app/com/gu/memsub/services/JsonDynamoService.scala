@@ -62,23 +62,66 @@ class JsonDynamoService[A, M[_]](tableName: String, client: DynamoDbClient)(impl
 
   private def toAttributeValueMap(json: JsValue): Map[String, AttributeValue] = {
     json.as[JsObject].fields.map {
-      case (key, JsString(s)) => key -> AttributeValue.builder().s(s).build()
-      case (key, JsNumber(n)) => key -> AttributeValue.builder().n(n.toString).build()
-      case (key, JsBoolean(b)) => key -> AttributeValue.builder().bool(b).build()
-      case (key, JsNull) => key -> AttributeValue.builder().nul(true).build()
-      case (key, other) => key -> AttributeValue.builder().s(other.toString).build()
+      case (key, value) => key -> jsonToAttributeValue(value)
     }.toMap
   }
 
+  private def jsonToAttributeValue(json: JsValue): AttributeValue = {
+    json match {
+      case JsNull =>
+        AttributeValue.builder().nul(true).build()
+      case JsBoolean(b) =>
+        AttributeValue.builder().bool(b).build()
+      case JsNumber(n) =>
+        AttributeValue.builder().n(n.toString).build()
+      case JsString(s) =>
+        AttributeValue.builder().s(s).build()
+      case JsArray(arr) =>
+        AttributeValue.builder().l(arr.map(jsonToAttributeValue).asJava).build()
+      case obj: JsObject =>
+        val map = obj.fields.map {
+          case (k, v) => k -> jsonToAttributeValue(v)
+        }.toMap
+        AttributeValue.builder().m(map.asJava).build()
+    }
+  }
+
   private def toJson(item: java.util.Map[String, AttributeValue]): String = {
-    val fields = item.asScala.map {
-      case (key, av) if av.s() != null => key -> JsString(av.s())
-      case (key, av) if av.n() != null => key -> JsNumber(BigDecimal(av.n()))
-      case (key, av) if av.bool() != null => key -> JsBoolean(av.bool())
-      case (key, av) if av.nul() != null && av.nul() => key -> JsNull
-      case (key, _) => key -> JsNull
-    }.toSeq
-    Json.stringify(JsObject(fields))
+    Json.stringify(dynamoMapToJson(item))
+  }
+
+  private def dynamoMapToJson(item: java.util.Map[String, AttributeValue]): JsObject = {
+    JsObject(item.asScala.view.mapValues(dynamoToJson).toMap)
+  }
+
+  private def dynamoToJson(attribute: AttributeValue): JsValue = {
+    if (attribute.hasM()) {
+      // Map
+      dynamoMapToJson(attribute.m())
+    } else if (attribute.hasL()) {
+      // List (array)
+      JsArray(attribute.l().asScala.map(dynamoToJson).toSeq)
+    } else if (attribute.hasSs()) {
+      // String set
+      JsArray(attribute.ss().asScala.map(JsString(_)).toSeq)
+    } else if (attribute.hasNs()) {
+      // Number set
+      JsArray(attribute.ns().asScala.map(n => JsNumber(BigDecimal(n))).toSeq)
+    } else if (attribute.s() != null) {
+      // String
+      JsString(attribute.s())
+    } else if (attribute.n() != null) {
+      // Number
+      JsNumber(BigDecimal(attribute.n()))
+    } else if (attribute.bool() != null) {
+      // Boolean
+      JsBoolean(attribute.bool())
+    } else if (attribute.nul() != null && attribute.nul()) {
+      // Null
+      JsNull
+    } else {
+      JsNull
+    }
   }
 }
 
