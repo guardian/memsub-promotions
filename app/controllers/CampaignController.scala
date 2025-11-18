@@ -7,17 +7,14 @@ import com.gu.memsub.promo.{Campaign, CampaignCode, CampaignGroup}
 import com.gu.memsub.services.JsonDynamoService
 import utils.CampaignUtils.{filterCampaignsByOptionalGroup, sortCampaignsByPromotionDateThenNameForDisplay}
 import play.api.libs.json.{JsError, Json}
-import play.api.mvc.Result
 import play.api.mvc.Results._
 import wiring.AppComponents.Stage
-
 import scala.concurrent.{ExecutionContext, Future}
 
-class CampaignController(googleAuthAction: GoogleAuthenticatedAction, campaignService: JsonDynamoService[Campaign, Future], promotionService: JsonDynamoService[AnyPromotion, Future], stage: Stage, implicit val ec: ExecutionContext) {
+class CampaignController(googleAuthAction: GoogleAuthenticatedAction, campaignService: JsonDynamoService[Campaign, Future], promotionService: JsonDynamoService[AnyPromotion, Future], stage: Stage)(implicit val ec: ExecutionContext) {
 
   def all(group: Option[String]) = googleAuthAction.async {
     import com.gu.memsub.promo.Formatters.PromotionFormatters._
-
     val campaignsF = campaignService.all
     val promotionsF = promotionService.all
     for {
@@ -31,21 +28,28 @@ class CampaignController(googleAuthAction: GoogleAuthenticatedAction, campaignSe
   }
 
   def get(code: Option[String]) = googleAuthAction.async {
-    code.map(CampaignCode).map(c => campaignService.find(c)).fold[Future[Result]](Future.successful(BadRequest)) { campaigns =>
-      campaigns.map(_.headOption.fold[Result](NotFound)(c => Ok(Json.toJson(c))))
+    code match {
+      case None => Future.successful(BadRequest)
+      case Some(codeStr) =>
+        val codeObj = CampaignCode(codeStr)
+        campaignService.all.map { campaigns =>
+          campaigns.find(_.code == codeObj) match {
+            case Some(campaign) => Ok(Json.toJson(campaign))
+            case None           => NotFound
+          }
+        }
     }
   }
 
   def upsert = googleAuthAction.async { request =>
     request.body.asJson.map { json =>
-      json.validate[Campaign].map { campaign => {
-          campaignService.add(campaign).map(_ => Ok(Json.obj("status" -> "ok")))
-        }
-      }.recoverTotal{
-        e => Future(BadRequest("Detected error:"+ JsError.toJson(e)))
+      json.validate[Campaign].map { campaign =>
+        campaignService.add(campaign).map(_ => Ok(Json.obj("status" -> "ok")))
+      }.recoverTotal { e =>
+        Future(BadRequest("Detected error:" + JsError.toJson(e)))
       }
     }.getOrElse {
-      Future(BadRequest("Could not parse campaign data"))
+      Future.successful(BadRequest("Could not parse campaign data"))
     }
   }
 

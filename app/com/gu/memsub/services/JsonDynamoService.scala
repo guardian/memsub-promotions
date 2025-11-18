@@ -1,75 +1,140 @@
 package com.gu.memsub.services
 
-import com.amazonaws.regions.Regions
-import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClient
-import com.amazonaws.services.dynamodbv2.document.spec.{GetItemSpec, ScanSpec}
-import com.amazonaws.services.dynamodbv2.document._
 import com.gu.aws.CredentialsProvider
-import com.typesafe.scalalogging.StrictLogging
+import com.gu.memsub.services.JsonDynamoService.{dynamoMapToJson, toAttributeValueMap}
 import play.api.libs.json._
+import software.amazon.awssdk.regions.Region
+import software.amazon.awssdk.services.dynamodb.DynamoDbClient
+import software.amazon.awssdk.services.dynamodb.model._
+import com.typesafe.scalalogging.StrictLogging
 
-import scala.jdk.CollectionConverters._
 import scala.concurrent.{ExecutionContext, Future}
-import scala.util.Try
+import scala.jdk.CollectionConverters._
 import scalaz.Monad
 
-class JsonDynamoService[A, M[_]](table: Table)(implicit m: Monad[M]) extends StrictLogging {
-
-  implicit val itemFormat = JsonDynamoService.itemFormat
+class JsonDynamoService[A, M[_]](tableName: String, client: DynamoDbClient)(implicit m: Monad[M]) extends StrictLogging {
 
   def all(implicit formatter: Reads[A]): M[Seq[A]] = Monad[M].point {
-    val items: Iterator[Item] = table.scan().iterator().asScala
-    val (results, errorCount) = items.foldLeft((List.empty[A], 0)) { case ((acc, errors), item) =>
-      Json.fromJson[A](Json.toJson[Item](item)) match {
-        case JsSuccess(value, _) => (acc :+ value, errors)
-        case JsError(errs) => (acc, errors + 1)
+    /**
+     * Due to the way the promos data is modelled we have to perform a full scan of the table.
+     * This means we need to paginate, keeping track of the lastEvaluatedKey after each batch.
+     */
+    @scala.annotation.tailrec
+    def scan(
+      accumulatedItems: List[java.util.Map[String, AttributeValue]],
+      lastKey: Option[java.util.Map[String, AttributeValue]]
+    ): List[java.util.Map[String, AttributeValue]] = {
+      val scanRequestBuilder = ScanRequest.builder().tableName(tableName)
+      lastKey.foreach(scanRequestBuilder.exclusiveStartKey)
+      val scanResponse = client.scan(scanRequestBuilder.build())
+
+      val newItems = accumulatedItems ++ scanResponse.items().asScala.toList
+      // If lastEvaluatedKey is empty then no more results remaining
+      val nextKey = Option(scanResponse.lastEvaluatedKey()).filter(!_.isEmpty)
+
+      if (nextKey.isDefined) scan(newItems, nextKey)
+      else newItems
+    }
+
+    val allItems = scan(List.empty, None)
+
+    // deserialize all items and count any failures
+    val (parsedItems, errorCount) = allItems.foldLeft((Vector.empty[A], 0)) { case ((items, errors), item) =>
+      Json.fromJson[A](dynamoMapToJson(item)) match {
+        case JsSuccess(value, _) => (items :+ value, errors)
+        case JsError(_) => (items, errors + 1)
       }
     }
 
     if (errorCount > 0) {
-      logger.info(s"Failed to parse $errorCount items from DynamoDB table ${table.getTableName}.")
+      logger.error(s"Failed to parse $errorCount items from DynamoDB table $tableName.")
     }
-    logger.info(s"Parsed ${results.length} items from DynamoDB table ${table.getTableName}.")
 
-    results
+    logger.info(s"Parsed ${parsedItems.length} items from DynamoDB table $tableName.")
+    parsedItems
   }
 
   def add(p: A)(implicit formatter: Writes[A]): M[Unit] = Monad[M].point {
-    val item = Json.fromJson[Item](Json.toJson(p))
-      .getOrElse(throw new IllegalStateException(s"Unable to convert $p to item"))
-    table.putItem(item)
+    val json = Json.toJson(p)
+    val item = toAttributeValueMap(json)
+    val putRequest = PutItemRequest.builder()
+      .tableName(tableName)
+      .item(item.asJava)
+      .build()
+    client.putItem(putRequest)
     ()
-  }
-
-  def find[B](b: B)(implicit of: OWrites[B], r: Reads[A]): M[List[A]] = Monad[M].point {
-    val primaryKey = table.describe().getKeySchema.get(0).getAttributeName
-    val jsonItem = Json.toJson(b)
-    val dynamoResult = (jsonItem \ primaryKey).validate[String].asOpt.fold {
-      itemFormat.reads(jsonItem).fold(err => Seq.empty, { itemFromJson =>
-        val filters = itemFromJson.asMap().asScala.map { case (k, v) => new ScanFilter(k).eq(v): ScanFilter }.toSeq
-        table.scan(new ScanSpec().withScanFilters(filters:_*)).iterator().asScala.toSeq
-      })
-    } { keyValue =>
-      Option(table.getItem(new GetItemSpec().withPrimaryKey(primaryKey, keyValue))).toSeq
-    }
-    dynamoResult.flatMap(i => Json.fromJson[A](Json.toJson[Item](i)).asOpt).toList
   }
 }
 
 object JsonDynamoService {
-
-  val itemFormat = Format(
-    (in: JsValue) => Try(JsSuccess(Item.fromJSON(in.toString))).getOrElse(JsError(s"unable to deserialise $in")),
-    (o: Item) => Json.parse(o.toJSON)
-  )
-
   def forTable[A](table: String)(implicit e: ExecutionContext): JsonDynamoService[A, Future] = {
     import scalaz.std.scalaFuture._
-    val dynamoDBClient = AmazonDynamoDBClient.builder
-      .withCredentials(CredentialsProvider)
-      .withRegion(Regions.EU_WEST_1)
+    val dynamoDBClient = DynamoDbClient.builder()
+      .credentialsProvider(CredentialsProvider)
+      .region(Region.EU_WEST_1)
       .build()
-    new JsonDynamoService[A, Future](new DynamoDB(dynamoDBClient).getTable(table))(futureInstance)
+    new JsonDynamoService[A, Future](table, dynamoDBClient)(futureInstance)
   }
 
+  // Transform Play JSON value to DynamoDb attribute value map
+  def toAttributeValueMap(json: JsValue): Map[String, AttributeValue] = {
+    def jsonToAttributeValue(json: JsValue): AttributeValue = {
+      json match {
+        case JsNull =>
+          AttributeValue.builder().nul(true).build()
+        case JsBoolean(b) =>
+          AttributeValue.builder().bool(b).build()
+        case JsNumber(n) =>
+          AttributeValue.builder().n(n.toString).build()
+        case JsString(s) =>
+          AttributeValue.builder().s(s).build()
+        case JsArray(arr) =>
+          AttributeValue.builder().l(arr.map(jsonToAttributeValue).asJava).build()
+        case obj: JsObject =>
+          val map = obj.fields.map {
+            case (k, v) => k -> jsonToAttributeValue(v)
+          }.toMap
+          AttributeValue.builder().m(map.asJava).build()
+      }
+    }
+
+    json.as[JsObject].fields.map {
+      case (key, value) => key -> jsonToAttributeValue(value)
+    }.toMap
+  }
+
+  // Transform DynamoDb attribute value map to Play JSON value
+  def dynamoMapToJson(item: java.util.Map[String, AttributeValue]): JsObject = {
+    def dynamoToJson(attribute: AttributeValue): JsValue = {
+      if (attribute.hasM()) {
+        // Map
+        dynamoMapToJson(attribute.m())
+      } else if (attribute.hasL()) {
+        // List (array)
+        JsArray(attribute.l().asScala.map(dynamoToJson).toSeq)
+      } else if (attribute.hasSs()) {
+        // String set
+        JsArray(attribute.ss().asScala.map(JsString(_)).toSeq)
+      } else if (attribute.hasNs()) {
+        // Number set
+        JsArray(attribute.ns().asScala.map(n => JsNumber(BigDecimal(n))).toSeq)
+      } else if (attribute.s() != null) {
+        // String
+        JsString(attribute.s())
+      } else if (attribute.n() != null) {
+        // Number
+        JsNumber(BigDecimal(attribute.n()))
+      } else if (attribute.bool() != null) {
+        // Boolean
+        JsBoolean(attribute.bool())
+      } else if (attribute.nul() != null && attribute.nul()) {
+        // Null
+        JsNull
+      } else {
+        JsNull
+      }
+    }
+
+    JsObject(item.asScala.view.mapValues(dynamoToJson).toMap)
+  }
 }

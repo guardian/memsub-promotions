@@ -50,7 +50,7 @@ javaOptions in Universal ++= Seq(
 scalaVersion := "2.13.10"
 scalacOptions ++= Seq("-feature")
 
-val awsVersion = "1.12.649"
+val awsVersion = "2.29.1"
 
 libraryDependencies ++= Seq(
   jdbc,
@@ -60,8 +60,10 @@ libraryDependencies ++= Seq(
   "com.softwaremill.macwire" %% "macros" % "2.5.0" % "provided",
   "com.softwaremill.macwire" %% "util" % "2.5.0",
   "com.softwaremill.macwire" %% "proxy" % "2.5.0",
-  "com.amazonaws" % "aws-java-sdk-s3" % awsVersion,
-  "com.amazonaws" % "aws-java-sdk-dynamodb" % awsVersion,
+  "software.amazon.awssdk" % "s3" % awsVersion,
+  "software.amazon.awssdk" % "dynamodb" % awsVersion,
+  "software.amazon.awssdk" % "auth" % awsVersion,
+  "software.amazon.awssdk" % "dynamodb-enhanced" % awsVersion,
   "org.scalaz" %% "scalaz-core" % "7.3.8",
   "com.github.nscala-time" %% "nscala-time" % "2.32.0",
   "com.gu" %% "support-internationalisation" % "0.16",

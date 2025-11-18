@@ -1,6 +1,6 @@
 package com.gu.memsub.auth.common
 
-import com.amazonaws.services.s3.model.GetObjectRequest
+import software.amazon.awssdk.services.s3.model.GetObjectRequest
 import com.google.auth.oauth2.ServiceAccountCredentials
 import com.gu.aws.AwsS3
 import com.gu.googleauth.{AntiForgeryChecker, GoogleAuthConfig, GoogleGroupChecker}
@@ -18,13 +18,17 @@ object MemSub {
         c.getString("client.id"),
         c.getString("client.secret"),
         c.getString("callback"),
-        List(GuardianAppsDomain),        // Google App domain to restrict login
+        List(GuardianAppsDomain), // Google App domain to restrict login
         antiForgeryChecker = AntiForgeryChecker.borrowSettingsFromPlay(httpConfiguration)
       )
     }
 
     def googleGroupCheckerFor(config: Config): GoogleGroupChecker = {
-      val request = new GetObjectRequest("membership-private", "google-auth-service-account-certificate.json")
+      val request = GetObjectRequest.builder()
+        .bucket("membership-private")
+        .key("google-auth-service-account-certificate.json")
+        .build()
+
       AwsS3.fetchObject(AwsS3.client, request).map { stream =>
         val googleServiceAccountCredential = ServiceAccountCredentials.fromStream(stream)
         stream.close()

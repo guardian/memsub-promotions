@@ -43,13 +43,29 @@ class PromotionController(
   }
 
   def all(campaignCode: Option[String]): Action[AnyContent] = googleAuthAction.async {
-    campaignCode.map(CampaignCode).fold(dynamoService.all)(dynamoService.find).map(promos => Ok(Json.toJson(promos.sortBy(_.name))))
+    val promosF: Future[Seq[AnyPromotion]] = dynamoService.all
+    promosF.map { promos =>
+      val filtered = campaignCode match {
+        case None => promos
+        case Some(codeStr) =>
+          val codeObj = CampaignCode(codeStr)
+          promos.filter(_.campaign == codeObj)
+      }
+      Ok(Json.toJson(filtered.sortBy(_.name)))
+    }
   }
 
   def get(uuid: Option[String]): Action[AnyContent] = googleAuthAction.async {
-    uuid.flatMap(i => Try(UUID.fromString(i)).toOption).map {
-      i => dynamoService.find(i).map(_.headOption.fold[Result](NotFound)(promo => Ok(Json.toJson(promo))))
-    }.getOrElse[Future[Result]](Future.successful(BadRequest))
+    uuid.flatMap(i => Try(UUID.fromString(i)).toOption) match {
+      case None => Future.successful(BadRequest)
+      case Some(id) =>
+        dynamoService.all.map { promos =>
+          promos.find(_.uuid == id) match {
+            case Some(promo) => Ok(Json.toJson(promo))
+            case None        => NotFound
+          }
+        }
+    }
   }
 
   private def productRatePlanIdsAreValidForStage(promo: AnyPromotion): Boolean = promo.appliesTo.productRatePlanIds.forall {
