@@ -50,7 +50,7 @@ javaOptions in Universal ++= Seq(
 scalaVersion := "2.13.10"
 scalacOptions ++= Seq("-feature")
 
-val awsVersion = "2.29.1"
+val awsVersion = "2.39.6"
 
 libraryDependencies ++= Seq(
   jdbc,
