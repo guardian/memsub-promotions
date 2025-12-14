@@ -52,6 +52,8 @@ jobs:
       - name: riff-raff
         uses: guardian/actions-riff-raff@v2
         with:
+          githubToken: ${{ secrets.GITHUB_TOKEN }}
+          roleArn: ${{ secrets.GU_RIFF_RAFF_ROLE_ARN }}
           app: memsub-promotions-lambdas
           buildNumberOffset: 500
           config: |
