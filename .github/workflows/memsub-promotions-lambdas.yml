@@ -50,7 +50,7 @@ jobs:
           popd
 
       - name: riff-raff
-        uses: guardian/actions-riff-raff@v2
+        uses: guardian/actions-riff-raff@v4
         with:
           app: memsub-promotions-lambdas
           buildNumberOffset: 500
