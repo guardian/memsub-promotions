@@ -129,7 +129,7 @@ Resources:
     Type: AWS::Lambda::EventSourceMapping
     Properties:
       BatchSize: 1
-      Enabled: true
+      Enabled: false
       EventSourceArn: !Ref 'CODEPromotionsTableStreamARN'
       FunctionName: !Ref 'PromoCodeViewLambdaFunctionCODE'
       StartingPosition: TRIM_HORIZON
@@ -137,7 +137,7 @@ Resources:
     Type: AWS::Lambda::EventSourceMapping
     Properties:
       BatchSize: 1
-      Enabled: true
+      Enabled: false
       EventSourceArn: !Ref 'PRODPromotionsTableStreamARN'
       FunctionName: !Ref 'PromoCodeViewLambdaFunctionPROD'
       StartingPosition: TRIM_HORIZON
