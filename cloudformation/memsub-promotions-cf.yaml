@@ -265,26 +265,6 @@ Resources:
           FromPort: 1514
           ToPort: 1515
           CidrIp: 0.0.0.0/0
-
-  alarmNoHealthyHosts:
-    Type: AWS::CloudWatch::Alarm
-    Properties:
-      ActionsEnabled: 'true'
-      AlarmDescription: There are insufficient healthy hosts
-      ComparisonOperator: LessThanThreshold
-      EvaluationPeriods: '1'
-      MetricName: HealthyHostCount
-      Namespace: AWS/ELB
-      Period: '60'
-      Statistic: Average
-      Threshold: !Ref 'MinInstances'
-      AlarmActions:
-      - !Ref 'AlarmTopicARN'
-      InsufficientDataActions:
-      - !Ref 'AlarmTopicARN'
-      Dimensions:
-      - Name: LoadBalancerName
-        Value: !Ref 'LoadBalancer'
 Outputs:
   LoadBalancer:
     Value: !GetAtt [LoadBalancer, DNSName]
