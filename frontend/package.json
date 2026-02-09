@@ -21,7 +21,7 @@
   },
   "devDependencies": {
     "@babel/core": "^7.29.0",
-    "@babel/preset-env": "^7.28.6",
+    "@babel/preset-env": "^7.29.0",
     "angular": "^1.8.3",
     "angular-animate": "^1.8.3",
     "angular-aria": "^1.8.3",
